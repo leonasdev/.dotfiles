@@ -18,7 +18,13 @@ require("catppuccin").setup({
   transparent_background = true
 })
 
-local status, _ = pcall(vim.cmd, "colorscheme gruvbox")
+require("tokyonight").setup {
+  transparent = true,
+}
+
+vim.g.gruvbox_material_transparent_background = 1
+
+local status, _ = pcall(vim.cmd, "colorscheme gruvbox-material")
 if not status then
   print("Colorscheme not found")
   return

@@ -20,6 +20,8 @@ return require('packer').startup { function(use)
     requires = { 'tjdevries/colorbuddy.nvim' }
   }
   use 'catppuccin/nvim'
+  use 'folke/tokyonight.nvim'
+  use 'sainnhe/gruvbox-material'
   ---------------------------
 
   use 'kyazdani42/nvim-web-devicons' -- nerd font supported icons

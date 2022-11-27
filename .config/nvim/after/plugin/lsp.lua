@@ -25,7 +25,7 @@ end
 
 local default_on_attach = function(client, bufnr)
   -- enable format on save in all configred lsp
-  enable_format_on_save(client, bufnr)
+  -- enable_format_on_save(client, bufnr)
 
   lspsaga.init_lsp_saga({
     border_style = "single",
