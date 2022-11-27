@@ -1,9 +1,6 @@
 if not pcall(require, 'telescope') then
   return
 end
-test
-test1
-test2
 
 local actions = require('telescope.actions')
 
