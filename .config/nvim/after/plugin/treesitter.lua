@@ -22,6 +22,7 @@ configs.setup {
     disable = {}
   },
   ensure_installed = {
+    'vim',
     'c',
     'cpp',
     'go',
