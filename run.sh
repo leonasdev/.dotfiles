@@ -141,7 +141,6 @@ function msg() {
 }
 
 function backup_old_config() {
-  function backup_old_config() {
   msg "${BOLD}Backing up your current Neovim configuration...${NC}" "1"
 
   mkdir -p "$CONFIG_DIR/nvim" "$CONFIG_DIR/nvim.bak"
