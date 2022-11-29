@@ -226,3 +226,5 @@ function check_tput_install() {
     exit 1
   fi
 }
+
+main
