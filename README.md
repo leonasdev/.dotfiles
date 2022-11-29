@@ -33,3 +33,4 @@ TODO:
 - mason
 - lsp
 - treesitter
+- fish shell
