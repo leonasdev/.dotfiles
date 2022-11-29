@@ -21,9 +21,11 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 
 # MAIN
 function main() {
+  echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!${NC}"
   check_tput_install
   detect_platform
   check_system_deps
+  check_neovim_version
   echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
   
   while [ true ]; do
@@ -55,6 +57,23 @@ function main() {
 
 function finish() {
   msg "${BOLD}${GREEN}Installation Successfully!${NC}" 1
+  echo -e "${BOLD}Now you can manage your dotfiles by using \"git dotfiles\" command.${NC}\n"
+}
+
+function check_neovim_version() {
+  msg "${BOLD}Checking Neovim version... ${NC}"
+  regex="^NVIM v"
+  nvim_ver=$(nvim --version | grep "$regex")
+  nvim_ver="${nvim_ver/NVIM v/""}"
+  nvim_ver="${nvim_ver:0:3}"
+  required_ver="0.8"
+
+  if (( $(echo "$nvim_ver < $required_ver" |bc -l) )); then
+    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.8.0${NC}"
+  else
+    echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.8.0 !${NC}"
+    exit 1
+  fi
 }
 
 function setup_neovim_plugin() {
@@ -71,6 +90,7 @@ function setup_neovim_plugin() {
 }
 
 function install_neovim_packer() {
+  msg "${BOLD}Installing Neovim Packer... ${NC}\n"
   if [ -e "$PACK_DIR/packer/start/packer.nvim" ]; then
     msg "${BOLD}${GREEN}Packer already installed!${NC}"
     echo -e
@@ -211,7 +231,7 @@ function detect_platform() {
       RECOMMEND_INSTALL="brew install"
       ;;
     *)
-      echo -e "${BOLD}OS $OS is not currently supported.${NC}"
+      echo -e "${BOLD}${RED}OS $OS is not currently supported.${NC}"
       exit 1
       ;;
   esac
