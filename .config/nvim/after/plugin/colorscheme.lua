@@ -8,7 +8,6 @@ local colorschemes = {
 for _, cs in ipairs(colorschemes) do
   local status, _ = pcall(require, cs)
   if not status then
-    print(cs)
     return
   end
 end
