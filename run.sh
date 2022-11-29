@@ -50,8 +50,8 @@ function main() {
 
   remove_neovim_config
   clone_repo
-  install_neovim_packer
-  setup_neovim_plugin
+  # install_neovim_packer
+  # setup_neovim_plugin
   finish
 }
 
@@ -76,33 +76,32 @@ function check_neovim_version() {
   fi
 }
 
-function setup_neovim_plugin() {
-  msg "${BOLD}Creating and moving to Neovim configuration directory... ${NC}"
-  mkdir -p $CONFIG_DIR/nvim
-  cd $CONFIG_DIR/nvim
-  echo "${GREEN}${BOLD}Done${NC}"
+# function setup_neovim_plugin() {
+#   msg "${BOLD}Moving to Neovim configuration directory... ${NC}"
+#   cd $CONFIG_DIR/nvim
+#   echo "${GREEN}${BOLD}Done${NC}"
+#
+#   msg "${BOLD}Installing plugins...${NC}" 1
+#   nvim -c 'autocmd User PackerComplete quitall' \
+#     -c 'PackerSync'
+#   msg "${BOLD}${GREEN}Done${NC}" 1 0
+#
+#   msg "${BOLD}${GREEN}Packer setup complete!${NC}" 1
+# }
 
-  msg "${BOLD}Installing plugins...${NC}" 1
-  nvim -c 'autocmd User PackerComplete quitall' \
-    -c 'PackerSync'
-  msg "${BOLD}${GREEN}Done${NC}" 1 0
-
-  msg "${BOLD}${GREEN}Packer setup complete!${NC}" 1
-}
-
-function install_neovim_packer() {
-  msg "${BOLD}Installing Neovim Packer... ${NC}\n"
-  if [ -e "$PACK_DIR/packer/start/packer.nvim" ]; then
-    msg "${BOLD}${GREEN}Packer already installed!${NC}"
-    echo -e
-  else
-    if ! git clone --depth 1 "https://github.com/wbthomason/packer.nvim" \
-      "$PACK_DIR/packer/start/packer.nvim"; then
-      msg "${BOLD}${RED}Failed to clone Packer. Installation failed.${NC}"
-      exit 1
-    fi
-  fi
-}
+# function install_neovim_packer() {
+#   msg "${BOLD}Installing Neovim Packer... ${NC}\n"
+#   if [ -e "$PACK_DIR/packer/start/packer.nvim" ]; then
+#     msg "${BOLD}${GREEN}Packer already installed!${NC}"
+#     echo -e
+#   else
+#     if ! git clone --depth 1 "https://github.com/wbthomason/packer.nvim" \
+#       "$PACK_DIR/packer/start/packer.nvim"; then
+#       msg "${BOLD}${RED}Failed to clone Packer. Installation failed.${NC}"
+#       exit 1
+#     fi
+#   fi
+# }
 
 function clone_repo() {
   msg "${BOLD}Cloning dotfiles... ${NC}" "1"
