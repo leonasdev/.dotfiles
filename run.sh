@@ -201,7 +201,7 @@ function check_system_deps() {
     exit 1
   fi
   if ! command -v clang &>/dev/null; then
-    print_missing_dep_msg "clang" then
+    print_missing_dep_msg "clang"
     exit 1
   fi
 }
