@@ -18,7 +18,7 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-return require('packer').startup { function(use)
+require('packer').startup { function(use)
   use 'wbthomason/packer.nvim'
 
   use 'nvim-lua/plenary.nvim' -- lua library for neovim
@@ -89,11 +89,17 @@ return require('packer').startup { function(use)
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
     require('packer').sync()
-
-    print '=================================='
-    print '    Plugins are being installed'
-    print '    Wait until Packer completes,'
-    print '       then restart nvim'
-    print '=================================='
   end
 end }
+
+if packer_bootstrap then
+  print '=================================='
+  print '    Plugins are being installed'
+  print '    Wait until Packer completes,'
+  print '       then restart nvim'
+  print '=================================='
+
+  return false
+end
+
+return true

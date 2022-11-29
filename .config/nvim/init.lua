@@ -12,6 +12,8 @@ vim.g.mapleader = " "
 -- Turn off builtin plugins I do not use
 require('leonasdev.disable_builtin')
 
-require('leonasdev.packer')
+if not require('leonasdev.packer') then
+  return
+end
 require('leonasdev.options')
 require('leonasdev.keymaps')
