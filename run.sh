@@ -77,7 +77,8 @@ function check_neovim_version() {
 }
 
 function setup_neovim_plugin() {
-  msg "${BOLD}Moving to Neovim configuration directory... ${NC}"
+  msg "${BOLD}Creating and moving to Neovim configuration directory... ${NC}"
+  mkdir -p $CONFIG_DIR/nvim
   cd $CONFIG_DIR/nvim
   echo "${GREEN}${BOLD}Done${NC}"
 
