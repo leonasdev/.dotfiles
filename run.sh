@@ -200,6 +200,10 @@ function check_system_deps() {
     print_missing_dep_msg "fzf"
     exit 1
   fi
+  if ! command -v clang &>/dev/null; then
+    print_missing_dep_msg "clang" then
+    exit 1
+  fi
 }
 
 function detect_platform() {

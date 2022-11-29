@@ -1,18 +1,15 @@
 local status, configs = pcall(require, 'nvim-treesitter.configs')
 if (not status) then
-  print('nvim-treesitter not installed')
   return
 end
 
 local status2, install = pcall(require, 'nvim-treesitter.install')
 if (not status2) then
-  print('nvim-treesitter not installed')
   return
 end
 
 local status3, autopairs = pcall(require, 'nvim-autopairs')
 if (not status3) then
-  print('nvim-autopairs not installed')
   return
 end
 

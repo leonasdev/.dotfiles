@@ -1,3 +1,18 @@
+local colorschemes = {
+  'nightfox',
+  'gruvbox',
+  'catppuccin',
+  'tokyonight',
+}
+
+for _, cs in ipairs(colorschemes) do
+  local status, _ = pcall(require, cs)
+  if not status then
+    print(cs)
+    return
+  end
+end
+
 require('nightfox').setup({
   options = {
     transparent = true,
@@ -30,6 +45,7 @@ if not status then
   return
 end
 
+-- for gruvbox colorscheme
 vim.api.nvim_set_hl(0, 'GruvboxYellowSign', { link = 'GruvboxYellow' })
 vim.api.nvim_set_hl(0, 'GruvboxPurpleSign', { link = 'GruvboxPurple' })
 vim.api.nvim_set_hl(0, 'GruvboxOrangeSign', { link = 'GruvboxOrange' })
@@ -37,10 +53,6 @@ vim.api.nvim_set_hl(0, 'GruvboxGreenSign', { link = 'GruvboxGreen' })
 vim.api.nvim_set_hl(0, 'GruvboxBlueSign', { link = 'GruvboxBlue' })
 vim.api.nvim_set_hl(0, 'GruvboxAquaSign', { link = 'GruvboxAqua' })
 vim.api.nvim_set_hl(0, 'GruvboxRedSign', { link = 'GruvboxRed' })
--- vim.api.nvim_set_hl(0, 'DiagnosticSignError', { link = 'GruvboxRed' })
--- vim.api.nvim_set_hl(0, 'DiagnosticSignWarn', { link = 'GruvboxYellow' })
--- vim.api.nvim_set_hl(0, 'DiagnosticSignInfo', { link = 'GruvboxBlue' })
--- vim.api.nvim_set_hl(0, 'DiagnosticSignHint', { link = 'GruvboxAqua' })
 
 -- local status, neosolarized = pcall(require, "neosolarized")
 -- if (not status) then

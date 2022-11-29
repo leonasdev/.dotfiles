@@ -1,18 +1,15 @@
 local status, cmp = pcall(require, "cmp")
 if (not status) then
-  print("nvim-cmp not installed")
   return
 end
 
 local status2, lspkind = pcall(require, "lspkind")
 if (not status2) then
-  print("lspkind not installed")
   return
 end
 
 local status3, luasnip = pcall(require, "luasnip")
 if (not status3) then
-  print("luasnip not installed")
   return
 end
 

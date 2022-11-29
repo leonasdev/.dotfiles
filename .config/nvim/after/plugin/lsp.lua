@@ -1,12 +1,10 @@
 local status, lspconfig = pcall(require, "lspconfig")
 if (not status) then
-  print("nvim-lspconfig not installed")
   return
 end
 
 local status2, lspsaga = pcall(require, "lspsaga")
 if (not status2) then
-  print("lspsaga not installed")
   return
 end
 
