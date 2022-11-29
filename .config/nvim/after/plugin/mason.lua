@@ -14,9 +14,9 @@ mason.setup()
 
 mason_lspconfig.setup {
   ensure_installed = {
-    "sumneko_lua",
-    "clangd",
-    "tsserver",
-    "volar"
+    -- "sumneko_lua",
+    -- "clangd",
+    -- "tsserver",
+    -- "volar"
   }
 }

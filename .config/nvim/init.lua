@@ -9,10 +9,6 @@ _G.IS_WSL = IS_LINUX and uname.release:find 'Microsoft' and true or false
 -- Leader key -> " "
 vim.g.mapleader = " "
 
-if require 'leonasdev.first_load' () then
-  return
-end
-
 -- Turn off builtin plugins I do not use
 require('leonasdev.disable_builtin')
 
