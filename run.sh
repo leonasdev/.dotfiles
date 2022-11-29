@@ -29,7 +29,7 @@ function main() {
   echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
   
   while [ true ]; do
-    echo -e "Do you wish to backup your current ${BOLD}Neovim${NC} config?"
+    echo -e "Backup your current ${BOLD}Neovim${NC} config?"
     read -p $'\e[33m[y/n]\e[0m: ' yn
     case $yn in
         [Yy]* ) backup_old_config;break;;
@@ -40,7 +40,7 @@ function main() {
 
   while [ true ]; do
     msg
-    read -p $'Do you wish to install dotfiles now? \e[33m[y/n]\e[0m: ' yn
+    read -p $'Install dotfiles now? \e[33m[y/n]\e[0m: ' yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
@@ -50,14 +50,12 @@ function main() {
 
   remove_neovim_config
   clone_repo
-  # install_neovim_packer
-  # setup_neovim_plugin
   finish
 }
 
 function finish() {
   msg "${BOLD}${GREEN}Installation Successfully!${NC}" 1
-  echo -e "${BOLD}Now you can manage your dotfiles by using \"git dotfiles\" command.${NC}\n"
+  echo -e "${BOLD}\nNow you can manage your dotfiles by using\n- git dotfiles\ncommand.${NC}\n"
 }
 
 function check_neovim_version() {
@@ -75,33 +73,6 @@ function check_neovim_version() {
     echo -e "${BOLD}${GREEN}Neovim version is greater than 0.8.0${NC}"
   fi
 }
-
-# function setup_neovim_plugin() {
-#   msg "${BOLD}Moving to Neovim configuration directory... ${NC}"
-#   cd $CONFIG_DIR/nvim
-#   echo "${GREEN}${BOLD}Done${NC}"
-#
-#   msg "${BOLD}Installing plugins...${NC}" 1
-#   nvim -c 'autocmd User PackerComplete quitall' \
-#     -c 'PackerSync'
-#   msg "${BOLD}${GREEN}Done${NC}" 1 0
-#
-#   msg "${BOLD}${GREEN}Packer setup complete!${NC}" 1
-# }
-
-# function install_neovim_packer() {
-#   msg "${BOLD}Installing Neovim Packer... ${NC}\n"
-#   if [ -e "$PACK_DIR/packer/start/packer.nvim" ]; then
-#     msg "${BOLD}${GREEN}Packer already installed!${NC}"
-#     echo -e
-#   else
-#     if ! git clone --depth 1 "https://github.com/wbthomason/packer.nvim" \
-#       "$PACK_DIR/packer/start/packer.nvim"; then
-#       msg "${BOLD}${RED}Failed to clone Packer. Installation failed.${NC}"
-#       exit 1
-#     fi
-#   fi
-# }
 
 function clone_repo() {
   msg "${BOLD}Cloning dotfiles... ${NC}" "1"
@@ -129,6 +100,10 @@ function print_missing_dep_msg() {
     echo -e "${BOLD}${RED}[ERROR]: Unable to find neovim dependency${NC}"
     echo -e "${BOLD}Please install it first and re-run the installer.${NC}"
     echo -e "${BOLD}You need to install latest nightly version. Use: brew install --HEAD neovim${NC}\n"
+  elif [ "$#" -eq 1 ] && [ "$1" == "neovim" ]; then
+    echo -e "${BOLD}${RED}[ERROR]: Unable to find neovim dependency${NC}"
+    echo -e "${BOLD}Please install it first and re-run the installer.${NC}\n"
+    echo -e "${BOLD}Highly recommand install Neovim from source to get the latest version.${NC}\n"
   elif [ "$#" -eq 1 ]; then
     echo -e "${BOLD}${RED}[ERROR]: Unable to find dependency [$1]${NC}"
     echo -e "${BOLD}Please install it first and re-run the installer. Try: $RECOMMEND_INSTALL $1${NC}\n"
