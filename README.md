@@ -33,4 +33,5 @@ TODO:
 - mason
 - lsp
 - treesitter
+- clipboard slow down startup on Ubuntu 20.04
 - fish shell
