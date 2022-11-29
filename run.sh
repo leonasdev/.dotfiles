@@ -106,8 +106,7 @@ function install_neovim_packer() {
 
 function clone_repo() {
   msg "${BOLD}Cloning dotfiles... ${NC}" "1"
-  if ! git clone -b --bare --branch "$GIT_BRANCH" \
-    --depth 1 "https://github.com/${GIT_REMOTE}" "$HOME/.dotfiles"; then
+  if ! git clone --branch "$GIT_BRANCH" --bare "https://github.com/${GIT_REMOTE}" "$HOME/.dotfiles"; then
     echo "Failed to clone repository. Installation failed."
     exit 1
   else
