@@ -61,7 +61,7 @@ function finish() {
 }
 
 function check_neovim_version() {
-  msg "${BOLD}Checking Neovim version... ${NC}"
+  msg "${BOLD}Checking Neovim version... ${NC}" "1"
   regex="^NVIM v"
   nvim_ver=$(nvim --version | grep "$regex")
   nvim_ver="${nvim_ver/NVIM v/""}"
@@ -69,10 +69,10 @@ function check_neovim_version() {
   required_ver="0.8"
 
   if (( $(echo "$nvim_ver < $required_ver" |bc -l) )); then
-    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.8.0${NC}"
-  else
     echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.8.0 !${NC}"
     exit 1
+  else
+    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.8.0${NC}"
   fi
 }
 
@@ -181,7 +181,7 @@ function backup_old_config() {
         ;;
     esac
   fi
-  echo "${BOLD}${GREEN}Backup operation complete! ${GREEN}You can find it under ${CONFIG_DIR/nvim}.bak${NC}"
+  echo "${BOLD}${GREEN}Backup operation complete! ${GREEN}You can find it under ${CONFIG_DIR}/nvim.bak${NC}"
 }
 
 function check_system_deps() {
@@ -235,7 +235,7 @@ function detect_platform() {
       exit 1
       ;;
   esac
-  echo -e "${BOLD}OS detected: $OS${NC}"
+  echo -e "${BOLD}\nOS detected: $OS${NC}"
   echo -e "${GREEN}${BOLD}Done${NC}"
 }
 
