@@ -103,7 +103,7 @@ function print_missing_dep_msg() {
   elif [ "$#" -eq 1 ] && [ "$1" == "neovim" ]; then
     echo -e "${BOLD}${RED}[ERROR]: Unable to find neovim dependency${NC}"
     echo -e "${BOLD}Please install it first and re-run the installer.${NC}\n"
-    echo -e "${BOLD}Highly recommand install Neovim from source to get the latest version.${NC}\n"
+    echo -e "${BOLD}Highly recommend install Neovim from appimage or build from source to get the latest version.${NC}\n"
   elif [ "$#" -eq 1 ]; then
     echo -e "${BOLD}${RED}[ERROR]: Unable to find dependency [$1]${NC}"
     echo -e "${BOLD}Please install it first and re-run the installer. Try: $RECOMMEND_INSTALL $1${NC}\n"
@@ -179,6 +179,10 @@ function check_system_deps() {
     print_missing_dep_msg "clang"
     exit 1
   fi
+  if ! command -v xsel &>/dev/null; then
+    print_missing_dep_msg "xsel"
+    exit 1
+  fi
 }
 
 function detect_platform() {
@@ -213,7 +217,7 @@ function detect_platform() {
       exit 1
       ;;
   esac
-  echo -e "${BOLD}\nOS detected: $OS${NC}"
+  echo -e "${BOLD}\nOS detected: ${BLUE}$OS${NC}"
   echo -e "${GREEN}${BOLD}Done${NC}"
 }
 
