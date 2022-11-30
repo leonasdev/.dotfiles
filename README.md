@@ -24,7 +24,7 @@ My personal dotfiles
 
 # Quick Start
 ```bash
-bash <(curl https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
+bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
 ```
 
 TODO:
