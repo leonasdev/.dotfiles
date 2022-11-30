@@ -1,12 +1,12 @@
 # .dotfiles
 My personal dotfiles
 
-# Prerequisites
-## Windows
+## Prerequisites
+### Windows
 - [CMake](https://cmake.org/download/)
 - [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/zh-hant/downloads/#build-tools-for-visual-studio-2022) (MSVC)
 
-## Linux
+### Linux
 - CMake
   - `sudo apt install cmake`
 - Clang
@@ -22,7 +22,7 @@ My personal dotfiles
  - `sudo apt install npm`
  - `curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && sudo apt-get install -y nodejs`
 
-# Quick Start
+## Quick Start
 bash:
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
