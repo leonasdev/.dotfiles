@@ -23,8 +23,13 @@ My personal dotfiles
  - `curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && sudo apt-get install -y nodejs`
 
 # Quick Start
+bash:
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
+```
+fish:
+```bash
+bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh | psub)
 ```
 
 TODO:
