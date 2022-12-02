@@ -42,3 +42,4 @@ TODO:
   - caused by no clipboard provider
   - solved: apt install xsel
 - fish shell
+- colorscheme
