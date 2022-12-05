@@ -43,3 +43,6 @@ TODO:
   - solved: apt install xsel
 - fish shell
 - colorscheme
+- better way to manage my dotfiles
+- prompt theme
+- kitty
