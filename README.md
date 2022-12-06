@@ -43,6 +43,7 @@ TODO:
   - solved: apt install xsel
 - fish shell
 - colorscheme
+  - now using `ishan9299/nvim-solarized-lua` with some manual config
 - better way to manage my dotfiles
 - prompt theme
 - kitty
