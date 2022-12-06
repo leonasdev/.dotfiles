@@ -36,8 +36,11 @@ TODO:
 - telescope-fzf-native
 - gitignore run.sh
 - mason
+  - should i init to nothing or some default?
 - lsp
+  - integrate with mason?
 - treesitter
+  - should i use auto install?
 - clipboard slow down startup on some distro
   - caused by no clipboard provider
   - solved: apt install xsel
