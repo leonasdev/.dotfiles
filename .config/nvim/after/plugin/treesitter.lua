@@ -19,22 +19,22 @@ configs.setup {
     disable = {}
   },
   ensure_installed = {
-    'vim',
-    'c',
-    'cpp',
-    'go',
-    'gomod',
-    'java',
-    'javascript',
-    'typescript',
-    'json',
-    'html',
-    'css',
-    'scss',
-    'lua',
-    'rust'
+    -- 'vim',
+    -- 'c',
+    -- 'cpp',
+    -- 'go',
+    -- 'gomod',
+    -- 'java',
+    -- 'javascript',
+    -- 'typescript',
+    -- 'json',
+    -- 'html',
+    -- 'css',
+    -- 'scss',
+    -- 'lua',
+    -- 'rust'
   },
-  sync_install = false,
+  sync_install = true,
   auto_install = true,
   autotag = { -- dependency with 'nvim-ts-autotag'
     enable = true

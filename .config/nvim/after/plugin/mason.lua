@@ -12,6 +12,7 @@ mason.setup()
 
 mason_lspconfig.setup {
   ensure_installed = {
+    "gopls",
     -- "sumneko_lua",
     -- "clangd",
     -- "tsserver",

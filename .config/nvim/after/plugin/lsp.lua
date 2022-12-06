@@ -58,7 +58,6 @@ local default_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local servers = {
   html = true,
-  -- eslint = true,
   pyright = true,
   clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
   gopls = true,
