@@ -5,7 +5,7 @@ end
 
 lualine.setup({
   options = {
-    theme = 'gruvbox-material',
+    theme = 'solarized_dark',
     globalstatus = true
   }
 })

@@ -24,15 +24,17 @@ require('packer').startup { function(use)
   use 'nvim-lua/plenary.nvim' -- lua library for neovim
 
   ------ Color Schemes ------
+  use {
+      'svrana/neosolarized.nvim',
+      requires = { 'tjdevries/colorbuddy.nvim' }
+    }
   use 'EdenEast/nightfox.nvim'
   use 'ellisonleao/gruvbox.nvim'
-  use {
-    'svrana/neosolarized.nvim',
-    requires = { 'tjdevries/colorbuddy.nvim' }
-  }
   use 'catppuccin/nvim'
   use 'folke/tokyonight.nvim'
   use 'sainnhe/gruvbox-material'
+  use 'ishan9299/nvim-solarized-lua'
+  use 'rebelot/kanagawa.nvim'
   ---------------------------
 
   use 'kyazdani42/nvim-web-devicons' -- nerd font supported icons
@@ -85,6 +87,7 @@ require('packer').startup { function(use)
 
   use 'ThePrimeagen/harpoon' -- Getting you where you want with the fewest keystrokes.
 
+  use 'dstein64/vim-startuptime'
 
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then

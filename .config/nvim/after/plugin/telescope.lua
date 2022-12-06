@@ -90,6 +90,10 @@ local function file_browser()
   })
 end
 
+local function highlights()
+  require('telescope.builtin').highlights()
+end
+
 -- mappings
 vim.keymap.set('n', '<leader>ff', find_files, {})
 vim.keymap.set('n', '<C-f>', live_grep, {})
@@ -110,3 +114,5 @@ vim.keymap.set('n', '<leader>fe', diagnostics, {})
 vim.keymap.set('n', '<leader>fn', edit_neovim, {})
 
 vim.keymap.set('n', '<C-n>', file_browser, {})
+
+vim.keymap.set('n', '<leader>hi', highlights, {})
