@@ -38,5 +38,11 @@ TODO:
 - mason
 - lsp
 - treesitter
-- clipboard slow down startup on Ubuntu 20.04
+- clipboard slow down startup on some distro
+  - caused by no clipboard provider
+  - solved: apt install xsel
 - fish shell
+- colorscheme
+- better way to manage my dotfiles
+- prompt theme
+- kitty
