@@ -3,6 +3,9 @@ local keymap = vim.keymap
 
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
+-- set q to do nothing because it's so annoying (default is recording macro)
+keymap.set("n", "q", "")
+
 -- using delete without yank
 keymap.set({ "n", "v" }, "<leader>d", "\"_d")
 

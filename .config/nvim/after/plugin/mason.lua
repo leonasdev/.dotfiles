@@ -8,13 +8,19 @@ if (not status2) then
   return
 end
 
-mason.setup()
+mason.setup {
+  providers = {
+    "mason.providers.registry-api",
+    "mason.providers.client",
+  }
+}
 
 mason_lspconfig.setup {
   ensure_installed = {
     "gopls",
-    -- "sumneko_lua",
-    -- "clangd",
+    "sumneko_lua",
+    "clangd",
+    "pyright"
     -- "tsserver",
     -- "volar"
   }
