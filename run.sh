@@ -179,8 +179,8 @@ function check_system_deps() {
     print_missing_dep_msg "clang"
     exit 1
   fi
-  if ! command -v xsel &>/dev/null; then
-    print_missing_dep_msg "xsel"
+  if ! command -v xclip &>/dev/null; then
+    print_missing_dep_msg "xclip"
     exit 1
   fi
 }
