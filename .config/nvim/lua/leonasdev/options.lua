@@ -37,6 +37,20 @@ opt.backspace = "indent,eol,start"
 -- clipboard
 -- allow you to yank from neovim and C-v to anywhere vice versa
 opt.clipboard:prepend { 'unnamed', 'unnamedplus' }
+if _G.IS_WSL then -- you need put win32yank in system32
+    vim.g.clipboard = {
+        name = 'win32yank-wsl',
+        copy = {
+            ["+"] = { "win32yank.exe", "-i", "--crlf" },
+            ["*"] = { "win32yank.exe", "-i", "--crlf" },
+        },
+        paste = {
+            ["+"] = { "win32yank.exe", "-o", "--lf" },
+            ["*"] = { "win32yank.exe", "-o", "--lf" },
+        },
+        cache_enabled = true
+    }
+end
 
 -- split windows
 opt.splitright = true -- new vertical splits will appear on the right
