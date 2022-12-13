@@ -77,10 +77,10 @@ require('packer').startup { function(use)
   use {
     'nvim-telescope/telescope.nvim', branch = '0.1.x', -- super powerful fuzzy-finder
   }
-  -- use {
-  --   'nvim-telescope/telescope-fzf-native.nvim', -- native telescope sorter to significantly improve sorting performance
-  --   run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
-  -- }
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim', -- native telescope sorter to significantly improve sorting performance
+    run = 'make'
+  }
   use 'nvim-telescope/telescope-file-browser.nvim' -- file browser extension for telescope.nvim
   use 'nvim-telescope/telescope-live-grep-args.nvim' -- enable passing arguments to the live_grep of telescope
   -----------------------

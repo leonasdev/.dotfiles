@@ -11,7 +11,10 @@ vim.api.nvim_create_autocmd({ "Filetype" }, {
   end
 })
 
-vim.keymap.set('n', '<leader>a', function() require('harpoon.mark').add_file() end)
+vim.keymap.set('n', '<leader>a', function()
+  require('harpoon.mark').add_file()
+  print('Add buffer to harpoon')
+end)
 vim.keymap.set('n', '<C-e>', function() require('harpoon.ui').toggle_quick_menu() end)
 
 vim.keymap.set('n', '<C-h>', function() require('harpoon.ui').nav_file(1) end)

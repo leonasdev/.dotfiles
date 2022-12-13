@@ -38,15 +38,16 @@ local default_on_attach = function(client, bufnr)
     code_action_icon = " ",
     code_action_lightbulb = {
       enable = false
-    }
+    },
+    finder_request_timeout = 50000,
   })
 
   -- Mappings.
   local opts = { noremap = true, silent = true, buffer = bufnr }
 
-  vim.keymap.set('n', '<C-]>', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts) -- jump to next diagnostic
-  vim.keymap.set('n', '<C-[>', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts) -- jump to previous diagnostic
-  vim.keymap.set('n', '<leader>cd', '<Cmd>Lspsaga show_line_diagnostics<CR>', opts) -- show current line diagnostics
+  vim.keymap.set('n', '<leader>dn', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts) -- jump to next diagnostic
+  vim.keymap.set('n', '<leader>dp', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts) -- jump to previous diagnostic
+  vim.keymap.set('n', '<leader>dd', '<Cmd>Lspsaga show_line_diagnostics<CR>', opts) -- show current line diagnostics
   vim.keymap.set('n', 'gd', '<Cmd>Lspsaga lsp_finder<CR>', opts) -- show definitions, implementations, references
   vim.keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', opts) -- show definition and make edits in float window
   vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts) -- show docs for what is under cursor

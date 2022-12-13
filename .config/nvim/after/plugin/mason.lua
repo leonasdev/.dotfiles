@@ -20,7 +20,7 @@ mason_lspconfig.setup {
     "gopls",
     "sumneko_lua",
     "clangd",
-    "pyright"
+    "pyright",
     -- "tsserver",
     -- "volar"
   }
