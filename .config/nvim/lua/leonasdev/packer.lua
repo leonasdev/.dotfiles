@@ -87,7 +87,8 @@ require('packer').startup { function(use)
 
   use 'ThePrimeagen/harpoon' -- Getting you where you want with the fewest keystrokes.
 
-  use 'dstein64/vim-startuptime'
+  use 'dstein64/vim-startuptime' -- benchmark for neovim startup
+  use 'folke/zen-mode.nvim' -- Distraction-free coding for Neovim
 
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
