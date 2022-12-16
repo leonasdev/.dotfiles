@@ -35,6 +35,7 @@ require('packer').startup { function(use)
   use 'sainnhe/gruvbox-material'
   use 'ishan9299/nvim-solarized-lua'
   use 'rebelot/kanagawa.nvim'
+  use 'Mofiqul/vscode.nvim'
   ---------------------------
 
   use 'kyazdani42/nvim-web-devicons' -- nerd font supported icons
