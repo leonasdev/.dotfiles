@@ -59,6 +59,7 @@ end
 -- cmd('highlight') for update
 
 -- for ishan9229/solarized
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg='none' })
 vim.api.nvim_set_hl(0, 'LineNr', { fg='#586e75', bg='none' })
 vim.api.nvim_set_hl(0, 'CursorLineNr', { fg='#b58900', bg='none' })
 vim.api.nvim_set_hl(0, 'CursorLine', { fg='none', bg='#002b36' })
