@@ -90,6 +90,7 @@ require('packer').startup { function(use)
 
   use 'dstein64/vim-startuptime' -- benchmark for neovim startup
   use 'folke/zen-mode.nvim' -- Distraction-free coding for Neovim
+  use 'j-hui/fidget.nvim' -- Standalone UI for nvim-lsp progress
 
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then

@@ -8,6 +8,17 @@ if (not status2) then
   return
 end
 
+local status3, fidget = pcall(require, "fidget")
+if (not status3) then
+  return
+end
+
+fidget.setup{
+    window = {
+        blend = 0 -- set 0 if using transparent background, otherwise set 100
+    }
+}
+
 -- auto formatting when save file
 local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
 local enable_format_on_save = function(_, bufnr)
