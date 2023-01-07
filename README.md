@@ -21,6 +21,13 @@ My personal dotfiles
 - npm & node
  - `sudo apt install npm`
  - `curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && sudo apt-get install -y nodejs`
+- Neovim
+   ```bash
+    sudo apt install software-properties-common
+    sudo add-apt-repository ppa:neovim-ppa/unstable
+    sudo apt update
+    sudo apt install neovim
+   ```
 
 ## Quick Start
 bash:

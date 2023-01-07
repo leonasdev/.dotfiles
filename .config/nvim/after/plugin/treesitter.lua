@@ -34,7 +34,6 @@ configs.setup {
     'lua',
     -- 'rust'
   },
-  sync_install = true,
   auto_install = true,
   autotag = { -- dependency with 'nvim-ts-autotag'
     enable = true
