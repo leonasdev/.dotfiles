@@ -59,7 +59,7 @@ end
 -- cmd('highlight') for update
 
 -- for ishan9229/solarized
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg='none' })
+-- vim.api.nvim_set_hl(0, 'NormalFloat', { bg='none' })
 vim.api.nvim_set_hl(0, 'LineNr', { fg='#586e75', bg='none' })
 vim.api.nvim_set_hl(0, 'CursorLineNr', { fg='#b58900', bg='none' })
 vim.api.nvim_set_hl(0, 'CursorLine', { fg='none', bg='#002b36' })
@@ -68,6 +68,7 @@ vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextError', { fg='#dc322f', bg='#360909
 vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextWarn', { fg='#b58900', bg='#1c1500'})
 vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextInfo', { fg='#268bd2', bg='#0e3550'})
 vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextHint', { fg='#2aa198', bg='#0a2725'})
+vim.api.nvim_set_hl(0, 'PmenuSel', { bg='#586e75'})
 vim.cmd('highlight GitSignsAdd guibg=none')
 vim.cmd('highlight GitSignsChange guibg=none')
 vim.cmd('highlight GitSignsDelete guibg=none')

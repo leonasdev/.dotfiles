@@ -41,7 +41,7 @@ require('packer').startup { function(use)
   use 'kyazdani42/nvim-web-devicons' -- nerd font supported icons
   use 'nvim-lualine/lualine.nvim' -- status line
   use 'numToStr/Comment.nvim' -- commenting
-  use 'norcalli/nvim-colorizer.lua' -- color highlighter
+  use 'NvChad/nvim-colorizer.lua' -- color highlighter
   use 'lewis6991/gitsigns.nvim' -- git decorations
 
   ------ LSP ------
@@ -60,7 +60,9 @@ require('packer').startup { function(use)
   use 'hrsh7th/cmp-path' -- nvim-cmp source for path words
   use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's built-in LSP
   use 'hrsh7th/nvim-cmp' -- Completion
+  use 'saadparwaiz1/cmp_luasnip' -- luasnip completion source for nvim-cmp
   use 'L3MON4D3/LuaSnip' -- Snippet engine
+  use "rafamadriz/friendly-snippets" -- Set of preconfigured snippets for different languages.
   -----------------
 
   use {
@@ -70,6 +72,7 @@ require('packer').startup { function(use)
       ts_update()
     end
   }
+  use 'nvim-treesitter/playground'
 
   use 'windwp/nvim-autopairs'
   use { 'windwp/nvim-ts-autotag', after='nvim-treesitter' }

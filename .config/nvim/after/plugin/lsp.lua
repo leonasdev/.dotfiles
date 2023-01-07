@@ -77,6 +77,7 @@ local servers = {
   tsserver = true,
   cssls = true,
   volar = true,
+  tailwindcss = true,
   sumneko_lua = {
     settings = {
       Lua = {
