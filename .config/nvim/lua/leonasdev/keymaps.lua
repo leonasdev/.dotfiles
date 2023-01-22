@@ -27,6 +27,8 @@ keymap.set("n", "<C-d>", "<C-d>zz")
 keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- Delete a word using Ctrl+Backspace
+keymap.set("i", "<C-BS>", "<C-w>")
+keymap.set("c", "<C-BS>", "<C-w>")
 keymap.set("i", "<C-H>", "<C-w>") -- using Ctrl+Backspace delete a word. ref:https://www.reddit.com/r/neovim/comments/prp8zw/using_ctrlbackspace_in_neovim/
 keymap.set("c", "<C-H>", "<C-w>") -- using Ctrl+Backspace delete a word (command mode). ref:https://www.reddit.com/r/neovim/comments/prp8zw/using_ctrlbackspace_in_neovim/
 
