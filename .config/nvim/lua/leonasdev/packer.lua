@@ -22,6 +22,9 @@ require('packer').startup { function(use)
   use 'wbthomason/packer.nvim'
 
   use 'nvim-lua/plenary.nvim' -- lua library for neovim
+  use { 'folke/neodev.nvim', config = function ()
+    require('neodev').setup()
+  end}
 
   ------ Color Schemes ------
   use {
@@ -51,10 +54,10 @@ require('packer').startup { function(use)
   use 'williamboman/mason-lspconfig.nvim' -- bridges mason with the lspconfig
 
   use 'onsails/lspkind-nvim' -- vscode-like pictograms
-  use {
-    'glepnir/lspsaga.nvim', -- LSP UIs
-    branch = "main"
-  }
+  -- use { -- deprecate untill it stable
+  --   'glepnir/lspsaga.nvim', -- LSP UIs
+  --   branch = "main"
+  -- }
 
   use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
   use 'hrsh7th/cmp-path' -- nvim-cmp source for path words
