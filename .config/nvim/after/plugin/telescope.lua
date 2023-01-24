@@ -58,10 +58,13 @@ require('telescope').load_extension('file_browser')
 require('telescope').load_extension('live_grep_args')
 
 -- configs
+local enable_previewer = false
+
 local function edit_neovim()
   local opts = {
     prompt_title = "~ Neovim Config ~",
     cwd = vim.fn.stdpath("config"),
+    previewer = enable_previewer,
   }
 
   require('telescope.builtin').find_files(opts)
@@ -69,6 +72,7 @@ end
 
 local function find_files()
   local opts = {
+    previewer = enable_previewer,
     no_ignore = true, -- set false to ignore files by .gitignore
     hidden = true -- set false to ignore dotfiles
   }
@@ -77,7 +81,9 @@ local function find_files()
 end
 
 local function git_files()
-  require('telescope.builtin').git_files()
+  require('telescope.builtin').git_files({
+    previewer = enable_previewer,
+  })
 end
 
 local function live_grep()

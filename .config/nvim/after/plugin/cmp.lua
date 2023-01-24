@@ -13,7 +13,42 @@ if (not status3) then
   return
 end
 
+-- reference: https://code.visualstudio.com/docs/editor/intellisense#_types-of-completions
+lspkind.init({
+  symbol_map = {
+    Text = '',
+    Method = '',
+    Function = '',
+    Constructor = '',
+    Field = '',
+    Variable = '',
+    Class = '',
+    Interface = '',
+    Module = '',
+    Property = '',
+    Unit = '',
+    Value = '',
+    Enum = '',
+    Keyword = '',
+    Snippet = '',
+    Color = '',
+    File = '',
+    Reference = '',
+    Folder = '',
+    EnumMember = '',
+    Constant = '',
+    Struct = '',
+    Event = '',
+    Operator = '',
+    TypeParameter = '',
+  }
+})
+
 require("luasnip.loaders.from_vscode").lazy_load()
+
+luasnip.config.set_config({
+  region_check_events = 'CursorMoved'
+})
 
 vim.opt.completeopt = "menu,menuone,noselect"
 
@@ -45,8 +80,8 @@ cmp.setup({
             })
         elseif luasnip.expand_or_jumpable() then
             luasnip.expand_or_jump()
-        elseif has_words_before() then
-            cmp.complete()
+        -- elseif has_words_before() then
+        --     cmp.complete()
         else
             fallback()
         end
@@ -70,15 +105,25 @@ cmp.setup({
   }),
   sources = cmp.config.sources({
     -- ordering is matter
-    { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'nvim_lsp' },
     { name = 'path' },
     { name = 'buffer', keyword_length = 5 }, -- show buffer's completion only if type more then keyword_length
   }),
   window = {
-    completion = {
-      col_offset = -3 -- align the abbr and word on cursor (due to fields order below)
-    }
+    -- completion = {
+    --   col_offset = -3 -- align the abbr and word on cursor (due to fields order below)
+    -- },
+    -- documentation = {
+    --   winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None"
+    -- },
+
+    -- border style
+    completion = cmp.config.window.bordered({
+      col_offset = -3, -- align the abbr and word on cursor (due to fields order below)
+      side_padding = 0,
+    }),
+    documentation = cmp.config.window.bordered(),
   },
   formatting = {
     fields = { "kind", "abbr", "menu" },
@@ -86,10 +131,10 @@ cmp.setup({
       mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
       menu = ({ -- showing type in menu
-        nvim_lsp = "[LSP]",
-        path = "[Path]",
-        buffer = "[Buffer]",
-        luasnip = "[LuaSnip]",
+        nvim_lsp = "(LSP)",
+        path = "(Path)",
+        buffer = "(Buffer)",
+        luasnip = "(LuaSnip)",
       }),
       before = function(entry, vim_item) -- for tailwind css autocomplete
         if vim_item.kind == 'Color' and entry.completion_item.documentation then
