@@ -110,6 +110,12 @@ local function highlights()
   require('telescope.builtin').highlights()
 end
 
+local function current_buffer_fuzzy_find()
+  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+    previewer = false,
+  })
+end
+
 -- mappings
 vim.keymap.set('n', '<leader>ff', find_files, {})
 vim.keymap.set('n', '<C-f>', live_grep, {})
@@ -132,3 +138,5 @@ vim.keymap.set('n', '<leader>fn', edit_neovim, {})
 vim.keymap.set('n', '<C-n>', file_browser, {})
 
 vim.keymap.set('n', '<leader>hi', highlights, {})
+
+vim.keymap.set('n', '<leader>/', current_buffer_fuzzy_find, {})

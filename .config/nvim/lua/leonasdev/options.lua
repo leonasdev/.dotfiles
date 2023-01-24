@@ -72,11 +72,13 @@ opt.updatetime = 100 -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_do
 opt.belloff = "all" -- Just turn the dang bell off
 opt.signcolumn = "yes" -- always showing the signcolumn
 
+-- Remap for dealing with word wrap
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
 -- Highlight yanked text
-local ag = vim.api.nvim_create_augroup
-local au = vim.api.nvim_create_autocmd
-au('TextYankPost', {
-  group = ag('yank_highlight', {}),
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('yank_highlight', {}),
   pattern = '*',
   callback = function()
     vim.highlight.on_yank { higroup = 'Search',
