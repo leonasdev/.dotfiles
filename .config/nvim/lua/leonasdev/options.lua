@@ -1,5 +1,7 @@
 local opt = vim.opt
 
+vim.keymap.set('n', '<CR>', 'o<Esc>k')
+vim.keymap.set('n', '<S-CR>', 'O<Esc>j')
 -- line numbers
 opt.relativenumber = true
 opt.number = true
@@ -12,11 +14,14 @@ opt.expandtab = true
 opt.autoindent = true
 
 -- line wrapping
-opt.wrap = false
--- opt.wrap = true
--- opt.breakindent = true
--- opt.showbreak = string.rep(" ", 3) -- Make it so that long lines wrap smartly
--- opt.linebreak = true
+-- opt.wrap = false
+opt.wrap = true
+opt.breakindent = true
+opt.showbreak = string.rep(" ", 3) -- Make it so that long lines wrap smartly
+opt.linebreak = true
+-- Remap for dealing with word wrap
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 --search & replace settings
 opt.ignorecase = true
@@ -72,10 +77,6 @@ opt.updatetime = 100 -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_do
 opt.belloff = "all" -- Just turn the dang bell off
 opt.signcolumn = "yes" -- always showing the signcolumn
 
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('yank_highlight', {}),
@@ -83,5 +84,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
     vim.highlight.on_yank { higroup = 'Search',
       timeout = 100 }
+  end,
+})
+
+-- disable auto comment when insert new line after comment
+vim.api.nvim_create_autocmd("bufEnter", {
+  group = vim.api.nvim_create_augroup("FormatOptions", {}),
+  pattern = "*",
+  callback = function()
+    opt.formatoptions:remove{"r", "o"}
   end,
 })
