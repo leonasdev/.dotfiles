@@ -1,7 +1,5 @@
 local opt = vim.opt
 
-vim.keymap.set('n', '<CR>', 'o<Esc>k')
-vim.keymap.set('n', '<S-CR>', 'O<Esc>j')
 -- line numbers
 opt.relativenumber = true
 opt.number = true
