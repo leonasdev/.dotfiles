@@ -181,6 +181,7 @@ cmp.setup({
       }),
       before = function(entry, vim_item) -- for tailwind css autocomplete
         vim_item = formatForTailwindCSS(entry, vim_item)
+        return vim_item
       end
     })
   }
