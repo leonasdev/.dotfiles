@@ -6,6 +6,7 @@ end
 colorizer.setup({
   user_default_options = {
     filetypes = { "*" },
+    names = false,
     tailwind = true,
   }
 })
