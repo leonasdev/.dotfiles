@@ -65,7 +65,10 @@ require('packer').startup { function(use)
   use 'hrsh7th/nvim-cmp' -- Completion
   use 'saadparwaiz1/cmp_luasnip' -- luasnip completion source for nvim-cmp
   use 'L3MON4D3/LuaSnip' -- Snippet engine
-  use "rafamadriz/friendly-snippets" -- Set of preconfigured snippets for different languages.
+  use 'rafamadriz/friendly-snippets' -- Set of preconfigured snippets for different languages.
+
+  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP
+  use 'jay-babu/mason-null-ls.nvim' -- bridges mason.nvim with the null-ls plugin
   -----------------
 
   use {

@@ -2,13 +2,49 @@ local lspconfig = require("lspconfig")
 local fidget = require("fidget")
 local mason = require("mason")
 local mason_lspconfig = require("mason-lspconfig")
+local null_ls = require("null-ls")
+local mason_null_ls = require("mason-null-ls")
 
 -- local status2, lspsaga = pcall(require, "lspsaga")
 -- if (not status2) then
 --   return
 -- end
 
-fidget.setup{
+local lsp_formatting = function(bufnr)
+  vim.lsp.buf.format({
+    filter = function(client)
+      return client.name == "null-ls"
+    end,
+    bufnr = bufnr,
+  })
+end
+
+-- for auto formatting on save
+-- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+null_ls.setup {
+  sources = {
+    null_ls.builtins.formatting.prettierd,
+    -- null_ls.builtins.diagnostics.eslint_d,
+  },
+  on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/formatting") then
+      -- auto formatting on save
+      -- vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+      -- vim.api.nvim_create_autocmd("BufWritePre", {
+      --   group = augroup,
+      --   buffer = bufnr,
+      --   callback = function()
+      --     lsp_formatting(bufnr)
+      --   end
+      -- })
+      vim.api.nvim_create_user_command("Format", function()
+        lsp_formatting(bufnr)
+      end, {})
+    end
+  end,
+}
+
+fidget.setup {
   window = {
     blend = 0 -- set 0 if using transparent background, otherwise set 100
   }
@@ -35,14 +71,24 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   border = "rounded"
 })
 
-vim.diagnostic.config {
-  float = { border = "rounded" },
-}
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
 
-vim.fn.sign_define("DiagnosticSignError", { text = "✗", texthl = "DiagnosticSignError" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = "!", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInformation", { text = "", texthl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '●',
+    severity_sort = true,
+  },
+  float = {
+    border = "rounded",
+    source = "always", -- Or "if_many"
+    prefix = " - ",
+  },
+  severity_sort = true,
+})
 
 -- auto formatting when save file
 local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
@@ -57,10 +103,7 @@ local enable_format_on_save = function(_, bufnr)
   })
 end
 
-local on_attach = function(client, bufnr)
-  -- enable format on save in all configred lsp
-  -- enable_format_on_save(client, bufnr)
-
+local on_attach = function(_, bufnr)
   -- lspsaga.setup({
   --   ui = {
   --     title = false,
@@ -127,9 +170,6 @@ local on_attach = function(client, bufnr)
       local float_opts = {
         focusable = false,
         close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-        border = "rounded",
-        source = "always", -- show source in diagnostic popup window
-        prefix = " ",
       }
 
       if not vim.b.diagnostics_pos then
@@ -138,7 +178,7 @@ local on_attach = function(client, bufnr)
 
       local cursor_pos = vim.api.nvim_win_get_cursor(0)
       if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
-        and #vim.diagnostic.get() > 0
+          and #vim.diagnostic.get() > 0
       then
         vim.diagnostic.open_float(nil, float_opts)
       end
@@ -157,6 +197,7 @@ local servers = {
   clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
   gopls = true,
   tsserver = true,
+  eslint = true,
   cssls = true,
   volar = true,
   tailwindcss = true,
@@ -208,3 +249,9 @@ end
 for server, config in pairs(servers) do
   setup_server(server, config)
 end
+
+mason_null_ls.setup({
+  ensure_installed = {
+    "prettierd",
+  }
+})
