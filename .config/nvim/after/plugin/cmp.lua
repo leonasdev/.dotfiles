@@ -89,7 +89,6 @@ local formatForTailwindCSS = function(entry, vim_item)
       if vim.fn.hlID(group) < 1 then
         vim.api.nvim_set_hl(0, group, {fg = '#' .. color})
       end
-      -- vim_item.kind = "⬤" -- or "■" or anything
       vim_item.kind = "●" -- or "■" or anything
       vim_item.kind_hl_group = group
       return vim_item
