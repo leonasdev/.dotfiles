@@ -197,7 +197,9 @@ local servers = {
   clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
   gopls = true,
   tsserver = true,
-  eslint = true,
+  eslint = {
+    filetypes = { "javascript", "javascriptreact", "javascript.jsx"}
+  },
   cssls = true,
   volar = true,
   tailwindcss = true,

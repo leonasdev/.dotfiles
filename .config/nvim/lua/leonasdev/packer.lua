@@ -78,10 +78,12 @@ require('packer').startup { function(use)
       ts_update()
     end
   }
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'nvim-treesitter/playground'
 
   use 'windwp/nvim-autopairs'
   use { 'windwp/nvim-ts-autotag', after='nvim-treesitter' }
+  use 'kylechui/nvim-surround'
 
   ------ telescope ------
   use {
