@@ -16,7 +16,7 @@ keymap.set({ "n", "v" }, "<leader>d", "\"_d")
 keymap.set("i", "jk", "<ESC>")
 
 -- clear highlight of search
-keymap.set("n", "<leader>nh", ":nohl<CR>")
+keymap.set("n", "<leader>nh", ":nohl<CR>", { silent = true })
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")

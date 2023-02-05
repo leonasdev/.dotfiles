@@ -33,9 +33,32 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {
   install = {
-    colorscheme = { "solarized", "habamax" }
+    colorscheme = { --[[ "solarized",  ]]"habamax" }
   },
   ui = {
     border = "rounded",
+  },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        -- "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      }
+    }
   }
+})
+
+-- close lazy panel with esc
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "lazy",
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "<Esc>", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+  end
 })

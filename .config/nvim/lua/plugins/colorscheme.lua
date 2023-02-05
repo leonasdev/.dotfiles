@@ -20,6 +20,8 @@ return {
       vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextInfo', { fg='#268bd2', bg='#0e3550'})
       vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextHint', { fg='#2aa198', bg='#0a2725'})
       vim.api.nvim_set_hl(0, 'PmenuSel', { bg='#586e75'})
+      vim.api.nvim_set_hl(0, 'LazyButton', { link = "Visual" })
+      vim.api.nvim_set_hl(0, 'LazyButtonActive', { link = "IncSearch" })
       vim.cmd('highlight GitSignsAdd guibg=none')
       vim.cmd('highlight GitSignsChange guibg=none')
       vim.cmd('highlight GitSignsDelete guibg=none')
