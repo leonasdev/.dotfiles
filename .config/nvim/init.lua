@@ -11,14 +11,31 @@ _G.IS_WSL = (function()
     return condition1 or condition2
 end)()
 
--- Leader key -> " "
+-- Mapping leader key to: " "
 vim.g.mapleader = " "
 
--- Turn off builtin plugins I do not use
-require('leonasdev.disable_builtin')
+require("leonasdev.options")
+require("leonasdev.keymaps")
 
-if not require('leonasdev.packer') then
-  return
+-- Install lazy.nvim (package manager)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
-require('leonasdev.options')
-require('leonasdev.keymaps')
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup("plugins", {
+  install = {
+    colorscheme = { "solarized", "habamax" }
+  },
+  ui = {
+    border = "rounded",
+  }
+})

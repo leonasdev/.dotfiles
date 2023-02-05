@@ -76,7 +76,7 @@ opt.belloff = "all" -- Just turn the dang bell off
 opt.signcolumn = "yes" -- always showing the signcolumn
 
 -- Highlight yanked text
-vim.api.nvim_create_autocmd('TextYankPost', {
+vim.api.nvim_create_autocmd('textyankpost', {
   group = vim.api.nvim_create_augroup('yank_highlight', {}),
   pattern = '*',
   callback = function()
