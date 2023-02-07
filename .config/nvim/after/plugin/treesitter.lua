@@ -20,6 +20,7 @@ configs.setup {
   },
   indent = {
     enable = true,
+    disable = {"python"}
   },
   ensure_installed = {
     'vim',
