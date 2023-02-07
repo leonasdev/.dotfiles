@@ -15,9 +15,15 @@ keymap.set({ "n", "v" }, "<leader>d", "\"_d")
 -- escape insert mode
 keymap.set("i", "jk", "<ESC>")
 
--- clear highlight of search
-keymap.set("n", "<leader>nh", "<cmd>nohl<cr>")
-keymap.set({ "n", "i" }, "<Esc>", "<cmd>noh<cr><esc>")
+-- clear highlight of search and don't show search message
+keymap.set("n", "<leader>nh", function()
+  vim.cmd([[nohl]])
+  vim.cmd([[stopinsert]])
+end)
+keymap.set({ "n", "i" }, "<Esc>", function()
+  vim.cmd([[nohl]])
+  vim.cmd([[stopinsert]])
+end)
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")
