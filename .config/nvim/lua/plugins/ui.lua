@@ -17,6 +17,8 @@ return {
           "neo-tree",
         },
       }
+
+      vim.opt.showmode = false
     end
   },
 
@@ -26,10 +28,11 @@ return {
     event = "BufEnter",
     config = function()
       require("colorizer").setup {
+        filetypes = { "*" },
         user_default_options = {
-          filetypes = { "*" },
           names = false,
-          tailwind = true,
+          tailwind = "both",
+          mode = "background"
         }
       }
     end
@@ -55,7 +58,7 @@ return {
   -- Standalone UI for nvim-lsp progress
   {
     "j-hui/fidget.nvim",
-    event = "BufEnter",
+    event = "LspAttach",
     config = function()
       require("fidget").setup {
         window = {
