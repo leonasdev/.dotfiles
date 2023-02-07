@@ -49,3 +49,8 @@ keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- Search and replace in current word (case sensitive)
 keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 keymap.set("v", "<leader>s", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
+-- Add undo break-points
+keymap.set("i", ",", ",<C-g>u")
+keymap.set("i", ".", ".<C-g>u")
+keymap.set("i", ";", ";<C-g>u")
