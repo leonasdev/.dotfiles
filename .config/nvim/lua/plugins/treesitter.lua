@@ -16,10 +16,15 @@ return {
         },
         indent = {
           enable = true,
+          disable = { "python" },
         },
         ensure_installed = {
           'vim',
           'help',
+          'markdown',
+          'markdown_inline',
+          'bash',
+          'regex',
           'c',
           'cpp',
           'go',

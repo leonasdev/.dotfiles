@@ -151,7 +151,7 @@ return {
   -- configuration for nvim lsp
   {
     "neovim/nvim-lspconfig",
-    event = "BufReadPre",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
 
       -- for develop neovim

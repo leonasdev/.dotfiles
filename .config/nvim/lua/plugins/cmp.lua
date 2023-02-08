@@ -2,12 +2,13 @@ return {
   -- Completion
   {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "hrsh7th/cmp-buffer", -- nvim-cmp source for buffer words
       "hrsh7th/cmp-path", -- nvim-cmp source for path words
       "hrsh7th/cmp-nvim-lsp", -- nvim-cmp source for neovim's built-in LSP
       "saadparwaiz1/cmp_luasnip", -- nvim-cmp source for luasnip
+      "hrsh7th/cmp-cmdline", -- nvim-cmp source for vim's cmdline
       -- Snippet engine
       {
         "L3MON4D3/LuaSnip",
@@ -132,18 +133,6 @@ return {
               fallback()
             end
           end, { "i", "s" }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.confirm({
-                behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
-                select = true -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-              })
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
           -- ordering is matter
@@ -187,12 +176,94 @@ return {
       })
 
       cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
+        mapping = cmp.mapping.preset.cmdline({
+          ['<C-k>'] = cmp.mapping({
+            c = function(fallback)
+              if cmp.visible() then
+                return cmp.select_prev_item()
+              end
+              fallback()
+            end,
+          }),
+          ['<C-j>'] = cmp.mapping({
+            c = function(fallback)
+              if cmp.visible() then
+                return cmp.select_next_item()
+              end
+              fallback()
+            end,
+          }),
+          ['<Tab>'] = cmp.mapping({
+            c = function(fallback)
+              if cmp.visible() then
+                return cmp.confirm({
+                  behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
+                  select = true -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                })
+              else
+                return fallback()
+              end
+            end
+          }),
+        }),
         sources = {
           { name = 'buffer' }
         }
       })
+
+      cmp.setup.cmdline(":", {
+        completion = {
+          autocomplete = false
+        },
+        mapping = cmp.mapping.preset.cmdline({
+          ['<C-k>'] = cmp.mapping({
+            c = function(fallback)
+              if cmp.visible() then
+                return cmp.select_prev_item()
+              end
+              fallback()
+            end,
+          }),
+          ['<C-j>'] = cmp.mapping({
+            c = function(fallback)
+              if cmp.visible() then
+                return cmp.select_next_item()
+              end
+              fallback()
+            end,
+          }),
+          ['<Tab>'] = cmp.mapping({
+            c = function()
+              if cmp.visible() then
+                return cmp.select_next_item()
+              else
+                cmp.complete()
+                cmp.select_next_item()
+                return
+              end
+            end
+          }),
+          ['<S-Tab>'] = cmp.mapping({
+            c = function()
+              if cmp.visible() then
+                return cmp.select_prev_item()
+              else
+                cmp.complete()
+                cmp.select_next_item()
+                return
+              end
+            end
+          }),
+        }),
+        sources = {
+          { name = "path" },
+          { name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!"}
+            }
+          },
+        },
+      })
     end
   },
-
 }

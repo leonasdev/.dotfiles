@@ -15,8 +15,15 @@ keymap.set({ "n", "v" }, "<leader>d", "\"_d")
 -- escape insert mode
 keymap.set("i", "jk", "<ESC>")
 
--- clear highlight of search
-keymap.set("n", "<leader>nh", ":nohl<CR>")
+-- clear highlight of search and don't show search message
+keymap.set("n", "<leader>nh", function()
+  vim.cmd([[nohl]])
+  vim.cmd([[stopinsert]])
+end)
+keymap.set({ "n", "i" }, "<Esc>", function()
+  vim.cmd([[nohl]])
+  vim.cmd([[stopinsert]])
+end)
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")
@@ -42,3 +49,8 @@ keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- Search and replace in current word (case sensitive)
 keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 keymap.set("v", "<leader>s", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
+-- Add undo break-points
+keymap.set("i", ",", ",<C-g>u")
+keymap.set("i", ".", ".<C-g>u")
+keymap.set("i", ";", ";<C-g>u")
