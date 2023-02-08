@@ -151,13 +151,13 @@ return {
 
           -- border style
           completion = cmp.config.window.bordered({
-            col_offset = -3, -- align the abbr and word on cursor (due to fields order below)
+            col_offset = 0, -- align the abbr and word on cursor (due to fields order below)
             side_padding = 0,
           }),
           documentation = cmp.config.window.bordered(),
         },
         formatting = {
-          fields = { "kind", "abbr", "menu" },
+          fields = { "abbr", "kind", "menu" },
           format = lspkind.cmp_format({
             mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
             maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
