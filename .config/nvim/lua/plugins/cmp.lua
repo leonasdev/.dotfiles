@@ -151,24 +151,25 @@ return {
 
           -- border style
           completion = cmp.config.window.bordered({
-            col_offset = 0, -- align the abbr and word on cursor (due to fields order below)
+            col_offset = -3, -- align the abbr and word on cursor (due to fields order below)
             side_padding = 0,
           }),
           documentation = cmp.config.window.bordered(),
         },
         formatting = {
-          fields = { "abbr", "kind", "menu" },
+          fields = { "kind", "abbr", "menu" },
           format = lspkind.cmp_format({
             mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
             maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-            menu = ({ -- showing type in menu
-              nvim_lsp = "(LSP)",
-              path = "(Path)",
-              buffer = "(Buffer)",
-              luasnip = "(LuaSnip)",
-            }),
-            before = function(entry, vim_item) -- for tailwind css autocomplete
-              vim_item = formatForTailwindCSS(entry, vim_item)
+            -- menu = ({ -- showing type in menu
+            --   nvim_lsp = "(LSP)",
+            --   path = "(Path)",
+            --   buffer = "(Buffer)",
+            --   luasnip = "(LuaSnip)",
+            -- }),
+            before = function(entry, vim_item)
+              vim_item.menu = "(" .. vim_item.kind .. ")"
+              vim_item = formatForTailwindCSS(entry, vim_item) -- for tailwind css autocomplete
               return vim_item
             end
           })
@@ -208,7 +209,23 @@ return {
         }),
         sources = {
           { name = 'buffer' }
-        }
+        },
+        formatting = {
+          fields = { "abbr", "kind" },
+          format = lspkind.cmp_format({
+            mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            before = function(_, vim_item)
+              if vim_item.kind == "Text" then
+                vim_item.kind = ""
+                return vim_item
+              end
+              -- just show the icon
+              vim_item.kind = lspkind.symbolic(vim_item.kind) and lspkind.symbolic(vim_item.kind) or vim_item.kind
+              return vim_item
+            end
+          })
+        },
       })
 
       cmp.setup.cmdline(":", {
@@ -262,6 +279,22 @@ return {
               ignore_cmds = { "Man", "!"}
             }
           },
+        },
+        formatting = {
+          fields = { "abbr", "kind" },
+          format = lspkind.cmp_format({
+            mode = 'symbol_text', -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            before = function(_, vim_item)
+              if vim_item.kind == "Variable" then
+                vim_item.kind = ""
+                return vim_item
+              end
+              -- just show the icon
+              vim_item.kind = lspkind.symbolic(vim_item.kind) and lspkind.symbolic(vim_item.kind) or vim_item.kind
+              return vim_item
+            end
+          }),
         },
       })
     end
