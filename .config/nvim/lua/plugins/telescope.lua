@@ -61,6 +61,24 @@ local function current_buffer_fuzzy_find()
   })
 end
 
+local function lsp_definitions()
+  require("telescope.builtin").lsp_definitions(require('telescope.themes').get_dropdown {
+    show_line = false,
+  })
+end
+
+local function lsp_references()
+  require("telescope.builtin").lsp_references(require('telescope.themes').get_dropdown {
+    show_line = false,
+  })
+end
+
+local function lsp_implementations()
+  require("telescope.builtin").lsp_implementations(require('telescope.themes').get_dropdown {
+    show_line = false,
+  })
+end
+
 return {
   -- super powerful fuzzy-finder
   {
@@ -77,7 +95,9 @@ return {
       { "<C-n>", file_browser, mode = "n", desc = "File Browser" },
       { "<leader>hi", "<cmd>Telescope highlights<cr>", mode = "n", desc = "Neovim Highlight Groups" },
       { "<leader>/", current_buffer_fuzzy_find, mode = "n", desc = "Fuzzy Find in Current Buffer" },
-      { "gr", "<cmd>Telescope lsp_references<cr>", mode = "n", desc = "LSP Find References" },
+      { "gd", lsp_definitions, mode = "n", desc = "LSP Find Definitions" },
+      { "gr", lsp_references, mode = "n", desc = "LSP Find References" },
+      { "gi", lsp_implementations, mode = "n", desc = "LSP Find Implementations" },
     },
     config = function()
       require("telescope").setup {
