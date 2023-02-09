@@ -92,6 +92,10 @@ local function lspconfig_setup()
       vim.api.nvim_create_user_command("FormatToggle", function()
         require("leonasdev.autoformat").toggle()
       end, { desc = "Toggle Format on Save" })
+
+      -- TODO: Format command in visual mode and normal mode
+      -- vim.api.nvim_create_user_command("Format", format
+      --   , { range = true, desc = "Format on range" })
     end
 
     local opts = { buffer = bufnr }
