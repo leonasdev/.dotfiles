@@ -25,6 +25,9 @@ end
 
 local format = function()
   local buf = vim.api.nvim_get_current_buf()
+  if require("leonasdev.autoformat").autoformat == false then
+    return
+  end
 
   local ft = vim.bo[buf].filetype
   local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
@@ -77,61 +80,66 @@ local servers = {
 }
 
 local function lspconfig_setup()
-  local on_attach = function(client, bufnr)
-    if client.supports_method("textDocument/formatting") then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
+  vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+      local bufnr = args.buf
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+      if client.supports_method("textDocument/formatting") then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
+          buffer = bufnr,
+          callback = function()
+            if require("leonasdev.autoformat").autoformat then
+              format()
+            end
+          end,
+        })
+
+        vim.api.nvim_create_user_command("FormatToggle", function()
+          require("leonasdev.autoformat").toggle()
+        end, { desc = "Toggle Format on Save" })
+
+        -- TODO: Format command in visual mode and normal mode
+        -- vim.api.nvim_create_user_command("Format", format
+        --   , { range = true, desc = "Format on range" })
+      end
+
+      local opts = { buffer = bufnr }
+
+      vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, opts)
+      vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
+      vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, opts)
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+      vim.keymap.set({ 'i', 'n' }, '<C-s>', vim.lsp.buf.signature_help, opts)
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+
+      -- auto show diagnostic when cursor hold
+      vim.api.nvim_create_autocmd("CursorHold", {
         buffer = bufnr,
         callback = function()
-          if require("leonasdev.autoformat").autoformat then
-            format()
+          local float_opts = {
+            focusable = false,
+            close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+          }
+
+          if not vim.b.diagnostics_pos then
+            vim.b.diagnostics_pos = { nil, nil }
           end
+
+          local cursor_pos = vim.api.nvim_win_get_cursor(0)
+          if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
+              and #vim.diagnostic.get() > 0
+          then
+            vim.diagnostic.open_float(nil, float_opts)
+          end
+
+          vim.b.diagnostics_pos = cursor_pos
         end,
       })
-
-      vim.api.nvim_create_user_command("FormatToggle", function()
-        require("leonasdev.autoformat").toggle()
-      end, { desc = "Toggle Format on Save" })
-
-      -- TODO: Format command in visual mode and normal mode
-      -- vim.api.nvim_create_user_command("Format", format
-      --   , { range = true, desc = "Format on range" })
     end
-
-    local opts = { buffer = bufnr }
-
-    vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, opts)
-    vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
-    vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set({ 'i', 'n' }, '<C-s>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-
-    -- auto show diagnostic when cursor hold
-    vim.api.nvim_create_autocmd("CursorHold", {
-      buffer = bufnr,
-      callback = function()
-        local float_opts = {
-          focusable = false,
-          close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-        }
-
-        if not vim.b.diagnostics_pos then
-          vim.b.diagnostics_pos = { nil, nil }
-        end
-
-        local cursor_pos = vim.api.nvim_win_get_cursor(0)
-        if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
-            and #vim.diagnostic.get() > 0
-        then
-          vim.diagnostic.open_float(nil, float_opts)
-        end
-
-        vim.b.diagnostics_pos = cursor_pos
-      end,
-    })
-  end
+  })
 
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -146,7 +154,6 @@ local function lspconfig_setup()
     end
 
     config = vim.tbl_deep_extend("force", {
-      on_attach = on_attach,
       capabilities = capabilities,
     }, config)
 
