@@ -24,6 +24,7 @@ local function lsp_related_ui_adjust()
 end
 
 local format_on_save = false
+local format_on_save_prettier = true
 
 local servers = {
   html = true,
@@ -176,7 +177,7 @@ return {
             },
             on_attach = function(client, bufnr)
               if client.supports_method("textDocument/formatting") then
-                if format_on_save then
+                if format_on_save or format_on_save_prettier then
                   -- auto formatting on save
                   local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
                   vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
