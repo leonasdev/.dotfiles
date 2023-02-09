@@ -23,8 +23,22 @@ local function lsp_related_ui_adjust()
   })
 end
 
-local format_on_save = false
-local format_on_save_prettier = true
+local format = function()
+  local buf = vim.api.nvim_get_current_buf()
+
+  local ft = vim.bo[buf].filetype
+  local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
+
+  vim.lsp.buf.format({
+    bufnr = buf,
+    filter = function(client)
+      if have_nls then
+        return client.name == "null-ls"
+      end
+      return client.name ~= "null-ls"
+    end,
+  })
+end
 
 local servers = {
   html = true,
@@ -33,7 +47,7 @@ local servers = {
   gopls = true,
   tsserver = true,
   eslint = {
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx"}
+    filetypes = { "javascript", "javascriptreact", "javascript.jsx" }
   },
   cssls = true,
   volar = true,
@@ -63,18 +77,21 @@ local servers = {
 }
 
 local function lspconfig_setup()
-  local on_attach = function(_, bufnr)
-    if format_on_save then
-      -- auto formatting when save file
-      local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
-      vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
+  local on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/formatting") then
       vim.api.nvim_create_autocmd("BufWritePre", {
-        group = augroup_format,
+        group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
         buffer = bufnr,
         callback = function()
-          vim.lsp.buf.format({ bufnr = bufnr })
+          if require("leonasdev.autoformat").autoformat then
+            format()
+          end
         end,
       })
+
+      vim.api.nvim_create_user_command("FormatToggle", function()
+        require("leonasdev.autoformat").toggle()
+      end, { desc = "Toggle Format on Save" })
     end
 
     local opts = { buffer = bufnr }
@@ -83,7 +100,7 @@ local function lspconfig_setup()
     vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
     vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set({ 'i', 'n' }, '<C-s>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set({ 'i', 'n' }, '<C-i>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
@@ -102,7 +119,7 @@ local function lspconfig_setup()
 
         local cursor_pos = vim.api.nvim_win_get_cursor(0)
         if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
-          and #vim.diagnostic.get() > 0
+            and #vim.diagnostic.get() > 0
         then
           vim.diagnostic.open_float(nil, float_opts)
         end
@@ -137,15 +154,6 @@ local function lspconfig_setup()
   end
 end
 
-local lsp_formatting = function(bufnr)
-  vim.lsp.buf.format({
-    filter = function(client)
-      return client.name == "null-ls"
-    end,
-    bufnr = bufnr,
-  })
-end
-
 return {
   -- configuration for nvim lsp
   {
@@ -175,25 +183,6 @@ return {
               require("null-ls").builtins.formatting.prettierd,
               -- null_ls.builtins.diagnostics.eslint_d,
             },
-            on_attach = function(client, bufnr)
-              if client.supports_method("textDocument/formatting") then
-                if format_on_save or format_on_save_prettier then
-                  -- auto formatting on save
-                  local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-                  vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-                  vim.api.nvim_create_autocmd("BufWritePre", {
-                    group = augroup,
-                    buffer = bufnr,
-                    callback = function()
-                      lsp_formatting(bufnr)
-                    end
-                  })
-                end
-                vim.api.nvim_create_user_command("Format", function()
-                  lsp_formatting(bufnr)
-                end, {})
-              end
-            end
           }
         end
       },
