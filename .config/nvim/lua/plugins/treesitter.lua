@@ -32,6 +32,7 @@ return {
           'java',
           'javascript',
           'typescript',
+          'tsx',
           'json',
           'html',
           'css',
