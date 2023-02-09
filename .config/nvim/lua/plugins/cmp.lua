@@ -24,13 +24,12 @@ return {
 
           vim.api.nvim_create_autocmd('ModeChanged', {
             group = unlinkgrp,
-            pattern = {'s:n', 'i:*'},
+            pattern = { 's:n', 'i:*' },
             desc = 'Forget the current snippet when leaving the insert mode',
             callback = function(evt)
-              if
-                luasnip.session
-                and luasnip.session.current_nodes[evt.buf]
-                and not luasnip.session.jump_active
+              if luasnip.session
+                  and luasnip.session.current_nodes[evt.buf]
+                  and not luasnip.session.jump_active
               then
                 luasnip.unlink_current()
               end
@@ -92,10 +91,10 @@ return {
         if vim_item.kind == 'Color' and entry.completion_item.documentation then
           local _, _, r, g, b = string.find(entry.completion_item.documentation, '^rgb%((%d+), (%d+), (%d+)')
           if r then
-            local color = string.format('%02x', r) .. string.format('%02x', g) ..string.format('%02x', b)
+            local color = string.format('%02x', r) .. string.format('%02x', g) .. string.format('%02x', b)
             local group = 'Tw_' .. color
             if vim.fn.hlID(group) < 1 then
-              vim.api.nvim_set_hl(0, group, {fg = '#' .. color})
+              vim.api.nvim_set_hl(0, group, { fg = '#' .. color })
             end
             vim_item.kind = "●" -- or "■" or anything
             vim_item.kind_hl_group = group
@@ -169,6 +168,10 @@ return {
             -- }),
             before = function(entry, vim_item)
               vim_item.menu = "(" .. vim_item.kind .. ")"
+              vim_item.dup = ({
+                nvim_lsp = 0,
+                path = 0,
+              })[entry.source.name] or 0
               vim_item = formatForTailwindCSS(entry, vim_item) -- for tailwind css autocomplete
               return vim_item
             end
@@ -276,7 +279,7 @@ return {
           { name = "path" },
           { name = "cmdline",
             option = {
-              ignore_cmds = { "Man", "!"}
+              ignore_cmds = { "Man", "!" }
             }
           },
         },

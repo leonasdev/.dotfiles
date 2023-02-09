@@ -54,3 +54,5 @@ keymap.set("v", "<leader>s", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left
 keymap.set("i", ",", ",<C-g>u")
 keymap.set("i", ".", ".<C-g>u")
 keymap.set("i", ";", ";<C-g>u")
+
+keymap.set("i", "<C-i>", "<C-i>")

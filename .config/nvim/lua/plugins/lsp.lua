@@ -104,7 +104,7 @@ local function lspconfig_setup()
     vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
     vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set({ 'i', 'n' }, '<C-i>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set({ 'i', 'n' }, '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
