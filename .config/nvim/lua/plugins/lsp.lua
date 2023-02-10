@@ -49,9 +49,6 @@ local servers = {
   clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
   gopls = true,
   tsserver = true,
-  eslint = {
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx" }
-  },
   cssls = true,
   volar = true,
   tailwindcss = true,
@@ -189,12 +186,7 @@ return {
       {
         "jose-elias-alvarez/null-ls.nvim",
         config = function()
-          require("null-ls").setup {
-            sources = {
-              require("null-ls").builtins.formatting.prettierd,
-              -- null_ls.builtins.diagnostics.eslint_d,
-            },
-          }
+          require("null-ls").setup()
         end
       },
     },
@@ -225,9 +217,22 @@ return {
         config = function()
           require("mason-null-ls").setup {
             ensure_installed = {
-              "prettierd",
+              "prettier",
             },
           }
+
+          local nls = require("null-ls")
+          require("mason-null-ls").setup_handlers({
+            prettier = function(source_name, methods)
+              nls.register(nls.builtins.formatting.prettier.with({
+                extra_args = { "--print-width", "120" }
+              }))
+            end,
+
+            -- eslint_d = function()
+            --   nls.register(nls.builtins.diagnostics.eslint_d)
+            -- end
+          })
         end
       },
     },
