@@ -10,7 +10,7 @@ return {
     "folke/zen-mode.nvim",
     cmd = "Zen",
     config = function()
-      vim.api.nvim_set_hl(0, 'ZenBg', { ctermbg=0 })
+      vim.api.nvim_set_hl(0, 'ZenBg', { ctermbg = 0 })
     end
   },
 
@@ -28,6 +28,18 @@ return {
     "numToStr/Comment.nvim",
     config = function()
       require("Comment").setup()
+    end
+  },
+
+  {
+    "epwalsh/obsidian.nvim",
+    config = function()
+      require("obsidian").setup({
+        dir = "/mnt/c/Users/s8952/我的雲端硬碟/notes",
+        completion = {
+          nvim_cmp = true,
+        }
+      })
     end
   },
 }
