@@ -30,16 +30,4 @@ return {
       require("Comment").setup()
     end
   },
-
-  {
-    "epwalsh/obsidian.nvim",
-    config = function()
-      require("obsidian").setup({
-        dir = "/mnt/c/Users/s8952/我的雲端硬碟/notes",
-        completion = {
-          nvim_cmp = true,
-        }
-      })
-    end
-  },
 }
