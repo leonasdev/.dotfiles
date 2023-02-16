@@ -218,6 +218,7 @@ return {
           require("mason-null-ls").setup {
             ensure_installed = {
               "prettier",
+              "dprint",
             },
           }
 
@@ -225,7 +226,25 @@ return {
           require("mason-null-ls").setup_handlers({
             prettier = function(source_name, methods)
               nls.register(nls.builtins.formatting.prettier.with({
+                filetypes = { "html", "css" },
                 extra_args = { "--print-width", "120" }
+              }))
+            end,
+
+            dprint = function(source_name, methods)
+              nls.register(nls.builtins.formatting.dprint.with({
+                extra_args = function()
+                  -- check if project have dprint configuration
+                  local path_separator = _G.IS_WINDOWS and "\\" or "/"
+                  local patterns = vim.tbl_flatten({ ".dprint.json", "dprint.json" })
+                  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/dprint.json"
+                  for _, name in ipairs(patterns) do
+                    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
+                      config_path = vim.loop.cwd() .. path_separator .. name
+                    end
+                  end
+                  return { "--config", config_path }
+                end
               }))
             end,
 
