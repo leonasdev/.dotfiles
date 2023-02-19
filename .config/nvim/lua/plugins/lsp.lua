@@ -226,7 +226,7 @@ return {
           require("mason-null-ls").setup_handlers({
             prettier = function(source_name, methods)
               nls.register(nls.builtins.formatting.prettier.with({
-                filetypes = { "html", "css" },
+                filetypes = { "html", "css", "scss" },
                 extra_args = { "--print-width", "120" }
               }))
             end,

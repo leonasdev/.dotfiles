@@ -11,16 +11,16 @@ return {
         {
           pattern = "solarized",
           callback = function()
-            vim.api.nvim_set_hl(0, 'NormalFloat', { bg='none' })
-            vim.api.nvim_set_hl(0, 'LineNr', { fg='#586e75', bg='none' })
-            vim.api.nvim_set_hl(0, 'CursorLineNr', { fg='#b58900', bg='none' })
-            vim.api.nvim_set_hl(0, 'CursorLine', { fg='none', bg='#002b36' })
-            vim.api.nvim_set_hl(0, 'Visual', { fg='#002b36', bg='#586e75'})
-            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextError', { fg='#dc322f', bg='#360909'})
-            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextWarn', { fg='#b58900', bg='#1c1500'})
-            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextInfo', { fg='#268bd2', bg='#0e3550'})
-            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextHint', { fg='#2aa198', bg='#0a2725'})
-            vim.api.nvim_set_hl(0, 'PmenuSel', { bg='#586e75'})
+            vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+            vim.api.nvim_set_hl(0, 'LineNr', { fg = '#586e75', bg = 'none' })
+            vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#b58900', bg = 'none' })
+            vim.api.nvim_set_hl(0, 'CursorLine', { fg = 'none', bg = '#002b36' })
+            vim.api.nvim_set_hl(0, 'Visual', { fg = '#002b36', bg = '#586e75' })
+            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextError', { fg = '#dc322f', bg = '#360909' })
+            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextWarn', { fg = '#b58900', bg = '#1c1500' })
+            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextInfo', { fg = '#268bd2', bg = '#0e3550' })
+            vim.api.nvim_set_hl(0, 'DiagnosticVirtualTextHint', { fg = '#2aa198', bg = '#0a2725' })
+            vim.api.nvim_set_hl(0, 'PmenuSel', { bg = '#586e75' })
             vim.api.nvim_set_hl(0, 'LazyButton', { link = "Visual" })
             vim.api.nvim_set_hl(0, 'LazyButtonActive', { link = "IncSearch" })
             vim.cmd('highlight GitSignsAdd guibg=none')
@@ -50,7 +50,7 @@ return {
         {
           pattern = "gruvbox-material",
           callback = function()
-            vim.api.nvim_set_hl(0, 'NormalFloat', { bg='none' })
+            vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
             vim.api.nvim_set_hl(0, 'GruvboxYellowSign', { link = 'GruvboxYellow' })
             vim.api.nvim_set_hl(0, 'GruvboxPurpleSign', { link = 'GruvboxPurple' })
             vim.api.nvim_set_hl(0, 'GruvboxOrangeSign', { link = 'GruvboxOrange' })
@@ -78,7 +78,7 @@ return {
       require("gruvbox").setup {
         transparent_mode = true,
         overrides = {
-          String = { italic = false},
+          String = { italic = false },
         },
       }
     end
@@ -156,4 +156,17 @@ return {
     },
   },
 
+  -- moonbow
+  {
+    "arturgoms/moonbow.nvim",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+    },
+    config = function()
+      require("moonbow").setup({
+        transparent_mode = true,
+      })
+    end
+  },
 }

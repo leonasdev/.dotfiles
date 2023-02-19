@@ -90,7 +90,7 @@ return {
     },
     cmd = "Neotree",
     keys = {
-      { "<C-b>", "<cmd>Neotree toggle<cr>", mode = "n", desc = "Toggle Neotree"},
+      { "<C-b>", "<cmd>Neotree toggle<cr>", mode = "n", desc = "Toggle Neotree" },
     },
     config = function()
       require("neo-tree").setup()
