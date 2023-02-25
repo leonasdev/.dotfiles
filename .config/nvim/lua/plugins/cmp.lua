@@ -86,6 +86,7 @@ return {
       local lspkind = require("lspkind")
 
       vim.opt.completeopt = "menu,menuone,noselect"
+      vim.opt.pumheight = 10 -- Maximum number of items to show in the popup menu
 
       local formatForTailwindCSS = function(entry, vim_item)
         if vim_item.kind == 'Color' and entry.completion_item.documentation then

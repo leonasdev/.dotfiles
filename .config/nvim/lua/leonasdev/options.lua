@@ -93,3 +93,37 @@ vim.api.nvim_create_autocmd("bufEnter", {
     opt.formatoptions:remove { "r", "o" }
   end,
 })
+
+vim.api.nvim_create_user_command("LiveServer", function()
+  if vim.g.liveserver_bufnr ~= nil then
+    return
+  end
+
+  vim.cmd("tabnew | term live-server");
+  vim.g.liveserver_bufnr = vim.api.nvim_get_current_buf();
+  vim.cmd("close");
+
+  local live_server_lualine = function()
+    if vim.g.liveserver_bufnr ~= nil then
+      return [[󱄙]]
+    end
+    return [[]]
+  end
+
+  require("lualine").setup {
+    sections = {
+      lualine_x = { 'encoding', 'fileformat', 'filetype', { live_server_lualine, color = { fg = "#268bd2" } } },
+    }
+  }
+
+end, { desc = "Start live-server in background" })
+
+vim.api.nvim_create_user_command("LiveServerStop", function()
+  if not vim.g.liveserver_bufnr then
+    print("You haven't start Live Server!")
+    return
+  end
+
+  vim.cmd("bd! " .. vim.g.liveserver_bufnr)
+  vim.g.liveserver_bufnr = nil;
+end, { desc = "Stop live-server" })

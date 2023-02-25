@@ -11,8 +11,9 @@ return {
     event = "VeryLazy",
     config = function()
       require("lualine").setup {
-        theme = "solarized_dark",
-        globalstatus = true,
+        options = {
+          globalstatus = true,
+        },
         extensions = {
           "neo-tree",
         },
