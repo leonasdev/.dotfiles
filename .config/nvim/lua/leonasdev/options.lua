@@ -99,9 +99,21 @@ vim.api.nvim_create_user_command("LiveServer", function()
     return
   end
 
-  vim.cmd("tabnew | term live-server");
-  vim.g.liveserver_bufnr = vim.api.nvim_get_current_buf();
-  vim.cmd("close");
+  vim.cmd("tabnew | term live-server")
+  vim.g.liveserver_bufnr = vim.api.nvim_get_current_buf()
+  vim.cmd("close")
+
+  local function print_lines()
+    local lines = vim.api.nvim_buf_get_lines(vim.g.liveserver_bufnr, 0, 1, false)
+    local content = table.concat(lines)
+    if content == nil or content == "" then
+      vim.defer_fn(print_lines, 100)
+    else
+      print(content)
+    end
+  end
+
+  print_lines()
 
   local live_server_lualine = function()
     if vim.g.liveserver_bufnr ~= nil then
@@ -125,5 +137,5 @@ vim.api.nvim_create_user_command("LiveServerStop", function()
   end
 
   vim.cmd("bd! " .. vim.g.liveserver_bufnr)
-  vim.g.liveserver_bufnr = nil;
+  vim.g.liveserver_bufnr = nil
 end, { desc = "Stop live-server" })

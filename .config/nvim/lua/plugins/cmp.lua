@@ -36,6 +36,10 @@ return {
             end,
           })
 
+
+          luasnip.filetype_extend("typescriptreact", { "html", "typescript" })
+          luasnip.filetype_extend("javascriptreact", { "html", "javascript" })
+
           require("luasnip.loaders.from_vscode").lazy_load()
           luasnip.config.set_config({
             region_check_events = 'CursorMoved'
