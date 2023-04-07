@@ -156,6 +156,11 @@ return {
     keys = {
       { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
     },
+    config = function()
+      require("vscode").setup({
+        transparent = true,
+      })
+    end
   },
 
   -- moonbow

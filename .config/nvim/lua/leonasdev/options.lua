@@ -127,7 +127,6 @@ vim.api.nvim_create_user_command("LiveServer", function()
       lualine_x = { 'encoding', 'fileformat', 'filetype', { live_server_lualine, color = { fg = "#268bd2" } } },
     }
   }
-
 end, { desc = "Start live-server in background" })
 
 vim.api.nvim_create_user_command("LiveServerStop", function()
