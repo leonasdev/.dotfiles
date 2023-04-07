@@ -45,7 +45,17 @@ end
 
 local servers = {
   html = true,
-  pyright = true,
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          diagnosticMode = "openFilesOnly"
+          -- diagnosticMode = "workspace"
+        }
+      }
+
+    }
+  },
   clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
   gopls = true,
   tsserver = true,
@@ -193,7 +203,6 @@ return {
     config = function()
       lsp_related_ui_adjust()
       lspconfig_setup()
-
     end
   },
 
@@ -230,7 +239,6 @@ return {
                 extra_args = { "--print-width", "120" }
               }))
             end,
-
             dprint = function(source_name, methods)
               nls.register(nls.builtins.formatting.dprint.with({
                 extra_args = function()
@@ -247,7 +255,6 @@ return {
                 end
               }))
             end,
-
             -- eslint_d = function()
             --   nls.register(nls.builtins.diagnostics.eslint_d)
             -- end
