@@ -126,7 +126,10 @@ return {
     },
     config = function()
       require("kanagawa").setup {
-        transparent_background = true
+        transparent = true,
+        keywordStyle = {
+          italic = false,
+        },
       }
     end
   },
@@ -141,8 +144,7 @@ return {
     },
     config = function()
       require("catppuccin").setup {
-        transparent = true,
-        specialReturn = false,
+        transparent_background = true,
       }
     end
   },
