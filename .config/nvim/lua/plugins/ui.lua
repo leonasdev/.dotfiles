@@ -93,7 +93,11 @@ return {
       { "<C-b>", "<cmd>Neotree toggle<cr>", mode = "n", desc = "Toggle Neotree" },
     },
     config = function()
-      require("neo-tree").setup()
+      require("neo-tree").setup({
+        filesystem = {
+          follow_current_file = true,
+        }
+      })
     end
   },
 
