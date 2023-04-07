@@ -52,4 +52,12 @@ return {
       })
     end
   },
+
+  -- auto detect indent
+  {
+    "nmac427/guess-indent.nvim",
+    config = function()
+      require("guess-indent").setup()
+    end
+  }
 }
