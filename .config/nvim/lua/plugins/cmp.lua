@@ -36,6 +36,10 @@ return {
             end,
           })
 
+
+          luasnip.filetype_extend("typescriptreact", { "html", "typescript" })
+          luasnip.filetype_extend("javascriptreact", { "html", "javascript" })
+
           require("luasnip.loaders.from_vscode").lazy_load()
           luasnip.config.set_config({
             region_check_events = 'CursorMoved'
@@ -86,6 +90,7 @@ return {
       local lspkind = require("lspkind")
 
       vim.opt.completeopt = "menu,menuone,noselect"
+      vim.opt.pumheight = 10 -- Maximum number of items to show in the popup menu
 
       local formatForTailwindCSS = function(entry, vim_item)
         if vim_item.kind == 'Color' and entry.completion_item.documentation then
