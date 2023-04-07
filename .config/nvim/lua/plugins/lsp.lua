@@ -62,6 +62,7 @@ local servers = {
   cssls = true,
   volar = true,
   tailwindcss = true,
+  astro = true,
   lua_ls = {
     settings = {
       Lua = {
