@@ -194,6 +194,11 @@ function install_deps() {
     sudo apt install -qqy xclip
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
+  if ! command -v unzip &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing unzip...${NC}"
+    sudo apt install -qqy unzip
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
   if ! command -v nvim &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing Neovim 0.10.0 ...${NC}"
     sudo apt install -qqy software-properties-common
