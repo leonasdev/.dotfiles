@@ -22,12 +22,7 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 # MAIN
 function main() {
   echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!${NC}"
-  check_tput_install
-  detect_platform
-  check_system_deps
-  check_neovim_version
   echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
-  
   while [ true ]; do
     echo -e "Backup your current ${BOLD}Neovim${NC} config?"
     read -p $'\e[33m[y/n]\e[0m: ' yn
@@ -37,17 +32,10 @@ function main() {
         * ) echo "${BOLD}Please answer ${YELLOW}y${NC}${BOLD} or ${YELLOW}n${NC}${BOLD}.${NC}";;
     esac
   done
-
-  while [ true ]; do
-    msg
-    read -p $'Install dotfiles now? \e[33m[y/n]\e[0m: ' yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit;;
-        * ) echo "${BOLD}Please answer ${YELLOW}y${NC}${BOLD} or ${YELLOW}n${NC}${BOLD}.${NC}";;
-    esac
-  done
-
+  check_tput_install
+  detect_platform
+  install_deps
+  check_neovim_version
   remove_neovim_config
   clone_repo
   finish
@@ -56,6 +44,7 @@ function main() {
 function finish() {
   msg "${BOLD}${GREEN}Installation Successfully!${NC}" 1
   echo -e "${BOLD}\nNow you can manage your dotfiles by using\n- git dotfiles\ncommand.${NC}\n"
+  echo -e "${BOLD}\nPlease restart your shell.${NC}\n"
 }
 
 function check_neovim_version() {
@@ -64,13 +53,13 @@ function check_neovim_version() {
   nvim_ver=$(nvim --version | grep "$regex")
   nvim_ver="${nvim_ver/NVIM v/""}"
   nvim_ver="${nvim_ver:0:3}"
-  required_ver="0.8"
+  required_ver="0.10.0"
 
   if (( $(echo "$nvim_ver < $required_ver" |bc -l) )); then
-    echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.8.0 !${NC}"
+    echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.10.0 !${NC}"
     exit 1
   else
-    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.8.0${NC}"
+    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.10.0${NC}"
   fi
 }
 
@@ -163,30 +152,88 @@ function check_system_deps() {
     print_missing_dep_msg "npm"
     exit 1
   fi
+  if ! command -v node &>/dev/null; then
+    print_missing_dep_msg "npm"
+    exit 1
+  fi
   if ! command -v git &>/dev/null; then
     print_missing_dep_msg "git"
     exit 1
   fi
-  if ! command -v nvim &>/dev/null; then
-    print_missing_dep_msg "neovim"
-    exit 1
-  fi
-  if ! command -v fzf &>/dev/null; then
-    print_missing_dep_msg "fzf"
-    exit 1
+}
+
+function install_deps() {
+  sudo apt update -qq
+  if ! command -v wget &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing wget...${NC}"
+    sudo apt install -qqy wget
+    echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v clang &>/dev/null; then
-    print_missing_dep_msg "clang"
-    exit 1
+    echo -e "${BOLD}${BLUE}Installing clang...${NC}"
+    sudo apt install -qqy clang
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v make &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing make...${NC}"
+    sudo apt install -qqy make
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v fd-find &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing fd-find...${NC}"
+    sudo apt install -qqy fd-find
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v ripgrep &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing ripgrep...${NC}"
+    sudo apt install -qqy ripgrep
+    echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v xclip &>/dev/null; then
-    print_missing_dep_msg "xclip"
-    exit 1
+    echo -e "${BOLD}${BLUE}Installing xclip...${NC}"
+    sudo apt install -qqy xclip
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v nvim &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing Neovim 0.10.0 ...${NC}"
+    sudo apt install -qqy software-properties-common
+    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    sudo apt update -qq
+    sudo apt install -qqy neovim
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v cargo &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing rustup...${NC}"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -qy
+    source $HOME/.cargo/env
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v go &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing golang...${NC}"
+    sudo rm -rf /usr/local/go
+    curl -sSL https://go.dev/dl/go1.20.3.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
+    sudo rm -rf /usr/local/go
+  fi
+  if ! command -v tree-sitter &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing tree-sitter-cli, it may take a little while...${NC}"
+    cargo install -q tree-sitter-cli
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v exa &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing exa...${NC}"
+    cargo install -q exa
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v oh-my-posh &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing oh-my-posh...${NC}"
+    sudo wget -q https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+    sudo chmod +x /usr/local/bin/oh-my-posh
+    echo -e "${GREEN}${BOLD}Done${NC}"
   fi
 }
 
 function detect_platform() {
-  msg "${BOLD}Detecting platform for managing any additional neovim dependencies... ${NC}"
+  msg "${BOLD}Detecting operating system... ${NC}"
   OS="$(uname -s)"
   case "$OS" in
     Linux)
