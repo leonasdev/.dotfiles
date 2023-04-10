@@ -20,6 +20,7 @@ return {
         },
         ensure_installed = {
           'vim',
+          'vimdoc',
           'markdown',
           'markdown_inline',
           'bash',
