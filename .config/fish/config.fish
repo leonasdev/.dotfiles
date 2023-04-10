@@ -21,7 +21,10 @@ set -gx PATH bin $PATH
 set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 
+set -Ux nvm_default_version v19
+
 if status is-interactive
 # Commands to run in interactive sessions can go here
+    fish_add_path $HOME/.cargo/bin
     oh-my-posh init fish --config ~/.config/oh-my-posh/leonasdev.omp.json| source
 end
