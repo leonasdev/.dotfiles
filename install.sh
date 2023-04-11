@@ -22,8 +22,8 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 # MAIN
 function main() {
   sudo echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
+  check_tput_installed
   pre_check
-  chenk_tput_installed
 
   # check if user wnat backup neovim config, otherwise it will overwrite it
   if [ -d "$HOME/.config/neovim" ] && ! [ -z "$(ls -A $HOME/.config/neovim)" ]; then
@@ -106,7 +106,7 @@ function clone_and_checkout_repo() {
   else
     git config --global alias.dotfiles '!git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
     git dotfiles config --local status.showUntrackedFiles no
-    git dotfiles checkout
+    git dotfiles checkout -f
   fi
   echo -e "${GREEN}${BOLD}Done${NC}"
 }
