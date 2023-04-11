@@ -59,7 +59,7 @@ function pre_check() {
     exit 1
   fi
   while [ true ]; do
-    echo -e "${BOLD}${YELLOW}Installation will override your current ${GREEN}[neovim, fish, oh-my-posh] configuration!${NC}\n"
+    echo -e "**${BOLD}${RED}Installation will override your current ${GREEN}[neovim, fish, oh-my-posh] ${RED}configuration!${NC}**"
     echo -e "${BOLD}${YELLOW}Continue installation?"
     read -p $'\e[33m[y/n]\e[0m: ' yn
     case $yn in
