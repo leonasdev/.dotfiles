@@ -23,32 +23,64 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 function main() {
   sudo echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
   echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
-  if [ -d "$HOME/.dotfiles" ] && ! [ -z "$(ls -A $HOME/.dotfiles)" ]; then
-    echo "${BOLD}${YELLOW}Destination path '/home/s8952889/.dotfiles' already exists and is not an empty directory.${NC}"
-    echo "${BOLD}${RED}Installation failed.${NC}"
-    exit 1
+  pre_check
+  chenk_tput_installed
+
+  # check if user wnat backup neovim config, otherwise it will overwrite it
+  if [ -d "$HOME/.config/neovim" ] && ! [ -z "$(ls -A $HOME/.config/neovim)" ]; then
+    echo "${BOLD}${YELLOW}Destination path $HOME/.config/neovim already exists and is not an empty directory.${NC}"
+    while [ true ]; do
+      echo -e "Backup your current ${BOLD}Neovim${NC} config?"
+      read -p $'\e[33m[y/n]\e[0m: ' yn
+      case $yn in
+          [Yy]* ) isBackup=$(backup_old_config);break;;
+          [Nn]* ) break;;
+          * ) echo "${BOLD}Please answer ${YELLOW}y${NC}${BOLD} or ${YELLOW}n${NC}${BOLD}.${NC}";;
+      esac
+    done
   fi
-  check_tput_install
-  while [ true ]; do
-    echo -e "Backup your current ${BOLD}Neovim${NC} config?"
-    read -p $'\e[33m[y/n]\e[0m: ' yn
-    case $yn in
-        [Yy]* ) isBackup=$(backup_old_config);break;;
-        [Nn]* ) break;;
-        * ) echo "${BOLD}Please answer ${YELLOW}y${NC}${BOLD} or ${YELLOW}n${NC}${BOLD}.${NC}";;
-    esac
-  done
+
   detect_platform
-  install_deps
-  check_neovim_version
   remove_neovim_config
-  clone_repo
+  clone_and_checkout_repo
+  install_deps
+  post_install
   msg "${BOLD}${GREEN}\n\n\n\n\nInstallation Successful !\n${NC}" 1
   if [ "$isBackup" ]; then
     echo "${BOLD}${GREEN}You can find your backup config under ${CONFIG_DIR}/nvim.bak${NC}"
   fi
   echo -e "${BOLD}\nNow you can manage your dotfiles by using\n- ${GREEN}git dotfiles${NC}\ncommand.\n"
   echo -e "${BOLD}${YELLOW}\nPlease restart your shell.${NC}\n"
+}
+
+function pre_check() {
+  if [ -d "$HOME/.dotfiles" ] && ! [ -z "$(ls -A $HOME/.dotfiles)" ]; then
+    echo "${BOLD}${YELLOW}Destination path $HOME/.dotfiles already exists and is not an empty directory.${NC}"
+    echo "${BOLD}${RED}Installation failed.${NC}"
+    exit 1
+  fi
+  if [ -d "$HOME/.config/fish" ] && ! [ -z "$(ls -A $HOME/.config/fish)" ]; then
+    echo "${BOLD}${YELLOW}Destination path $HOME/.config/fish already exists and is not an empty directory.${NC}"
+    echo "${BOLD}${RED}Installation failed.${NC}"
+    exit 1
+  fi
+  if [ -d "$HOME/.config/oh-my-posh" ] && ! [ -z "$(ls -A $HOME/.config/oh-my-posh)" ]; then
+    echo "${BOLD}${YELLOW}Destination path $HOME/.config/oh-my-posh already exists and is not an empty directory.${NC}"
+    echo "${BOLD}${RED}Installation failed.${NC}"
+    exit 1
+  fi
+}
+
+function post_install() {
+  echo -e "${BOLD}${BLUE}Removing install.sh...${NC}"
+  rm install.sh
+  git dotfiles rm --cache install.sh
+  echo -e "${BOLD}${GREEN}Done${NC}"
+
+  echo -e "${BOLD}${BLUE}Removing README.md...${NC}"
+  rm README.md
+  git dotfiles rm --cache README.md
+  echo -e "${BOLD}${GREEN}Done${NC}"
 }
 
 function check_neovim_version() {
@@ -67,26 +99,22 @@ function check_neovim_version() {
   fi
 }
 
-function clone_repo() {
-  msg "${BOLD}Cloning dotfiles... ${NC}" "1"
+function clone_and_checkout_repo() {
+  msg "${BOLD}Cloning & checkout dotfiles... ${NC}" "1"
   if ! git clone --branch "$GIT_BRANCH" --bare "https://github.com/${GIT_REMOTE}" "$HOME/.dotfiles"; then
     echo "Failed to clone repository. Installation failed."
     exit 1
   else
     git config --global alias.dotfiles '!git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
     git dotfiles config --local status.showUntrackedFiles no
-    git dotfiles checkout -f
-    rm install.sh
-    git dotfiles rm --cache install.sh
-    rm README.md
-    git dotfiles rm --cache README.md
+    git dotfiles checkout
   fi
   echo -e "${GREEN}${BOLD}Done${NC}"
 }
 
 function remove_neovim_config() {
   cd $HOME
-  msg "${BOLD}Removing current Neovim configuration... ${NC}"
+  msg "${BOLD}${YELLOW}Removing current Neovim configuration... ${NC}"
   rm -rf "$RUNTIME_DIR/nvim"
   rm -rf "$CONFIG_DIR/nvim"
   echo -e "${GREEN}${BOLD}Done${NC}"
@@ -164,7 +192,7 @@ function check_system_deps() {
     exit 1
   fi
   if ! command -v node &>/dev/null; then
-    print_missing_dep_msg "npm"
+    print_missing_dep_msg "node"
     exit 1
   fi
   if ! command -v git &>/dev/null; then
@@ -178,6 +206,16 @@ function install_deps() {
   echo -e "${BOLD}${BLUE}Updating apt...${NC}"
   sudo apt update -qq
   echo -e "${GREEN}${BOLD}Done${NC}"
+  if ! command -v nvim &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing Neovim 0.10.0 ...${NC}"
+    sudo apt install -qqy software-properties-common
+    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    sudo apt update -qq
+    sudo apt install -qqy neovim
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  else
+    check_neovim_version
+  fi
   if ! command -v wget &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing wget...${NC}"
     sudo apt install -qqy wget
@@ -211,14 +249,6 @@ function install_deps() {
   if ! command -v unzip &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing unzip...${NC}"
     sudo apt install -qqy unzip
-    echo -e "${GREEN}${BOLD}Done${NC}"
-  fi
-  if ! command -v nvim &>/dev/null; then
-    echo -e "${BOLD}${BLUE}Installing Neovim 0.10.0 ...${NC}"
-    sudo apt install -qqy software-properties-common
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable
-    sudo apt update -qq
-    sudo apt install -qqy neovim
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v cargo &>/dev/null; then
@@ -294,7 +324,7 @@ function detect_platform() {
   echo -e "${GREEN}${BOLD}Done${NC}"
 }
 
-function check_tput_install() {
+function check_tput_installed() {
   if ! command -v tput &>/dev/null; then
     print_missing_dep_msg "tput"
     exit 1
