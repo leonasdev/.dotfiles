@@ -2,12 +2,12 @@
 My personal dotfiles for Ubuntu 20.04 or newer.
 
 ## Prerequisites
-### Nerd Fonts
+### 1. Nerd Fonts
 - Any Nerd Font is required to display the glyph correctly.
 - [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
 - [JetBrains Mono NL](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/JetBrainsMono/NoLigatures) is recommended.
 
-### Node (>=16.20.0) & Npm:
+### 2. Node (>=16.20.0) & Npm
 #### Bash
 - Manually install [Node & npm](https://nodejs.org/) or via node version manager: [nvm-sh/nvm](https://github.com/nvm-sh/nvm) (Recommendation):
   ```bash
@@ -47,7 +47,7 @@ My personal dotfiles for Ubuntu 20.04 or newer.
 ## Must Read
 **Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
 
-Installation will overwrite the following config:
+Installation will overwrite the following's config:
 - Neovim
 - Fish shell
 - oh-my-posh
@@ -70,5 +70,3 @@ TODO:
   - now using `ishan9299/nvim-solarized-lua` with some manual config
 - better way to manage my dotfiles
 - kitty
-- win32yank
-- nerd font
