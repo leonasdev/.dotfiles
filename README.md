@@ -1,27 +1,44 @@
 # .dotfiles
-My personal dotfiles
+My personal dotfiles for Ubuntu 20.04 or newer.
 
 ## Prerequisites
 
-### Linux
-- [BurntSushi/ripgrep](https://github.com/BurntSushi/ripgrep#installation)
+### Bash
+Choose one:
+- [Node & npm](https://nodejs.org/)
+- [nvm-sh/nvm](https://github.com/nvm-sh/nvm) (Recommendation)
+  ```bash
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+  # Restart your session
+  nvm install node
   ```
-    $ curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-    $ sudo dpkg -i ripgrep_13.0.0_amd64.deb
-  ```
-- [sharkdp/fd](https://github.com/sharkdp/fd#installation)
-  - `sudo apt install fd-find`
-- npm & node
- - `sudo apt install npm`
- - `curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && sudo apt-get install -y nodejs`
-- Neovim
-   ```bash
-    sudo apt install software-properties-common
-    sudo add-apt-repository ppa:neovim-ppa/unstable
-    sudo apt update
-    sudo apt install neovim
-   ```
 
+### Fish Shell (Recommendation)
+- [Fish shell](https://github.com/fish-shell/fish-shell) - The user-friendly command line shell
+  ```bash
+  sudo apt-add-repository -yu ppa:fish-shell/release-3
+  sudo apt install -qqy fish
+  
+  # Make fish shell default:
+  echo /usr/bin/fish | sudo tee -a /etc/shells
+  chsh -s /usr/bin/fish
+  
+  # Restart your session and you will log in with fish.
+  ```
+- [jorgebucaran/fisher](https://github.com/jorgebucaran/fisher) - A plugin manager for Fish.
+  ```bash
+  curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+  ```
+- [jorgebucaran/nvm.fish](https://github.com/jorgebucaran/nvm.fish) - Node.js version manager lovingly made for Fish.
+  ```bash
+  fisher install jorgebucaran/nvm.fish
+  nvm install latest
+  set -U nvm_default_version latest
+  ```
+- [jethrokuan/z](https://github.com/jethrokuan/z) - Pure-fish z directory jumping (optional)
+  ```bash
+  fisher install jethrokuan/z
+  ```
 ## Quick Start
 bash:
 ```bash
