@@ -50,22 +50,9 @@ Choose one:
   ```
 
 TODO:
-- telescope-fzf-native
-- gitignore run.sh
-- mason
-  - should i init to nothing or some default?
-- lsp
-  - integrate with mason?
-- treesitter
-  - should i use auto install?
-- clipboard slow down startup on some distro
-  - caused by no clipboard provider
-  - solved: apt install xclip
-- fish shell
 - colorscheme
   - now using `ishan9299/nvim-solarized-lua` with some manual config
 - better way to manage my dotfiles
-- prompt theme
 - kitty
 - win32yank
 - nerd font
