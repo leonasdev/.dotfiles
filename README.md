@@ -1,9 +1,14 @@
-# 🙂.dotfiles
+<div align="center">
+<h1>🔸.dotfiles</h1>
 My personal dotfiles for Ubuntu 20.04 or newer.
+</div>
+
+---
 
 - **Shout out to [@Takuya Matsuyama](https://github.com/craftzdog) who inspired my config setting**
 - **Shout out to my Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
 - **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
+
 
 # 🚀Getting Started
 ## ❗Must Read
@@ -72,8 +77,10 @@ Installation will overwrite the following's config:
 
 </details>
 
-TODO:
-- colorscheme
-  - now using `ishan9299/nvim-solarized-lua` with some manual config
-- better way to manage my dotfiles
-- kitty
+## ✅TODO:
+- [ ] Colorscheme
+  - Curretlly using `ishan9299/nvim-solarized-lua` with some manual config
+  - Considering make a own colorscheme
+- [ ] A better way to manage my dotfiles, instead of using `git bare repository`
+  - GNU stow?
+- [ ] Add my kitty config
