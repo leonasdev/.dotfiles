@@ -215,6 +215,11 @@ function install_deps() {
   else
     check_neovim_version
   fi
+  if ! command -v curl &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing curl...${NC}"
+    sudo apt install -qqy curl
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
   if ! command -v wget &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing wget...${NC}"
     sudo apt install -qqy wget
