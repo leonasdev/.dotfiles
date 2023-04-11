@@ -120,9 +120,10 @@ local function lspconfig_setup()
           group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
           buffer = bufnr,
           callback = function()
-            if require("leonasdev.autoformat").autoformat then
-              format()
+            if not require("leonasdev.autoformat").autoformat then
+              return
             end
+            format()
           end,
         })
 
