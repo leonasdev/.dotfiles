@@ -42,11 +42,11 @@ Choose one:
 ## Installation
 - Bash:
   ```bash
-  bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
+  bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/install.sh)
   ```
 - Fish:
   ```fish
-  bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh | psub)
+  bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/install.sh | psub)
   ```
 
 TODO:
