@@ -1,17 +1,17 @@
 # .dotfiles
 My personal dotfiles for Ubuntu 20.04 or newer.
 
-## Prerequisites
-
+## Prerequisites (choose one)
 ### Bash
 Choose one:
-- [Node & npm](https://nodejs.org/)
 - [nvm-sh/nvm](https://github.com/nvm-sh/nvm) (Recommendation)
   ```bash
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
   # Restart with a new session
   nvm install node
   ```
+- [Node & npm](https://nodejs.org/) (Manually)
+
 
 ### Fish Shell (Recommendation)
 - [Fish shell](https://github.com/fish-shell/fish-shell) - The user-friendly command line shell
@@ -39,15 +39,15 @@ Choose one:
   ```bash
   fisher install jethrokuan/z
   ```
-## Quick Start
-bash:
-```bash
-bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
-```
-fish:
-```bash
-bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh | psub)
-```
+## Installation
+- Bash:
+  ```bash
+  bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh)
+  ```
+- Fish:
+  ```fish
+  bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/run.sh | psub)
+  ```
 
 TODO:
 - telescope-fzf-native
