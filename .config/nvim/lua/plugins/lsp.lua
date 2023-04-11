@@ -44,43 +44,65 @@ local format = function()
 end
 
 local servers = {
-  html = true,
+  html = {
+    name = "html-lsp",
+  },
   pyright = {
-    settings = {
-      python = {
-        analysis = {
-          diagnosticMode = "openFilesOnly"
-          -- diagnosticMode = "workspace"
+    name = "pyright",
+    config = {
+      settings = {
+        python = {
+          analysis = {
+            diagnosticMode = "openFilesOnly"
+            -- diagnosticMode = "workspace"
+          }
         }
       }
-
     }
   },
-  clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
-  gopls = true,
-  tsserver = true,
-  cssls = true,
-  volar = true,
-  tailwindcss = true,
-  astro = true,
+  clangd = {
+    name = "clangd",
+    disabled = not _G.IS_WINDOWS -- false represent don't use this server
+  },
+  gopls = {
+    name = "gopls",
+  },
+  tsserver = {
+    name = "typescript-language-server",
+  },
+  cssls = {
+    name = "css-lsp",
+  },
+  volar = {
+    name = "vue-language-server",
+  },
+  tailwindcss = {
+    name = "tailwindcss-language-server",
+  },
+  astro = {
+    name = "astro-language-server",
+  },
   lua_ls = {
-    settings = {
-      Lua = {
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = { 'vim' }
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          -- library = vim.api.nvim_get_runtime_file("", true),
-          library = {
-            vim.fn.stdpath("config"),
+    name = "lua-language-server",
+    config = {
+      settings = {
+        Lua = {
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = { 'vim' }
           },
-          checkThirdParty = false
-        },
-        -- Do not send telemetry data containing a randomized but unique identifier
-        telemetry = {
-          enable = false
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            -- library = vim.api.nvim_get_runtime_file("", true),
+            library = {
+              vim.fn.stdpath("config"),
+            },
+            checkThirdParty = false
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = {
+            enable = false
+          }
         }
       }
     }
@@ -168,8 +190,18 @@ local function lspconfig_setup()
     require("lspconfig")[server].setup(config)
   end
 
-  for server, config in pairs(servers) do
-    setup_server(server, config)
+  for server, setting in pairs(servers) do
+    if setting.disabled then
+      goto continue
+    end
+
+    if setting.config ~= nil then
+      setup_server(server, setting.config)
+    else
+      setup_server(server, {})
+    end
+
+    ::continue::
   end
 end
 
@@ -215,9 +247,21 @@ return {
       {
         "williamboman/mason-lspconfig.nvim",
         config = function()
-          require("mason-lspconfig").setup {
-            ensure_installed = vim.tbl_keys(servers)
-          }
+          require("mason-lspconfig").setup {}
+        end
+      },
+
+      -- Install and upgrade third party tools automatically
+      {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        config = function()
+          local server_names = {}
+          for server, setting in pairs(servers) do
+            table.insert(server_names, setting.name)
+          end
+          require("mason-tool-installer").setup({
+            ensure_installed = server_names
+          })
         end
       },
 
@@ -232,7 +276,8 @@ return {
               "dprint",
             },
             handlers = {
-              function() end,
+              function()
+              end,
               prettier = function(source_name, methods)
                 nls.register(nls.builtins.formatting.prettier.with({
                   filetypes = { "html", "css", "scss" },
