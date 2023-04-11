@@ -1,19 +1,22 @@
 # .dotfiles
 My personal dotfiles for Ubuntu 20.04 or newer.
 
-## Prerequisites (choose one)
-### Bash
-Choose one:
-- [nvm-sh/nvm](https://github.com/nvm-sh/nvm) (Recommendation)
+## Prerequisites
+### Nerd Fonts
+- Any Nerd Font is required to display the glyph correctly.
+- [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
+- [JetBrains Mono NL](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/JetBrainsMono/NoLigatures) is recommended.
+
+### Node (>=16.20.0) & Npm:
+#### Bash
+- Manually install [Node & npm](https://nodejs.org/) or via node version manager: [nvm-sh/nvm](https://github.com/nvm-sh/nvm) (Recommendation):
   ```bash
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
   # Restart with a new session
   nvm install node
   ```
-- [Node & npm](https://nodejs.org/) (Manually)
 
-
-### Fish Shell (Recommendation)
+#### Fish Shell (Recommendation)
 - [Fish shell](https://github.com/fish-shell/fish-shell) - The user-friendly command line shell
   ```bash
   sudo apt-add-repository -yu ppa:fish-shell/release-3
@@ -23,9 +26,9 @@ Choose one:
   echo /usr/bin/fish | sudo tee -a /etc/shells
   chsh -s /usr/bin/fish
   
-  # Restart your session and you will log in with fish.
+  # Restart session and you will log in with fish.
   ```
-**The following commands require execution in fish shell.**
+  **The following commands require execution in fish shell:**
 - [jorgebucaran/fisher](https://github.com/jorgebucaran/fisher) - A plugin manager for Fish.
   ```bash
   curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
