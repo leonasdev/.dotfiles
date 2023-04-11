@@ -39,8 +39,15 @@ Choose one:
   ```bash
   fisher install jethrokuan/z
   ```
-## Installation
+  
+## Must Read
 **Warning: Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
+
+Installation will overwrite the following config:
+- Neovim
+- Fish shell
+- oh-my-posh
+## Installation
 - Bash:
   ```bash
   bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/install.sh)
