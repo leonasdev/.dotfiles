@@ -24,6 +24,7 @@ function main() {
   sudo echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
   check_tput_installed
   pre_check
+  check_system_deps
 
   # check if user wnat backup neovim config, otherwise it will overwrite it
   if [ -d "$HOME/.config/neovim" ] && ! [ -z "$(ls -A $HOME/.config/neovim)" ]; then
