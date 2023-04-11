@@ -9,6 +9,7 @@ My personal dotfiles for Ubuntu 20.04 or newer.
 - **Shout out to my Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
 - **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
 
+# ✨Features
 
 # 🚀Getting Started
 ## ❗Must Read
