@@ -21,7 +21,7 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 
 # MAIN
 function main() {
-  echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
+  sudo echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
   echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
   if [ -d "$HOME/.dotfiles" ] && ! [ -z "$(ls -A $HOME/.dotfiles)" ]; then
     echo "${BOLD}${YELLOW}Destination path '/home/s8952889/.dotfiles' already exists and is not an empty directory.${NC}"
