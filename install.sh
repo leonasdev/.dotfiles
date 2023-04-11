@@ -88,13 +88,13 @@ function check_neovim_version() {
   nvim_ver=$(nvim --version | grep "$regex")
   nvim_ver="${nvim_ver/NVIM v/""}"
   nvim_ver="${nvim_ver:0:3}"
-  required_ver="0.10.0"
+  required_ver="0.9.0"
 
   if (( $(echo "$nvim_ver < $required_ver" |bc -l) )); then
-    echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.10.0 !${NC}"
+    echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.9.0 !${NC}"
     exit 1
   else
-    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.10.0${NC}"
+    echo -e "${BOLD}${GREEN}Neovim version is greater than 0.9.0${NC}"
   fi
 }
 
