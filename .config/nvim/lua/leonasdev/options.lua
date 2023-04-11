@@ -70,10 +70,10 @@ opt.undofile = true
 -- others
 opt.iskeyword:append("-") -- now 'test-test' is a word
 opt.scrolloff = 10
-opt.path:append { '**' } -- Finding files - Search down into subfolders
-opt.updatetime = 100 -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_does_a_lower_updatetime_lead_to_better/
-opt.belloff = "all" -- Just turn the dang bell off
-opt.signcolumn = "yes" -- always showing the signcolumn
+opt.path:append { '**' }  -- Finding files - Search down into subfolders
+opt.updatetime = 100      -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_does_a_lower_updatetime_lead_to_better/
+opt.belloff = "all"       -- Just turn the dang bell off
+opt.signcolumn = "yes"    -- always showing the signcolumn
 
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('textyankpost', {
@@ -94,6 +94,7 @@ vim.api.nvim_create_autocmd("bufEnter", {
   end,
 })
 
+-- Add "LiveServer" command to quick execute live-server of npm
 vim.api.nvim_create_user_command("LiveServer", function()
   if vim.g.liveserver_bufnr ~= nil then
     return
@@ -129,6 +130,7 @@ vim.api.nvim_create_user_command("LiveServer", function()
   }
 end, { desc = "Start live-server in background" })
 
+-- Add "LiveServerStop" command to quick stop live-server of npm
 vim.api.nvim_create_user_command("LiveServerStop", function()
   if not vim.g.liveserver_bufnr then
     print("You haven't start Live Server!")
