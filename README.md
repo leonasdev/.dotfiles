@@ -25,6 +25,7 @@ Choose one:
   
   # Restart your session and you will log in with fish.
   ```
+**The following commands require execution in fish shell.**
 - [jorgebucaran/fisher](https://github.com/jorgebucaran/fisher) - A plugin manager for Fish.
   ```bash
   curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
