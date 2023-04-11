@@ -171,7 +171,9 @@ function check_system_deps() {
 
 function install_deps() {
   mkdir -p .cache
+  echo -e "${BOLD}${BLUE}Updating apt...${NC}"
   sudo apt update -qq
+  echo -e "${GREEN}${BOLD}Done${NC}"
   if ! command -v wget &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing wget...${NC}"
     sudo apt install -qqy wget
@@ -245,6 +247,9 @@ function install_deps() {
     echo -e "${BOLD}${BLUE}Installing oh-my-posh...${NC}"
     sudo wget -q https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
     sudo chmod +x /usr/local/bin/oh-my-posh
+    echo 'eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/leonasdev.omp.json)"' >> $HOME/.bashrc
+    echo 'eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/leonasdev.omp.json)"' >> $HOME/.profile
+    echo "Added eval oh-my-posh to .bashrc and .profile"
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
 }
