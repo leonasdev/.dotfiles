@@ -21,30 +21,34 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 
 # MAIN
 function main() {
-  echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!${NC}"
+  echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
   echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
+  if [ -d "$HOME/.dotfiles" ] && ! [ -z "$(ls -A $HOME/.dotfiles)" ]; then
+    echo "${BOLD}${YELLOW}Destination path '/home/s8952889/.dotfiles' already exists and is not an empty directory.${NC}"
+    echo "${BOLD}${RED}Installation failed.${NC}"
+    exit 1
+  fi
+  check_tput_install
   while [ true ]; do
     echo -e "Backup your current ${BOLD}Neovim${NC} config?"
     read -p $'\e[33m[y/n]\e[0m: ' yn
     case $yn in
-        [Yy]* ) backup_old_config;break;;
+        [Yy]* ) isBackup=$(backup_old_config);break;;
         [Nn]* ) break;;
         * ) echo "${BOLD}Please answer ${YELLOW}y${NC}${BOLD} or ${YELLOW}n${NC}${BOLD}.${NC}";;
     esac
   done
-  check_tput_install
   detect_platform
   install_deps
   check_neovim_version
   remove_neovim_config
   clone_repo
-  finish
-}
-
-function finish() {
-  msg "${BOLD}${GREEN}Installation Successfully!${NC}" 1
-  echo -e "${BOLD}\nNow you can manage your dotfiles by using\n- git dotfiles\ncommand.${NC}\n"
-  echo -e "${BOLD}\nPlease restart your shell.${NC}\n"
+  msg "${BOLD}${GREEN}\n\n\n\n\nInstallation Successful !\n${NC}" 1
+  if [ "$isBackup" ]; then
+    echo "${BOLD}${GREEN}You can find your backup config under ${CONFIG_DIR}/nvim.bak${NC}"
+  fi
+  echo -e "${BOLD}\nNow you can manage your dotfiles by using\n- ${GREEN}git dotfiles${NC}\ncommand.\n"
+  echo -e "${BOLD}${YELLOW}\nPlease restart your shell.${NC}\n"
 }
 
 function check_neovim_version() {
@@ -141,10 +145,13 @@ function backup_old_config() {
         ;;
       *)
         echo "OS $OS is not currently supported."
+        false
+        return $?
         ;;
     esac
   fi
-  echo "${BOLD}${GREEN}Backup operation complete! ${GREEN}You can find it under ${CONFIG_DIR}/nvim.bak${NC}"
+  true
+  return $?
 }
 
 function check_system_deps() {
@@ -163,6 +170,7 @@ function check_system_deps() {
 }
 
 function install_deps() {
+  mkdir -p .cache
   sudo apt update -qq
   if ! command -v wget &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing wget...${NC}"
@@ -179,12 +187,12 @@ function install_deps() {
     sudo apt install -qqy make
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
-  if ! command -v fd-find &>/dev/null; then
+  if ! command -v fdfind &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing fd-find...${NC}"
     sudo apt install -qqy fd-find
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
-  if ! command -v ripgrep &>/dev/null; then
+  if ! command -v rg &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing ripgrep...${NC}"
     sudo apt install -qqy ripgrep
     echo -e "${GREEN}${BOLD}Done${NC}"
@@ -217,7 +225,8 @@ function install_deps() {
     echo -e "${BOLD}${BLUE}Installing golang...${NC}"
     sudo rm -rf /usr/local/go
     curl -sSL https://go.dev/dl/go1.20.3.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
-    sudo rm -rf /usr/local/go
+    export PATH=$PATH:/usr/local/go/bin
+    echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v tree-sitter &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing tree-sitter-cli, it may take a little while...${NC}"
