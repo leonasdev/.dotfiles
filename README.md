@@ -41,7 +41,7 @@ Choose one:
   ```
   
 ## Must Read
-**Warning: Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
+**Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
 
 Installation will overwrite the following config:
 - Neovim
