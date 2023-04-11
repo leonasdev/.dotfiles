@@ -60,6 +60,10 @@ Installation will overwrite the following config:
   ```fish
   bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/install.sh | psub)
   ```
+  
+#### WSL 2 User Only:
+To use the Windows clipboard from within WSL, [`win32yank.exe`](https://github.com/equalsraf/win32yank) has to be on our `$PATH`. (e.g. `C:\Windows\System32\`)
+
 
 TODO:
 - colorscheme
