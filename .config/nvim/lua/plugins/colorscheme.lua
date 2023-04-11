@@ -3,7 +3,7 @@ return {
   -- solarized
   {
     "ishan9299/nvim-solarized-lua",
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       vim.api.nvim_create_autocmd(
@@ -175,5 +175,18 @@ return {
         transparent_mode = true,
       })
     end
+  },
+
+  -- darcula (JetBrains Intellij IDEA default theme)
+  {
+    "briones-gabriel/darcula-solid.nvim",
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+    },
+    dependencies = {
+      {
+        "rktjmp/lush.nvim",
+      },
+    },
   },
 }
