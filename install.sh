@@ -76,6 +76,10 @@ function clone_repo() {
     git config --global alias.dotfiles '!git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
     git dotfiles config --local status.showUntrackedFiles no
     git dotfiles checkout -f
+    rm install.sh
+    git dotfiles rm --cache install.sh
+    rm README.md
+    git dotfiles rm --cache README.md
   fi
   echo -e "${GREEN}${BOLD}Done${NC}"
 }
