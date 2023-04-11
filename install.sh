@@ -22,7 +22,6 @@ declare -r PACK_DIR="$RUNTIME_DIR/nvim/site/pack"
 # MAIN
 function main() {
   sudo echo -e "${BOLD}${BLUE}Welcome to leonasdev's dotfiles installation!\n${NC}"
-  echo -e "${BOLD}${YELLOW}Installation will override your current configuration!${NC}\n"
   pre_check
   chenk_tput_installed
 
@@ -59,16 +58,16 @@ function pre_check() {
     echo "${BOLD}${RED}Installation failed.${NC}"
     exit 1
   fi
-  if [ -d "$HOME/.config/fish" ] && ! [ -z "$(ls -A $HOME/.config/fish)" ]; then
-    echo "${BOLD}${YELLOW}Destination path $HOME/.config/fish already exists and is not an empty directory.${NC}"
-    echo "${BOLD}${RED}Installation failed.${NC}"
-    exit 1
-  fi
-  if [ -d "$HOME/.config/oh-my-posh" ] && ! [ -z "$(ls -A $HOME/.config/oh-my-posh)" ]; then
-    echo "${BOLD}${YELLOW}Destination path $HOME/.config/oh-my-posh already exists and is not an empty directory.${NC}"
-    echo "${BOLD}${RED}Installation failed.${NC}"
-    exit 1
-  fi
+  while [ true ]; do
+    echo -e "${BOLD}${YELLOW}Installation will override your current ${GREEN}[neovim, fish, oh-my-posh] configuration!${NC}\n"
+    echo -e "${BOLD}${YELLOW}Continue installation?"
+    read -p $'\e[33m[y/n]\e[0m: ' yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit 1;break;;
+        * ) echo "${BOLD}Please answer ${YELLOW}y${NC}${BOLD} or ${YELLOW}n${NC}${BOLD}.${NC}";;
+    esac
+  done
 }
 
 function post_install() {
