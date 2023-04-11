@@ -237,11 +237,11 @@ function install_deps() {
     echo "Added /usr/local/go/bin to .bashrc and .profile"
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
-  if ! command -v tree-sitter &>/dev/null; then
-    echo -e "${BOLD}${BLUE}Installing tree-sitter-cli, it may take a little while...${NC}"
-    cargo install -q tree-sitter-cli
-    echo -e "${GREEN}${BOLD}Done${NC}"
-  fi
+  # if ! command -v tree-sitter &>/dev/null; then
+  #   echo -e "${BOLD}${BLUE}Installing tree-sitter-cli, it may take a little while...${NC}"
+  #   cargo install -q tree-sitter-cli
+  #   echo -e "${GREEN}${BOLD}Done${NC}"
+  # fi
   if ! command -v exa &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing exa...${NC}"
     cargo install -q exa
