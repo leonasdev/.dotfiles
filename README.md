@@ -40,6 +40,7 @@ Choose one:
   fisher install jethrokuan/z
   ```
 ## Installation
+**Warning: Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
 - Bash:
   ```bash
   bash <(curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/install.sh)
