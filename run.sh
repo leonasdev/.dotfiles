@@ -226,6 +226,9 @@ function install_deps() {
     sudo rm -rf /usr/local/go
     curl -sSL https://go.dev/dl/go1.20.3.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
     export PATH=$PATH:/usr/local/go/bin
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.bashrc
+    echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.profile
+    echo "Added /usr/local/go/bin to .bashrc and .profile"
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v tree-sitter &>/dev/null; then
