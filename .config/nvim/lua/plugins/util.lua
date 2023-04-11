@@ -59,5 +59,12 @@ return {
     config = function()
       require("guess-indent").setup()
     end
+  },
+
+  -- git wrapper
+  {
+    "tpope/vim-fugitive",
+    config = function()
+    end
   }
 }
