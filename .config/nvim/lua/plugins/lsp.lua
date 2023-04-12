@@ -34,6 +34,7 @@ local format = function()
 
   vim.lsp.buf.format({
     bufnr = buf,
+    timeout_ms = 5000,
     filter = function(client)
       if have_nls then
         return client.name == "null-ls"
@@ -41,6 +42,18 @@ local format = function()
       return client.name ~= "null-ls"
     end,
   })
+end
+
+local function get_dprint_config_path()
+  local path_separator = _G.IS_WINDOWS and "\\" or "/"
+  local patterns = vim.tbl_flatten({ ".dprint.json", "dprint.json" })
+  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/dprint.json"
+  for _, name in ipairs(patterns) do
+    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
+      config_path = vim.loop.cwd() .. path_separator .. name
+    end
+  end
+  return { "--config", config_path }
 end
 
 local servers = {
@@ -287,18 +300,8 @@ return {
               end,
               dprint = function(source_name, methods)
                 nls.register(nls.builtins.formatting.dprint.with({
-                  extra_args = function()
-                    -- check if project have dprint configuration
-                    local path_separator = _G.IS_WINDOWS and "\\" or "/"
-                    local patterns = vim.tbl_flatten({ ".dprint.json", "dprint.json" })
-                    local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/dprint.json"
-                    for _, name in ipairs(patterns) do
-                      if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
-                        config_path = vim.loop.cwd() .. path_separator .. name
-                      end
-                    end
-                    return { "--config", config_path }
-                  end
+                  -- check if project have dprint configuration
+                  extra_args = get_dprint_config_path(),
                 }))
               end,
               -- eslint_d = function()
