@@ -77,12 +77,10 @@ function pre_check() {
 function post_install() {
   echo -e "${BOLD}${BLUE}Removing install.sh...${NC}"
   rm install.sh
-  git dotfiles rm --cache install.sh
   echo -e "${BOLD}${GREEN}Done${NC}"
 
   echo -e "${BOLD}${BLUE}Removing README.md...${NC}"
   rm README.md
-  git dotfiles rm --cache README.md
   echo -e "${BOLD}${GREEN}Done${NC}"
 }
 

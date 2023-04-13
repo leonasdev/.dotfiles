@@ -79,6 +79,7 @@ Installation will overwrite the following's config:
 </details>
 
 ## ✅TODO:
+- [ ] Add `nvim-dap` support
 - [ ] Improve the which-key config
 - [ ] Colorscheme
   - Curretlly using `ishan9299/nvim-solarized-lua` with some manual config
