@@ -1,6 +1,6 @@
 <div align="center">
 <h1>🔸.dotfiles</h1>
-My personal dotfiles for Ubuntu 20.04 or newer.
+My personal dotfiles that include an aesthetic and feature-rich neovim config
 </div>
 
 ---
@@ -9,7 +9,10 @@ My personal dotfiles for Ubuntu 20.04 or newer.
 - **Shout out to my Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
 - **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
 
-# ✨Features
+# ✨Showcase
+![Screenshot from 2023-04-14 03-02-50](https://user-images.githubusercontent.com/39915562/231859486-45f34315-375c-4e7b-ba4b-dc81bd23d6d7.png)
+![Screenshot from 2023-04-14 02-32-54](https://user-images.githubusercontent.com/39915562/231860282-b3aead77-8a03-4fe7-a9fd-6ab4d3c84977.png)
+![Screenshot from 2023-04-14 03-07-44](https://user-images.githubusercontent.com/39915562/231859536-1a58c06b-00aa-4456-aa05-5b7f592c2861.png)
 
 # 🚀Getting Started
 ## ❗Must Read
