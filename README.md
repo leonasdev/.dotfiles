@@ -5,7 +5,7 @@ My personal dotfiles for Ubuntu 20.04 or newer.
 
 ---
 
-- **Shout out to [@Takuya Matsuyama](https://github.com/craftzdog) who inspired my config setting**
+- **Shout out to [@Takuya Matsuyama](https://github.com/craftzdog) who inspired my configuration of neovim**
 - **Shout out to my Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
 - **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
 
