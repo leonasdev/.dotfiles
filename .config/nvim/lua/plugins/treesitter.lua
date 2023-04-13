@@ -34,6 +34,7 @@ return {
           'typescript',
           'tsx',
           'json',
+          'toml',
           'html',
           'css',
           'scss',
@@ -51,10 +52,8 @@ return {
         textobjects = {
           select = {
             enable = true,
-
             -- Automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
-
             keymaps = {
               ["af"] = { query = "@function.outer", desc = "Select outer part of a function region" },
               ["if"] = { query = "@function.inner", desc = "Select inner part of a function region" },
@@ -65,10 +64,10 @@ return {
           swap = {
             enable = true,
             swap_next = {
-              ["<leader>xp"] = { query = "@parameter.inner", desc = "Swap parameter with the next one"},
+              ["<leader>xp"] = { query = "@parameter.inner", desc = "Swap parameter with the next one" },
             },
             swap_previous = {
-              ["<leader>xP"] = { query = "@parameter.inner", desc = "Swap parameter with the previous one"},
+              ["<leader>xP"] = { query = "@parameter.inner", desc = "Swap parameter with the previous one" },
             },
           },
         },

@@ -48,6 +48,18 @@ local servers = {
   pyright = true,
   clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
   gopls = true,
+  rust_analyzer = {
+    settings = {
+      ['rust-analyzer'] = {
+        diagnostics = {
+          enable = true,
+          experimental = {
+            enable = true,
+          },
+        },
+      }
+    }
+  },
   tsserver = true,
   cssls = true,
   volar = true,
@@ -193,7 +205,6 @@ return {
     config = function()
       lsp_related_ui_adjust()
       lspconfig_setup()
-
     end
   },
 
@@ -219,20 +230,26 @@ return {
             ensure_installed = {
               "prettier",
               "dprint",
+              "rustfmt",
             },
           }
 
           local nls = require("null-ls")
           require("mason-null-ls").setup_handlers({
+            rustfmt = function(source_name, methods)
+              nls.register(nls.builtins.formatting.rustfmt.with({
+                filetypes = { "rust" },
+              }))
+            end,
             prettier = function(source_name, methods)
               nls.register(nls.builtins.formatting.prettier.with({
                 filetypes = { "html", "css", "scss" },
                 extra_args = { "--print-width", "120" }
               }))
             end,
-
             dprint = function(source_name, methods)
               nls.register(nls.builtins.formatting.dprint.with({
+                filetypes = { "javascriptreact", "typescript", "typescriptreact", "json", "javascript" },
                 extra_args = function()
                   -- check if project have dprint configuration
                   local path_separator = _G.IS_WINDOWS and "\\" or "/"
@@ -247,7 +264,6 @@ return {
                 end
               }))
             end,
-
             -- eslint_d = function()
             --   nls.register(nls.builtins.diagnostics.eslint_d)
             -- end
