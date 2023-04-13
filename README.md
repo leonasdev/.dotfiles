@@ -9,10 +9,22 @@ My personal dotfiles that include an aesthetic and feature-rich neovim config
 - **Shout out to my Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
 - **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
 
-# ✨Showcase
+# 💫Showcase
 ![Screenshot from 2023-04-14 03-02-50](https://user-images.githubusercontent.com/39915562/231865254-0917e7bc-12a2-40e9-9138-58da6e0d1d54.png)
 ![Screenshot from 2023-04-14 02-32-54](https://user-images.githubusercontent.com/39915562/231860282-b3aead77-8a03-4fe7-a9fd-6ab4d3c84977.png)
 ![Screenshot from 2023-04-14 03-07-44](https://user-images.githubusercontent.com/39915562/231859536-1a58c06b-00aa-4456-aa05-5b7f592c2861.png)
+
+# ✨Features
+Neovim:
+- Modern plugin manager with [lazy.nvim](https://github.com/folke/lazy.nvim)
+- Language Server Protocol with [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+- LSP servers, DAP servers, linters, and formatters manager with [mason.nvim](https://github.com/williamboman/mason.nvim)
+- Autocompletion with [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+- Aesthetic Colorscheme & Statusline with [nvim-solarized-lua](https://github.com/ishan9299/nvim-solarized-lua), [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+- Formatting and Linting with [null-ls.nvim](https://github.com/jose-elias-alvarez/null-ls.nvim)
+- Syntax highlighting with [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+- Fuzzy finding with [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- Git integration with [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim), [vim-fugitive](https://github.com/lewis6991/gitsigns.nvim)
 
 # 🚀Getting Started
 ## ❗Must Read
