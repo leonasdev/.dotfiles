@@ -16,7 +16,7 @@ My personal dotfiles that include an aesthetic and feature-rich neovim config
 
 # ✨Features
 Neovim:
-- Modern plugin manager with [lazy.nvim](https://github.com/folke/lazy.nvim)
+- Blazingly fast startup times by do a lot of lazy-loading with - [lazy.nvim](https://github.com/folke/lazy.nvim)
 - Language Server Protocol with [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
 - LSP servers, DAP servers, linters, and formatters manager with [mason.nvim](https://github.com/williamboman/mason.nvim)
 - Autocompletion with [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
