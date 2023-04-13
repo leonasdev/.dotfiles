@@ -25,6 +25,9 @@ function main() {
   check_tput_installed
   pre_check
   check_system_deps
+  if command -v nvim &>/dev/null; then
+    check_neovim_version
+  fi
 
   # check if user wnat backup neovim config, otherwise it will overwrite it
   if [ -d "$HOME/.config/nvim" ] && ! [ -z "$(ls -A $HOME/.config/nvim)" ]; then
