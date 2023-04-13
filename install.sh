@@ -27,7 +27,7 @@ function main() {
   check_system_deps
 
   # check if user wnat backup neovim config, otherwise it will overwrite it
-  if [ -d "$HOME/.config/neovim" ] && ! [ -z "$(ls -A $HOME/.config/neovim)" ]; then
+  if [ -d "$HOME/.config/nvim" ] && ! [ -z "$(ls -A $HOME/.config/nvim)" ]; then
     echo "${BOLD}${YELLOW}Destination path $HOME/.config/neovim already exists and is not an empty directory.${NC}"
     while [ true ]; do
       echo -e "Backup your current ${BOLD}Neovim${NC} config?"
