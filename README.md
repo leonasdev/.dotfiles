@@ -10,7 +10,7 @@ My personal dotfiles that include an aesthetic and feature-rich neovim config
 - **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
 
 # ✨Showcase
-![image](https://user-images.githubusercontent.com/39915562/231864382-2066ac3e-e57b-40a8-8ae8-4a57bbfcc061.png)
+![231859486-45f34315-375c-4e7b-ba4b-dc81bd23d6d7](https://user-images.githubusercontent.com/39915562/231864957-e02aa1b5-bb37-447e-8918-c15013d535ff.jpg)
 ![Screenshot from 2023-04-14 02-32-54](https://user-images.githubusercontent.com/39915562/231860282-b3aead77-8a03-4fe7-a9fd-6ab4d3c84977.png)
 ![Screenshot from 2023-04-14 03-07-44](https://user-images.githubusercontent.com/39915562/231859536-1a58c06b-00aa-4456-aa05-5b7f592c2861.png)
 
