@@ -89,7 +89,7 @@ function check_neovim_version() {
   nvim_ver=$(nvim --version | grep "$regex")
   nvim_ver="${nvim_ver/NVIM v/""}"
   nvim_ver="${nvim_ver:0:3}"
-  required_ver="0.9.0"
+  required_ver="0.9"
 
   if (( $(echo "$nvim_ver < $required_ver" |bc -l) )); then
     echo -e "${BOLD}${RED}[ERROR]: Neovim version needs to greater then 0.9.0 !${NC}"
@@ -206,6 +206,11 @@ function install_deps() {
   echo -e "${BOLD}${BLUE}Updating apt...${NC}"
   sudo apt update -qq
   echo -e "${GREEN}${BOLD}Done${NC}"
+  if ! command -v bc &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing bc...${NC}"
+    sudo apt install -qqy bc
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
   if ! command -v nvim &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing Neovim 0.10.0 ...${NC}"
     sudo apt install -qqy software-properties-common
