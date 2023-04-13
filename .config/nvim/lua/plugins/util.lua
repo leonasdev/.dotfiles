@@ -37,7 +37,7 @@ return {
     dependencies = "kevinhwang91/promise-async",
     config = function()
       vim.o.foldcolumn = '0' -- '0' is not bad
-      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
 
@@ -52,4 +52,39 @@ return {
       })
     end
   },
+
+  -- auto detect indent
+  {
+    "nmac427/guess-indent.nvim",
+    config = function()
+      require("guess-indent").setup()
+    end
+  },
+
+  -- git wrapper
+  {
+    "tpope/vim-fugitive",
+    config = function()
+    end
+  },
+
+  -- displays a popup with possible keybindings of the command
+  {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.timeoutlen = 300
+      require("which-key").setup({
+        plugins = {
+          presets = {
+            g = false
+          },
+        },
+        window = {
+          border = "single"
+        },
+      })
+    end
+  }
+
 }

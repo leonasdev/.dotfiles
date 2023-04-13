@@ -3,7 +3,7 @@ return {
   -- solarized
   {
     "ishan9299/nvim-solarized-lua",
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       vim.api.nvim_create_autocmd(
@@ -42,7 +42,7 @@ return {
     "sainnhe/gruvbox-material",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       vim.api.nvim_create_autocmd(
@@ -72,7 +72,7 @@ return {
     "ellisonleao/gruvbox.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       require("gruvbox").setup {
@@ -89,7 +89,7 @@ return {
     "folke/tokyonight.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       require("tokyonight").setup {
@@ -103,7 +103,7 @@ return {
     "EdenEast/nightfox.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       require("nightfox").setup {
@@ -122,11 +122,14 @@ return {
     "rebelot/kanagawa.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       require("kanagawa").setup {
-        transparent_background = true
+        transparent = true,
+        keywordStyle = {
+          italic = false,
+        },
       }
     end
   },
@@ -137,12 +140,11 @@ return {
     name = "catppuccin",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       require("catppuccin").setup {
-        transparent = true,
-        specialReturn = false,
+        transparent_background = true,
       }
     end
   },
@@ -152,8 +154,13 @@ return {
     "Mofiqul/vscode.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
+    config = function()
+      require("vscode").setup({
+        transparent = true,
+      })
+    end
   },
 
   -- moonbow
@@ -161,12 +168,25 @@ return {
     "arturgoms/moonbow.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", "Select Colorscheme with Preview" }
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
     },
     config = function()
       require("moonbow").setup({
         transparent_mode = true,
       })
     end
+  },
+
+  -- darcula (JetBrains Intellij IDEA default theme)
+  {
+    "briones-gabriel/darcula-solid.nvim",
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" }
+    },
+    dependencies = {
+      {
+        "rktjmp/lush.nvim",
+      },
+    },
   },
 }

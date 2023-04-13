@@ -34,6 +34,7 @@ local format = function()
 
   vim.lsp.buf.format({
     bufnr = buf,
+    timeout_ms = 5000,
     filter = function(client)
       if have_nls then
         return client.name == "null-ls"
@@ -43,45 +44,93 @@ local format = function()
   })
 end
 
+local function get_dprint_config_path()
+  local path_separator = _G.IS_WINDOWS and "\\" or "/"
+  local patterns = vim.tbl_flatten({ ".dprint.json", "dprint.json" })
+  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/dprint.json"
+  for _, name in ipairs(patterns) do
+    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
+      config_path = vim.loop.cwd() .. path_separator .. name
+    end
+  end
+  return { "--config", config_path }
+end
+
 local servers = {
-  html = true,
-  pyright = true,
-  clangd = not _G.IS_WINDOWS, -- DO NOT DEVELOP C++ IN WINDOWS!
-  gopls = true,
-  rust_analyzer = {
-    settings = {
-      ['rust-analyzer'] = {
-        diagnostics = {
-          enable = true,
-          experimental = {
-            enable = true,
-          },
-        },
+  html = {
+    name = "html-lsp",
+  },
+  pyright = {
+    name = "pyright",
+    config = {
+      settings = {
+        python = {
+          analysis = {
+            diagnosticMode = "openFilesOnly"
+            -- diagnosticMode = "workspace"
+          }
+        }
       }
     }
   },
-  tsserver = true,
-  cssls = true,
-  volar = true,
-  tailwindcss = true,
-  lua_ls = {
-    settings = {
-      Lua = {
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = { 'vim' }
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          -- library = vim.api.nvim_get_runtime_file("", true),
-          library = {
-            vim.fn.stdpath("config"),
+  rust_analyzer = {
+    name = "rust-analyzer",
+    config = {
+      settings = {
+        ['rust-analyzer'] = {
+          diagnostics = {
+            enable = true,
+            experimental = {
+              enable = true,
+            },
           },
-          checkThirdParty = false
-        },
-        -- Do not send telemetry data containing a randomized but unique identifier
-        telemetry = {
-          enable = false
+        }
+      }
+    }
+  },
+  clangd = {
+    name = "clangd",
+    disabled = not _G.IS_WINDOWS -- false represent don't use this server
+  },
+  gopls = {
+    name = "gopls",
+  },
+  tsserver = {
+    name = "typescript-language-server",
+  },
+  cssls = {
+    name = "css-lsp",
+  },
+  volar = {
+    name = "vue-language-server",
+  },
+  tailwindcss = {
+    name = "tailwindcss-language-server",
+  },
+  astro = {
+    name = "astro-language-server",
+  },
+  lua_ls = {
+    name = "lua-language-server",
+    config = {
+      settings = {
+        Lua = {
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = { 'vim' }
+          },
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            -- library = vim.api.nvim_get_runtime_file("", true),
+            library = {
+              vim.fn.stdpath("config"),
+            },
+            checkThirdParty = false
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = {
+            enable = false
+          }
         }
       }
     }
@@ -99,9 +148,10 @@ local function lspconfig_setup()
           group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
           buffer = bufnr,
           callback = function()
-            if require("leonasdev.autoformat").autoformat then
-              format()
+            if not require("leonasdev.autoformat").autoformat then
+              return
             end
+            format()
           end,
         })
 
@@ -169,8 +219,18 @@ local function lspconfig_setup()
     require("lspconfig")[server].setup(config)
   end
 
-  for server, config in pairs(servers) do
-    setup_server(server, config)
+  for server, setting in pairs(servers) do
+    if setting.disabled then
+      goto continue
+    end
+
+    if setting.config ~= nil then
+      setup_server(server, setting.config)
+    else
+      setup_server(server, {})
+    end
+
+    ::continue::
   end
 end
 
@@ -216,9 +276,21 @@ return {
       {
         "williamboman/mason-lspconfig.nvim",
         config = function()
-          require("mason-lspconfig").setup {
-            ensure_installed = vim.tbl_keys(servers)
-          }
+          require("mason-lspconfig").setup {}
+        end
+      },
+
+      -- Install and upgrade third party tools automatically
+      {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        config = function()
+          local server_names = {}
+          for server, setting in pairs(servers) do
+            table.insert(server_names, setting.name)
+          end
+          require("mason-tool-installer").setup({
+            ensure_installed = server_names
+          })
         end
       },
 
@@ -226,48 +298,39 @@ return {
       {
         "jay-babu/mason-null-ls.nvim",
         config = function()
+          local nls = require("null-ls")
           require("mason-null-ls").setup {
             ensure_installed = {
               "prettier",
               "dprint",
               "rustfmt",
             },
-          }
-
-          local nls = require("null-ls")
-          require("mason-null-ls").setup_handlers({
-            rustfmt = function(source_name, methods)
-              nls.register(nls.builtins.formatting.rustfmt.with({
-                filetypes = { "rust" },
-              }))
-            end,
-            prettier = function(source_name, methods)
-              nls.register(nls.builtins.formatting.prettier.with({
-                filetypes = { "html", "css", "scss" },
-                extra_args = { "--print-width", "120" }
-              }))
-            end,
-            dprint = function(source_name, methods)
-              nls.register(nls.builtins.formatting.dprint.with({
+            handlers = {
+              function()
+              end,
+              rustfmt = function(source_name, methods)
+                nls.register(nls.builtins.formatting.rustfmt.with({
+                  filetypes = { "rust" },
+                }))
+              end,
+              prettier = function(source_name, methods)
+                nls.register(nls.builtins.formatting.prettier.with({
+                  filetypes = { "html", "css", "scss" },
+                  extra_args = { "--print-width", "120" }
+                }))
+              end,
+              dprint = function(source_name, methods)
                 filetypes = { "javascriptreact", "typescript", "typescriptreact", "json", "javascript" },
-                extra_args = function()
+                nls.register(nls.builtins.formatting.dprint.with({
                   -- check if project have dprint configuration
-                  local path_separator = _G.IS_WINDOWS and "\\" or "/"
-                  local patterns = vim.tbl_flatten({ ".dprint.json", "dprint.json" })
-                  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/dprint.json"
-                  for _, name in ipairs(patterns) do
-                    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
-                      config_path = vim.loop.cwd() .. path_separator .. name
-                    end
-                  end
-                  return { "--config", config_path }
-                end
-              }))
-            end,
-            -- eslint_d = function()
-            --   nls.register(nls.builtins.diagnostics.eslint_d)
-            -- end
-          })
+                  extra_args = get_dprint_config_path(),
+                }))
+              end,
+              -- eslint_d = function()
+              --   nls.register(nls.builtins.diagnostics.eslint_d)
+              -- end
+            }
+          }
         end
       },
     },
