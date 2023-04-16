@@ -167,7 +167,7 @@ return {
       { "<C-j>", function() require("harpoon.ui").nav_file(1) end, mode = "n", desc = "Harpoon Nav File 1" },
       { "<C-k>", function() require("harpoon.ui").nav_file(2) end, mode = "n", desc = "Harpoon Nav File 2" },
       { "<C-l>", function() require("harpoon.ui").nav_file(3) end, mode = "n", desc = "Harpoon Nav File 3" },
-			{ "<C-h>", function() require("harpoon.ui").nav_file(4) end, mode = "n", desc = "Harpoon Nav File 4" },
+      { "<C-h>", function() require("harpoon.ui").nav_file(4) end, mode = "n", desc = "Harpoon Nav File 4" },
     },
     config = function()
       vim.api.nvim_create_autocmd({ "Filetype" }, {
