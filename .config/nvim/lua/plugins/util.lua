@@ -8,19 +8,10 @@ return {
   -- Distraction-free coding for Neovim
   {
     "folke/zen-mode.nvim",
-    cmd = "Zen",
+    cmd = { "Zen", "Z" },
     config = function()
       vim.api.nvim_set_hl(0, 'ZenBg', { ctermbg = 0 })
     end
-  },
-
-  -- measure startuptime
-  {
-    "dstein64/vim-startuptime",
-    cmd = "StartupTime",
-    config = function()
-      vim.g.startuptime_tries = 10
-    end,
   },
 
   -- commenting
@@ -37,7 +28,7 @@ return {
     dependencies = "kevinhwang91/promise-async",
     config = function()
       vim.o.foldcolumn = '0' -- '0' is not bad
-      vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
 
