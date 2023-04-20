@@ -1,14 +1,14 @@
 -- leader key is <Space>, defined in init.lua
 local keymap = vim.keymap
 
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
+keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- set q to do nothing because it's so annoying (default is recording macro)
 -- turned on when you need
 keymap.set("n", "q", "")
 
 -- greatest remap ever
-vim.keymap.set("x", "p", "P")
+keymap.set("x", "p", "P")
 
 -- using delete without yank
 keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = "Delete without yank" })
@@ -58,4 +58,24 @@ keymap.set("i", ",", ",<C-g>u")
 keymap.set("i", ".", ".<C-g>u")
 keymap.set("i", ";", ";<C-g>u")
 
+-- Fix tab? (I forgot what is it for)
 keymap.set("i", "<C-i>", "<C-i>")
+
+-- Smart insert in blank line (auto indent)
+keymap.set("n", "i", function()
+  if #vim.fn.getline(".") == 0 then
+    return [["_cc]]
+  else
+    return "i"
+  end
+end, { expr = true })
+
+
+-- Mapping for dd that doesn't yank an empty line into your default register:
+keymap.set("n", "dd", function()
+  if vim.api.nvim_get_current_line():match("^%s*$") then
+    return '"_dd'
+  else
+    return "dd"
+  end
+end, { expr = true })
