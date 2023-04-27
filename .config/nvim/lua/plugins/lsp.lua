@@ -320,8 +320,8 @@ return {
                 }))
               end,
               dprint = function(source_name, methods)
-                filetypes = { "javascriptreact", "typescript", "typescriptreact", "json", "javascript" },
                 nls.register(nls.builtins.formatting.dprint.with({
+                  filetypes = { "javascriptreact", "typescript", "typescriptreact", "json", "javascript" },
                   -- check if project have dprint configuration
                   extra_args = get_dprint_config_path(),
                 }))
