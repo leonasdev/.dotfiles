@@ -98,7 +98,7 @@ Installation will overwrite the following's config:
 - [ ] Improve the which-key config
 - [ ] Colorscheme
   - Curretlly using `ishan9299/nvim-solarized-lua` with some manual config
-  - Considering make a own colorscheme
+  - Considering make a own colorscheme (with semantic token highlighting supported)
 - [ ] A better way to manage my dotfiles, instead of using `git bare repository`
   - GNU stow?
 - [ ] Add my kitty config
