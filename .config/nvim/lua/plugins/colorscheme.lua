@@ -32,6 +32,15 @@ return {
         }
       )
 
+      -- temporory disable semantic tokens highlight,
+      -- since ishan9299/nvim-solarized-lua not support it yet
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          client.server_capabilities.semanticTokensProvider = nil
+        end,
+      });
+
       vim.g.solarized_termtrans = 1
       vim.cmd("colorscheme solarized")
     end
