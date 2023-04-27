@@ -49,7 +49,10 @@ require("lazy").setup("plugins", {
         "zipPlugin",
       }
     }
-  }
+  },
+  change_detection = {
+    notify = false,
+  },
 })
 
 -- close lazy panel with esc
