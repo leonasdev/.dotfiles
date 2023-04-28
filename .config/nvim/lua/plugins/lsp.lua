@@ -101,6 +101,9 @@ local servers = {
   cssls = {
     name = "css-lsp",
   },
+  jsonls = {
+    name = "json-lsp",
+  },
   volar = {
     name = "vue-language-server",
   },
