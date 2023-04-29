@@ -23,51 +23,6 @@ local function lsp_related_ui_adjust()
   })
 end
 
-local format = function()
-  local buf = vim.api.nvim_get_current_buf()
-  if require("leonasdev.autoformat").autoformat == false then
-    return
-  end
-
-  local ft = vim.bo[buf].filetype
-  local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
-
-  vim.lsp.buf.format({
-    bufnr = buf,
-    timeout_ms = 5000,
-    filter = function(client)
-      if have_nls then
-        return client.name == "null-ls"
-      end
-      return client.name ~= "null-ls"
-    end,
-  })
-end
-
-local function get_dprint_config_path()
-  local path_separator = _G.IS_WINDOWS and "\\" or "/"
-  local patterns = vim.tbl_flatten({ ".dprint.json", "dprint.json" })
-  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/dprint.json"
-  for _, name in ipairs(patterns) do
-    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
-      config_path = vim.loop.cwd() .. path_separator .. name
-    end
-  end
-  return { "--config", config_path }
-end
-
-local function get_stylua_config_path()
-  local path_separator = _G.IS_WINDOWS and "\\" or "/"
-  local patterns = vim.tbl_flatten({ ".stylua.toml", "stylua.toml" })
-  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/stylua.toml"
-  for _, name in ipairs(patterns) do
-    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
-      config_path = vim.loop.cwd() .. path_separator .. name
-    end
-  end
-  return { "--config-path", config_path }
-end
-
 local servers = {
   html = {
     name = "html-lsp",
@@ -170,27 +125,6 @@ local function lspconfig_setup()
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-      if client.supports_method("textDocument/formatting") then
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          group = vim.api.nvim_create_augroup("LspFormat." .. bufnr, {}),
-          buffer = bufnr,
-          callback = function()
-            if not require("leonasdev.autoformat").autoformat then
-              return
-            end
-            format()
-          end,
-        })
-
-        vim.api.nvim_create_user_command("FormatToggle", function()
-          require("leonasdev.autoformat").toggle()
-        end, { desc = "Toggle Format on Save" })
-
-        -- TODO: Format command in visual mode and normal mode
-        -- vim.api.nvim_create_user_command("Format", format
-        --   , { range = true, desc = "Format on range" })
-      end
 
       local opts = { buffer = bufnr }
 
@@ -319,58 +253,6 @@ return {
           end
           require("mason-tool-installer").setup({
             ensure_installed = server_names,
-          })
-        end,
-      },
-
-      -- bridges mason.nvim with the null-ls plugin
-      {
-        "jay-babu/mason-null-ls.nvim",
-        config = function()
-          local nls = require("null-ls")
-          require("mason-null-ls").setup({
-            ensure_installed = {
-              "prettier",
-              "dprint",
-              "rustfmt",
-              "stylua",
-            },
-            handlers = {
-              function() end,
-              rustfmt = function(source_name, methods)
-                nls.register(nls.builtins.formatting.rustfmt.with({
-                  filetypes = { "rust" },
-                }))
-              end,
-              prettier = function(source_name, methods)
-                nls.register(nls.builtins.formatting.prettier.with({
-                  filetypes = { "html", "css", "scss" },
-                  extra_args = { "--print-width", "120" },
-                }))
-              end,
-              dprint = function(source_name, methods)
-                nls.register(nls.builtins.formatting.dprint.with({
-                  filetypes = {
-                    "javascriptreact",
-                    "typescript",
-                    "typescriptreact",
-                    "json",
-                    "javascript",
-                  },
-                  -- check if project have dprint configuration
-                  extra_args = get_dprint_config_path(),
-                }))
-              end,
-              stylua = function(source_name, methods)
-                nls.register(nls.builtins.formatting.stylua.with({
-                  filetypes = { "lua" },
-                  extra_args = get_stylua_config_path(),
-                }))
-              end,
-              -- eslint_d = function()
-              --   nls.register(nls.builtins.diagnostics.eslint_d)
-              -- end
-            },
           })
         end,
       },
