@@ -11,7 +11,7 @@ local function lsp_related_ui_adjust()
 
   vim.diagnostic.config({
     virtual_text = {
-      prefix = '●',
+      prefix = "●",
       severity_sort = true,
     },
     float = {
@@ -56,41 +56,58 @@ local function get_dprint_config_path()
   return { "--config", config_path }
 end
 
+local function get_stylua_config_path()
+  local path_separator = _G.IS_WINDOWS and "\\" or "/"
+  local patterns = vim.tbl_flatten({ ".stylua.toml", "stylua.toml" })
+  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/format/stylua.toml"
+  for _, name in ipairs(patterns) do
+    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
+      config_path = vim.loop.cwd() .. path_separator .. name
+    end
+  end
+  return { "--config-path", config_path }
+end
+
 local servers = {
   html = {
     name = "html-lsp",
   },
   pyright = {
     name = "pyright",
+    disabled = false,
     config = {
       settings = {
         python = {
           analysis = {
-            diagnosticMode = "openFilesOnly"
+            diagnosticMode = "openFilesOnly",
             -- diagnosticMode = "workspace"
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
+  },
+  debugpy = {
+    name = "debugpy",
+    disabled = true,
   },
   rust_analyzer = {
     name = "rust-analyzer",
     config = {
       settings = {
-        ['rust-analyzer'] = {
+        ["rust-analyzer"] = {
           diagnostics = {
             enable = true,
             experimental = {
               enable = true,
             },
           },
-        }
-      }
-    }
+        },
+      },
+    },
   },
   clangd = {
     name = "clangd",
-    disabled = not _G.IS_WINDOWS -- false represent don't use this server
+    disabled = not _G.IS_WINDOWS, -- false represent don't use this server
   },
   gopls = {
     name = "gopls",
@@ -116,11 +133,12 @@ local servers = {
   lua_ls = {
     name = "lua-language-server",
     config = {
+      cmd = { "/root/lua-language-server/bin/lua-language-server" },
       settings = {
         Lua = {
           diagnostics = {
             -- Get the language server to recognize the `vim` global
-            globals = { 'vim' }
+            globals = { "vim" },
           },
           workspace = {
             -- Make the server aware of Neovim runtime files
@@ -128,22 +146,22 @@ local servers = {
             library = {
               vim.fn.stdpath("config"),
             },
-            checkThirdParty = false
+            checkThirdParty = false,
           },
           -- Do not send telemetry data containing a randomized but unique identifier
           telemetry = {
-            enable = false
-          }
-        }
-      }
-    }
+            enable = false,
+          },
+        },
+      },
+    },
   },
   solidity = {
     config = {
-      cmd = { 'nomicfoundation-solidity-language-server', '--stdio' },
-      filetypes = { 'solidity' },
+      cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
+      filetypes = { "solidity" },
       single_file_support = true,
-    }
+    },
   },
 }
 
@@ -176,13 +194,13 @@ local function lspconfig_setup()
 
       local opts = { buffer = bufnr }
 
-      vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev, opts)
-      vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, opts)
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-      vim.keymap.set({ 'i', 'n' }, '<C-s>', vim.lsp.buf.signature_help, opts)
-      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+      vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
+      vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
+      vim.keymap.set("n", "<leader>dd", vim.diagnostic.open_float, opts)
+      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+      vim.keymap.set({ "i", "n" }, "<C-s>", vim.lsp.buf.signature_help, opts)
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
       -- auto show diagnostic when cursor hold
       vim.api.nvim_create_autocmd("CursorHold", {
@@ -198,8 +216,9 @@ local function lspconfig_setup()
           end
 
           local cursor_pos = vim.api.nvim_win_get_cursor(0)
-          if (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
-              and #vim.diagnostic.get() > 0
+          if
+            (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
+            and #vim.diagnostic.get() > 0
           then
             vim.diagnostic.open_float(nil, float_opts)
           end
@@ -207,11 +226,11 @@ local function lspconfig_setup()
           vim.b.diagnostics_pos = cursor_pos
         end,
       })
-    end
+    end,
   })
 
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+  capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
   local setup_server = function(server, config)
     if not config then
@@ -256,7 +275,7 @@ return {
         "folke/neodev.nvim",
         config = function()
           require("neodev").setup()
-        end
+        end,
       },
 
       -- nvim-cmp source for neovim's built-in LSP
@@ -269,13 +288,13 @@ return {
         "jose-elias-alvarez/null-ls.nvim",
         config = function()
           require("null-ls").setup()
-        end
+        end,
       },
     },
     config = function()
       lsp_related_ui_adjust()
       lspconfig_setup()
-    end
+    end,
   },
 
   -- managing tool for lsp
@@ -286,8 +305,8 @@ return {
       {
         "williamboman/mason-lspconfig.nvim",
         config = function()
-          require("mason-lspconfig").setup {}
-        end
+          require("mason-lspconfig").setup({})
+        end,
       },
 
       -- Install and upgrade third party tools automatically
@@ -299,9 +318,9 @@ return {
             table.insert(server_names, setting.name)
           end
           require("mason-tool-installer").setup({
-            ensure_installed = server_names
+            ensure_installed = server_names,
           })
-        end
+        end,
       },
 
       -- bridges mason.nvim with the null-ls plugin
@@ -309,15 +328,15 @@ return {
         "jay-babu/mason-null-ls.nvim",
         config = function()
           local nls = require("null-ls")
-          require("mason-null-ls").setup {
+          require("mason-null-ls").setup({
             ensure_installed = {
               "prettier",
               "dprint",
               "rustfmt",
+              "stylua",
             },
             handlers = {
-              function()
-              end,
+              function() end,
               rustfmt = function(source_name, methods)
                 nls.register(nls.builtins.formatting.rustfmt.with({
                   filetypes = { "rust" },
@@ -326,26 +345,38 @@ return {
               prettier = function(source_name, methods)
                 nls.register(nls.builtins.formatting.prettier.with({
                   filetypes = { "html", "css", "scss" },
-                  extra_args = { "--print-width", "120" }
+                  extra_args = { "--print-width", "120" },
                 }))
               end,
               dprint = function(source_name, methods)
                 nls.register(nls.builtins.formatting.dprint.with({
-                  filetypes = { "javascriptreact", "typescript", "typescriptreact", "json", "javascript" },
+                  filetypes = {
+                    "javascriptreact",
+                    "typescript",
+                    "typescriptreact",
+                    "json",
+                    "javascript",
+                  },
                   -- check if project have dprint configuration
                   extra_args = get_dprint_config_path(),
+                }))
+              end,
+              stylua = function(source_name, methods)
+                nls.register(nls.builtins.formatting.stylua.with({
+                  filetypes = { "lua" },
+                  extra_args = get_stylua_config_path(),
                 }))
               end,
               -- eslint_d = function()
               --   nls.register(nls.builtins.diagnostics.eslint_d)
               -- end
-            }
-          }
-        end
+            },
+          })
+        end,
       },
     },
     config = function()
-      require("mason").setup {
+      require("mason").setup({
         providers = {
           "mason.providers.registry-api", -- default
           "mason.providers.client",
@@ -353,8 +384,8 @@ return {
         ui = {
           height = 0.85,
           border = "rounded",
-        }
-      }
-    end
+        },
+      })
+    end,
   },
 }
