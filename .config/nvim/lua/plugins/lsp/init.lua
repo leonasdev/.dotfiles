@@ -3,7 +3,7 @@ local function lsp_related_ui_adjust()
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
-  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
   for type, icon in pairs(signs) do
     local hl = "DiagnosticSign" .. type
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
@@ -22,103 +22,6 @@ local function lsp_related_ui_adjust()
     severity_sort = true,
   })
 end
-
-local servers = {
-  html = {
-    name = "html-lsp",
-  },
-  pyright = {
-    name = "pyright",
-    disabled = false,
-    config = {
-      settings = {
-        python = {
-          analysis = {
-            diagnosticMode = "openFilesOnly",
-            -- diagnosticMode = "workspace"
-          },
-        },
-      },
-    },
-  },
-  debugpy = {
-    name = "debugpy",
-    disabled = true,
-  },
-  rust_analyzer = {
-    name = "rust-analyzer",
-    config = {
-      settings = {
-        ["rust-analyzer"] = {
-          diagnostics = {
-            enable = true,
-            experimental = {
-              enable = true,
-            },
-          },
-        },
-      },
-    },
-  },
-  clangd = {
-    name = "clangd",
-    disabled = not _G.IS_WINDOWS, -- false represent don't use this server
-  },
-  gopls = {
-    name = "gopls",
-  },
-  tsserver = {
-    name = "typescript-language-server",
-  },
-  cssls = {
-    name = "css-lsp",
-  },
-  jsonls = {
-    name = "json-lsp",
-  },
-  volar = {
-    name = "vue-language-server",
-  },
-  tailwindcss = {
-    name = "tailwindcss-language-server",
-  },
-  astro = {
-    name = "astro-language-server",
-  },
-  lua_ls = {
-    name = "lua-language-server",
-    config = {
-      cmd = { "/root/lua-language-server/bin/lua-language-server" },
-      settings = {
-        Lua = {
-          diagnostics = {
-            -- Get the language server to recognize the `vim` global
-            globals = { "vim" },
-          },
-          workspace = {
-            -- Make the server aware of Neovim runtime files
-            -- library = vim.api.nvim_get_runtime_file("", true),
-            library = {
-              vim.fn.stdpath("config"),
-            },
-            checkThirdParty = false,
-          },
-          -- Do not send telemetry data containing a randomized but unique identifier
-          telemetry = {
-            enable = false,
-          },
-        },
-      },
-    },
-  },
-  solidity = {
-    config = {
-      cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
-      filetypes = { "solidity" },
-      single_file_support = true,
-    },
-  },
-}
 
 local function lspconfig_setup()
   vim.api.nvim_create_autocmd("LspAttach", {
@@ -182,6 +85,7 @@ local function lspconfig_setup()
     require("lspconfig")[server].setup(config)
   end
 
+  local servers = require("plugins.lsp.langueage_servers")
   for server, setting in pairs(servers) do
     if setting.disabled then
       goto continue
@@ -212,10 +116,14 @@ return {
         end,
       },
 
+      -- managing tool
+      { "williamboman/mason.nvim" },
+
+      -- bridges mason with the lspconfig
+      { "williamboman/mason-lspconfig.nvim" },
+
       -- nvim-cmp source for neovim's built-in LSP
-      {
-        "hrsh7th/cmp-nvim-lsp",
-      },
+      { "hrsh7th/cmp-nvim-lsp" },
 
       -- Use Neovim as a language server to inject LSP
       {
@@ -228,46 +136,6 @@ return {
     config = function()
       lsp_related_ui_adjust()
       lspconfig_setup()
-    end,
-  },
-
-  -- managing tool for lsp
-  {
-    "williamboman/mason.nvim",
-    dependencies = {
-      -- bridges mason with the lspconfig
-      {
-        "williamboman/mason-lspconfig.nvim",
-        config = function()
-          require("mason-lspconfig").setup({})
-        end,
-      },
-
-      -- Install and upgrade third party tools automatically
-      {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        config = function()
-          local server_names = {}
-          for server, setting in pairs(servers) do
-            table.insert(server_names, setting.name)
-          end
-          require("mason-tool-installer").setup({
-            ensure_installed = server_names,
-          })
-        end,
-      },
-    },
-    config = function()
-      require("mason").setup({
-        providers = {
-          "mason.providers.registry-api", -- default
-          "mason.providers.client",
-        },
-        ui = {
-          height = 0.85,
-          border = "rounded",
-        },
-      })
     end,
   },
 }

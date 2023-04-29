@@ -12,9 +12,9 @@ function M.toggle()
     M.autoformat = not M.autoformat
   end
   if M.autoformat then
-    Util.info("Enabled format on save", { title = "Format" })
+    Util.info("Enabled formatting on save", { title = "Format" })
   else
-    Util.warn("Disabled format on save", { title = "Format" })
+    Util.warn("Disabled formatting on save", { title = "Format" })
   end
 end
 
