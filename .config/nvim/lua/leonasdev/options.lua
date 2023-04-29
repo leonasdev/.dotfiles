@@ -18,8 +18,8 @@ opt.breakindent = true
 opt.showbreak = string.rep(" ", 3) -- Make it so that long lines wrap smartly
 opt.linebreak = true
 -- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 --search & replace settings
 opt.ignorecase = true
@@ -32,17 +32,17 @@ opt.termguicolors = true -- true color
 opt.background = "dark"
 opt.cursorline = true
 -- opt.pumblend = 10 -- transparency for popup-menu
-vim.api.nvim_set_hl(0, 'WinSeparator', { bg = 'None' }) -- the line background between two windows
+vim.api.nvim_set_hl(0, "WinSeparator", { bg = "None" }) -- the line background between two windows
 
 -- backspace
 opt.backspace = "indent,eol,start"
 
 -- clipboard
 -- allow you to yank from neovim and C-v to anywhere vice versa
-opt.clipboard:prepend { 'unnamed', 'unnamedplus' }
-if _G.IS_WSL and vim.fn.executable('win32yank.exe') == 1 then -- you need put win32yank in system32
+opt.clipboard:prepend({ "unnamed", "unnamedplus" })
+if _G.IS_WSL and vim.fn.executable("win32yank.exe") == 1 then -- you need put win32yank in system32
   vim.g.clipboard = {
-    name = 'win32yank-wsl',
+    name = "win32yank-wsl",
     copy = {
       ["+"] = { "win32yank.exe", "-i", "--crlf" },
       ["*"] = { "win32yank.exe", "-i", "--crlf" },
@@ -51,7 +51,7 @@ if _G.IS_WSL and vim.fn.executable('win32yank.exe') == 1 then -- you need put wi
       ["+"] = { "win32yank.exe", "-o", "--lf" },
       ["*"] = { "win32yank.exe", "-o", "--lf" },
     },
-    cache_enabled = true
+    cache_enabled = true,
   }
 end
 
@@ -60,9 +60,9 @@ opt.splitright = true -- new vertical splits will appear on the right
 opt.splitbelow = true -- new horizontal splits will appear on the bottom
 
 -- encodings
-vim.scriptencoding = 'utf-8'
-opt.encoding = 'utf-8'
-opt.fileencoding = 'utf-8'
+vim.scriptencoding = "utf-8"
+opt.encoding = "utf-8"
+opt.fileencoding = "utf-8"
 
 -- persistance undo
 opt.undofile = true
@@ -70,18 +70,17 @@ opt.undofile = true
 -- others
 opt.iskeyword:append("-") -- now 'test-test' is a word
 opt.scrolloff = 10
-opt.path:append { '**' }  -- Finding files - Search down into subfolders
-opt.updatetime = 100      -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_does_a_lower_updatetime_lead_to_better/
-opt.belloff = "all"       -- Just turn the dang bell off
-opt.signcolumn = "yes"    -- always showing the signcolumn
+opt.path:append({ "**" }) -- Finding files - Search down into subfolders
+opt.updatetime = 100 -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_does_a_lower_updatetime_lead_to_better/
+opt.belloff = "all" -- Just turn the dang bell off
+opt.signcolumn = "yes" -- always showing the signcolumn
 
 -- Highlight yanked text
-vim.api.nvim_create_autocmd('textyankpost', {
-  group = vim.api.nvim_create_augroup('yank_highlight', {}),
-  pattern = '*',
+vim.api.nvim_create_autocmd("textyankpost", {
+  group = vim.api.nvim_create_augroup("yank_highlight", {}),
+  pattern = "*",
   callback = function()
-    vim.highlight.on_yank { higroup = 'Search',
-      timeout = 100 }
+    vim.highlight.on_yank({ higroup = "Search", timeout = 100 })
   end,
 })
 
@@ -90,7 +89,7 @@ vim.api.nvim_create_autocmd("bufEnter", {
   group = vim.api.nvim_create_augroup("FormatOptions", {}),
   pattern = "*",
   callback = function()
-    opt.formatoptions:remove { "r", "o" }
+    opt.formatoptions:remove({ "r", "o" })
   end,
 })
 
@@ -123,11 +122,11 @@ vim.api.nvim_create_user_command("LiveServer", function()
     return [[]]
   end
 
-  require("lualine").setup {
+  require("lualine").setup({
     sections = {
-      lualine_x = { 'encoding', 'fileformat', 'filetype', { live_server_lualine, color = { fg = "#268bd2" } } },
-    }
-  }
+      lualine_x = { "encoding", "fileformat", "filetype", { live_server_lualine, color = { fg = "#268bd2" } } },
+    },
+  })
 end, { desc = "Start live-server in background" })
 
 -- Add "LiveServerStop" command to quick stop live-server of npm

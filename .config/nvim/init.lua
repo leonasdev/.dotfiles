@@ -1,12 +1,12 @@
 local uname = vim.loop.os_uname()
 
 _G.OS = uname.sysname
-_G.IS_MAC = OS == 'Darwin'
-_G.IS_LINUX = OS == 'Linux'
-_G.IS_WINDOWS = OS:find 'Windows' and true or false
+_G.IS_MAC = OS == "Darwin"
+_G.IS_LINUX = OS == "Linux"
+_G.IS_WINDOWS = OS:find("Windows") and true or false
 _G.IS_WSL = (function()
-  local output = vim.fn.systemlist "uname -r"
-  local condition1 = IS_LINUX and uname.release:lower():find 'microsoft' and true or false
+  local output = vim.fn.systemlist("uname -r")
+  local condition1 = IS_LINUX and uname.release:lower():find("microsoft") and true or false
   local condition2 = not not string.find(output[1] or "", "WSL")
   return condition1 or condition2
 end)()
@@ -33,7 +33,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {
   install = {
-    colorscheme = { "solarized", "habamax" }
+    colorscheme = { "solarized", "habamax" },
   },
   ui = {
     border = "rounded",
@@ -47,8 +47,8 @@ require("lazy").setup("plugins", {
         "tohtml",
         "tutor",
         "zipPlugin",
-      }
-    }
+      },
+    },
   },
   change_detection = {
     notify = false,
@@ -63,5 +63,5 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(event)
     vim.bo[event.buf].buflisted = false
     vim.keymap.set("n", "<Esc>", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-  end
+  end,
 })

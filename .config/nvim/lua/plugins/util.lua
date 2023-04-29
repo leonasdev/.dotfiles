@@ -10,8 +10,8 @@ return {
     "folke/zen-mode.nvim",
     cmd = "ZenMode",
     config = function()
-      vim.api.nvim_set_hl(0, 'ZenBg', { ctermbg = 0 })
-    end
+      vim.api.nvim_set_hl(0, "ZenBg", { ctermbg = 0 })
+    end,
   },
 
   -- commenting
@@ -19,7 +19,7 @@ return {
     "numToStr/Comment.nvim",
     config = function()
       require("Comment").setup()
-    end
+    end,
   },
 
   -- folding
@@ -27,21 +27,21 @@ return {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
     config = function()
-      vim.o.foldcolumn = '0' -- '0' is not bad
+      vim.o.foldcolumn = "0" -- '0' is not bad
       vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
 
       -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-      vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-      vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+      vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+      vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 
-      require('ufo').setup({
+      require("ufo").setup({
         provider_selector = function(bufnr, filetype, buftype)
-          return { 'treesitter', 'indent' }
-        end
+          return { "treesitter", "indent" }
+        end,
       })
-    end
+    end,
   },
 
   -- auto detect indent
@@ -49,15 +49,14 @@ return {
     "nmac427/guess-indent.nvim",
     config = function()
       require("guess-indent").setup()
-    end
+    end,
   },
 
   -- git wrapper
   {
     "tpope/vim-fugitive",
     cmd = { "Git", "G" },
-    config = function()
-    end
+    config = function() end,
   },
 
   -- displays a popup with possible keybindings of the command
@@ -69,14 +68,13 @@ return {
       require("which-key").setup({
         plugins = {
           presets = {
-            g = false
+            g = false,
           },
         },
         window = {
-          border = "single"
+          border = "single",
         },
       })
-    end
-  }
-
+    end,
+  },
 }

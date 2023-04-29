@@ -19,31 +19,31 @@ return {
           disable = { "python" },
         },
         ensure_installed = {
-          'vim',
-          'vimdoc',
-          'markdown',
-          'markdown_inline',
-          'bash',
-          'regex',
-          'c',
-          'cpp',
-          'go',
-          'gomod',
-          'java',
-          'javascript',
-          'typescript',
-          'tsx',
-          'json',
-          'toml',
-          'html',
-          'css',
-          'scss',
-          'lua',
-          'rust'
+          "vim",
+          "vimdoc",
+          "markdown",
+          "markdown_inline",
+          "bash",
+          "regex",
+          "c",
+          "cpp",
+          "go",
+          "gomod",
+          "java",
+          "javascript",
+          "typescript",
+          "tsx",
+          "json",
+          "toml",
+          "html",
+          "css",
+          "scss",
+          "lua",
+          "rust",
         },
         auto_install = true,
         autotag = { -- dependency with 'nvim-ts-autotag'
-          enable = true
+          enable = true,
         },
         playground = {
           enable = true,
@@ -71,8 +71,7 @@ return {
             },
           },
         },
-      }
-      )
+      })
 
       -- Must installed zig via scoop in Windows
       if _G.IS_WINDOWS then
@@ -80,7 +79,7 @@ return {
       else
         require("nvim-treesitter.install").compilers = { "clang", "gcc", "cc", "cl", "zig" }
       end
-    end
+    end,
   },
 
   {
@@ -88,19 +87,19 @@ return {
     event = "InsertEnter",
     config = function()
       require("nvim-autopairs").setup()
-    end
+    end,
   },
 
   {
     "kylechui/nvim-surround",
     event = "BufEnter",
     config = function()
-      require("nvim-surround").setup {
+      require("nvim-surround").setup({
         keymaps = {
           normal = "s",
           normal_cur = "ss",
-        }
-      }
-    end
+        },
+      })
+    end,
   },
 }

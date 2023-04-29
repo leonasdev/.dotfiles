@@ -4,7 +4,9 @@ local new_maker = function(filepath, bufnr, opts)
 
   filepath = vim.fn.expand(filepath)
   vim.loop.fs_stat(filepath, function(_, stat)
-    if not stat then return end
+    if not stat then
+      return
+    end
     if stat.size > 100000 then
       return
     else
@@ -23,7 +25,7 @@ local function edit_neovim()
     previewer = enable_previewer,
   }
 
-  require('telescope.builtin').find_files(opts)
+  require("telescope.builtin").find_files(opts)
 end
 
 local function find_files_or_git_files()
@@ -38,7 +40,7 @@ local function find_files_or_git_files()
     local opts = {
       previewer = enable_previewer,
       no_ignore = true, -- set false to ignore files by .gitignore
-      hidden = true -- set false to ignore dotfiles
+      hidden = true, -- set false to ignore dotfiles
     }
 
     require("telescope.builtin").find_files(opts)
@@ -47,36 +49,35 @@ end
 
 local function live_grep()
   -- require('telescope.builtin').live_grep()
-  require('telescope').extensions.live_grep_args.live_grep_args()
+  require("telescope").extensions.live_grep_args.live_grep_args()
 end
 
 local function file_browser()
-  require('telescope').extensions.file_browser.file_browser({
-  })
+  require("telescope").extensions.file_browser.file_browser({})
 end
 
 local function current_buffer_fuzzy_find()
-  require("telescope.builtin").current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+  require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
     previewer = false,
-  })
+  }))
 end
 
 local function lsp_definitions()
-  require("telescope.builtin").lsp_definitions(require('telescope.themes').get_dropdown {
+  require("telescope.builtin").lsp_definitions(require("telescope.themes").get_dropdown({
     show_line = false,
-  })
+  }))
 end
 
 local function lsp_references()
-  require("telescope.builtin").lsp_references(require('telescope.themes').get_dropdown {
+  require("telescope.builtin").lsp_references(require("telescope.themes").get_dropdown({
     show_line = false,
-  })
+  }))
 end
 
 local function lsp_implementations()
-  require("telescope.builtin").lsp_implementations(require('telescope.themes').get_dropdown {
+  require("telescope.builtin").lsp_implementations(require("telescope.themes").get_dropdown({
     show_line = false,
-  })
+  }))
 end
 
 return {
@@ -100,7 +101,7 @@ return {
       { "gi", lsp_implementations, mode = "n", desc = "LSP Find Implementations" },
     },
     config = function()
-      require("telescope").setup {
+      require("telescope").setup({
         defaults = {
           buffer_previewer_maker = new_maker,
           mappings = {
@@ -109,8 +110,8 @@ return {
               ["<c-j>"] = require("telescope.actions").move_selection_next,
               ["<c-k>"] = require("telescope.actions").move_selection_previous,
               ["<c-s>"] = require("telescope.actions").select_vertical,
-            }
-          }
+            },
+          },
         },
         extensions = {
           fzf = {
@@ -128,15 +129,15 @@ return {
             git_status = false,
             mappings = {
               i = {
-                ["<esc>"] = false
-              }
-            }
-          }
-        }
-      }
+                ["<esc>"] = false,
+              },
+            },
+          },
+        },
+      })
 
-      require('telescope').load_extension('fzf')
-    end
+      require("telescope").load_extension("fzf")
+    end,
   },
 
   -- native telescope sorter to significantly improve sorting performance
@@ -149,35 +150,77 @@ return {
   -- file browser extension for telescope.nvim
   {
     "nvim-telescope/telescope-file-browser.nvim",
-    lazy = true
+    lazy = true,
   },
 
   -- enable passing arguments to the live_grep of telescope
   {
     "nvim-telescope/telescope-live-grep-args.nvim",
-    lazy = true
+    lazy = true,
   },
 
   -- Getting you where you want with the fewest keystrokes
   {
     "ThePrimeagen/harpoon",
     keys = {
-      { "<C-e>", function() require("harpoon.ui").toggle_quick_menu() end, mode = "n", desc = "Harpoon Menu" },
-      { "<leader>a", function() require("harpoon.mark").add_file() end, mode = "n", desc = "Harpoon Add File" },
-      { "<C-j>", function() require("harpoon.ui").nav_file(1) end, mode = "n", desc = "Harpoon Nav File 1" },
-      { "<C-k>", function() require("harpoon.ui").nav_file(2) end, mode = "n", desc = "Harpoon Nav File 2" },
-      { "<C-l>", function() require("harpoon.ui").nav_file(3) end, mode = "n", desc = "Harpoon Nav File 3" },
-      { "<C-h>", function() require("harpoon.ui").nav_file(4) end, mode = "n", desc = "Harpoon Nav File 4" },
+      {
+        "<C-e>",
+        function()
+          require("harpoon.ui").toggle_quick_menu()
+        end,
+        mode = "n",
+        desc = "Harpoon Menu",
+      },
+      {
+        "<leader>a",
+        function()
+          require("harpoon.mark").add_file()
+        end,
+        mode = "n",
+        desc = "Harpoon Add File",
+      },
+      {
+        "<C-j>",
+        function()
+          require("harpoon.ui").nav_file(1)
+        end,
+        mode = "n",
+        desc = "Harpoon Nav File 1",
+      },
+      {
+        "<C-k>",
+        function()
+          require("harpoon.ui").nav_file(2)
+        end,
+        mode = "n",
+        desc = "Harpoon Nav File 2",
+      },
+      {
+        "<C-l>",
+        function()
+          require("harpoon.ui").nav_file(3)
+        end,
+        mode = "n",
+        desc = "Harpoon Nav File 3",
+      },
+      {
+        "<C-h>",
+        function()
+          require("harpoon.ui").nav_file(4)
+        end,
+        mode = "n",
+        desc = "Harpoon Nav File 4",
+      },
     },
     config = function()
       vim.api.nvim_create_autocmd({ "Filetype" }, {
         pattern = "harpoon",
         callback = function()
           vim.opt.cursorline = true
-          vim.api.nvim_set_hl(0, 'HarpoonWindow', { link = 'Normal' })
-          vim.api.nvim_set_hl(0, 'HarpoonBorder', { link = 'Normal' })
-        end
+          vim.api.nvim_set_hl(0, "HarpoonWindow", { link = "Normal" })
+          vim.api.nvim_set_hl(0, "HarpoonBorder", { link = "Normal" })
+        end,
       })
-    end
+    end,
   },
 }

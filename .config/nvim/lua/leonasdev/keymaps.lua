@@ -11,7 +11,7 @@ keymap.set("n", "q", "")
 keymap.set("x", "p", "P")
 
 -- using delete without yank
-keymap.set({ "n", "v" }, "<leader>d", "\"_d", { desc = "Delete without yank" })
+keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yank" })
 
 -- escape insert mode
 keymap.set("i", "jk", "<ESC>")
@@ -48,10 +48,18 @@ keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Search and replace in current word (case sensitive)
-keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
-  { desc = "Replace current word (case sensitive)" })
-keymap.set("v", "<leader>s", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
-  { desc = "Replace current word (case sensitive)" })
+keymap.set(
+  "n",
+  "<leader>s",
+  ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "Replace current word (case sensitive)" }
+)
+keymap.set(
+  "v",
+  "<leader>s",
+  ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "Replace current word (case sensitive)" }
+)
 
 -- Add undo break-points
 keymap.set("i", ",", ",<C-g>u")
@@ -69,7 +77,6 @@ keymap.set("n", "i", function()
     return "i"
   end
 end, { expr = true })
-
 
 -- Mapping for dd that doesn't yank an empty line into your default register:
 keymap.set("n", "dd", function()

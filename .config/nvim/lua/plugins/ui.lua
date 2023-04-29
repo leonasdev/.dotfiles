@@ -10,17 +10,17 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     config = function()
-      require("lualine").setup {
+      require("lualine").setup({
         options = {
           globalstatus = true,
         },
         extensions = {
           "neo-tree",
         },
-      }
+      })
 
       vim.opt.showmode = false
-    end
+    end,
   },
 
   -- color highlighter
@@ -28,15 +28,15 @@ return {
     "NvChad/nvim-colorizer.lua",
     event = "BufEnter",
     config = function()
-      require("colorizer").setup {
+      require("colorizer").setup({
         filetypes = { "*" },
         user_default_options = {
           names = false,
           tailwind = "both",
-          mode = "background"
-        }
-      }
-    end
+          mode = "background",
+        },
+      })
+    end,
   },
 
   -- git decorations
@@ -44,7 +44,7 @@ return {
     "lewis6991/gitsigns.nvim",
     event = "BufEnter",
     config = function()
-      require("gitsigns").setup {
+      require("gitsigns").setup({
         -- signs = {
         --   add = { text = '+' },
         --   change = { text = '~' },
@@ -52,8 +52,8 @@ return {
         --   topdelete = { text = '‾' },
         --   changedelete = { text = '~' },
         -- },
-      }
-    end
+      })
+    end,
   },
 
   -- Standalone UI for nvim-lsp progress
@@ -61,12 +61,12 @@ return {
     "j-hui/fidget.nvim",
     event = "LspAttach",
     config = function()
-      require("fidget").setup {
+      require("fidget").setup({
         window = {
-          blend = 0 -- set 0 if using transparent background, otherwise set 100
+          blend = 0, -- set 0 if using transparent background, otherwise set 100
         },
-      }
-    end
+      })
+    end,
   },
 
   -- Neovim plugin to improve the default vim.ui interfaces
@@ -81,13 +81,13 @@ return {
           },
         },
       })
-    end
+    end,
   },
 
   {
     "nvim-neo-tree/neo-tree.nvim",
     dependencies = {
-      "MunifTanjim/nui.nvim"
+      "MunifTanjim/nui.nvim",
     },
     cmd = "Neotree",
     keys = {
@@ -97,9 +97,9 @@ return {
       require("neo-tree").setup({
         filesystem = {
           follow_current_file = true,
-        }
+        },
       })
-    end
+    end,
   },
 
   -- {
