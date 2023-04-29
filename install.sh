@@ -284,8 +284,13 @@ function install_deps() {
   #   echo -e "${GREEN}${BOLD}Done${NC}"
   # fi
   if ! command -v exa &>/dev/null; then
-    echo -e "${BOLD}${BLUE}Installing exa...${NC}"
+    echo -e "${BOLD}${BLUE}Installing exa... (could take a while)${NC}"
     cargo install -q exa
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
+  if ! command -v python3-venv &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing python3-venv...${NC}"
+    sudo apt install -qqy python3-venv
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v oh-my-posh &>/dev/null; then
