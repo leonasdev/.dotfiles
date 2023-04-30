@@ -7,7 +7,7 @@ keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 -- turned on when you need
 keymap.set("n", "q", "")
 
--- greatest remap ever
+-- greatest remap ever (Paste over selection without yanking)
 keymap.set("x", "p", "P")
 
 -- using delete without yank
@@ -16,15 +16,19 @@ keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yank" })
 -- escape insert mode
 keymap.set("i", "jk", "<ESC>")
 
--- clear highlight of search and don't show search message
-keymap.set("n", "<leader>nh", function()
-  vim.cmd([[nohl]])
-  vim.cmd([[stopinsert]])
-end, { desc = "Clear highlight" })
+-- clear highlight of search
+keymap.set("n", "<leader>nh", "<cmd>nohl<cr>", { desc = "Clear highlight" })
+
+-- clear highlight of search, messages, floating windows
 keymap.set({ "n", "i" }, "<Esc>", function()
-  vim.cmd([[nohl]])
-  vim.cmd([[stopinsert]])
-end)
+  vim.cmd([[nohl]]) -- clear highlight of search
+  vim.cmd([[stopinsert]]) -- clear messages (the line below statusline)
+  for _, win in ipairs(vim.api.nvim_list_wins()) do -- clear all floating windows
+    if vim.api.nvim_win_get_config(win).relative == "win" then
+      vim.api.nvim_win_close(win, false)
+    end
+  end
+end, { desc = "Clear highlight of search, messages, floating windows" })
 
 -- Increment/decrement
 keymap.set("n", "+", "<C-a>")
@@ -86,3 +90,13 @@ keymap.set("n", "dd", function()
     return "dd"
   end
 end, { expr = true })
+
+-- better indenting
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
+
+-- Resize window using <ctrl> arrow keys
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })

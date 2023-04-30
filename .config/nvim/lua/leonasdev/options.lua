@@ -75,24 +75,6 @@ opt.updatetime = 100 -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_do
 opt.belloff = "all" -- Just turn the dang bell off
 opt.signcolumn = "yes" -- always showing the signcolumn
 
--- Highlight yanked text
-vim.api.nvim_create_autocmd("textyankpost", {
-  group = vim.api.nvim_create_augroup("yank_highlight", {}),
-  pattern = "*",
-  callback = function()
-    vim.highlight.on_yank({ higroup = "Search", timeout = 100 })
-  end,
-})
-
--- disable auto comment when insert new line after comment
-vim.api.nvim_create_autocmd("bufEnter", {
-  group = vim.api.nvim_create_augroup("FormatOptions", {}),
-  pattern = "*",
-  callback = function()
-    opt.formatoptions:remove({ "r", "o" })
-  end,
-})
-
 -- Add "LiveServer" command to quick execute live-server of npm
 vim.api.nvim_create_user_command("LiveServer", function()
   if vim.g.liveserver_bufnr ~= nil then

@@ -15,6 +15,7 @@ end)()
 vim.g.mapleader = " "
 
 require("leonasdev.options")
+require("leonasdev.autocmds")
 require("leonasdev.keymaps")
 
 -- Install lazy.nvim (package manager)

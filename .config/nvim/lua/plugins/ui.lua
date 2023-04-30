@@ -45,6 +45,10 @@ return {
     event = "BufEnter",
     config = function()
       require("gitsigns").setup({
+        signs = {
+          add = { text = "│" },
+          change = { text = "│" },
+        },
         -- signs = {
         --   add = { text = '+' },
         --   change = { text = '~' },
@@ -102,14 +106,30 @@ return {
     end,
   },
 
-  -- {
-  --   "lukas-reineke/indent-blankline.nvim",
-  --   config = function()
-  --     require("indent_blankline").setup {
-  --       char = '',
-  --       context_char = '│',
-  --       show_current_context = true,
-  --     }
-  --   end
-  -- },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "@text.strike" })
+      require("indent_blankline").setup({
+        char = "",
+        context_char = "│",
+        show_current_context = true,
+      })
+    end,
+  },
+
+  {
+    "luukvbaal/statuscol.nvim",
+    config = function()
+      local builtin = require("statuscol.builtin")
+      require("statuscol").setup({
+        segments = {
+          { sign = { name = { "Diagnostic" } } },
+          { sign = { name = { "DapBreakpoint.*" } } },
+          { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
+          { sign = { name = { "GitSigns.*" } } },
+        },
+      })
+    end,
+  },
 }
