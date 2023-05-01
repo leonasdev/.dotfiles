@@ -142,7 +142,7 @@ return {
         ft_ignore = { "neo-tree" },
         segments = {
           { sign = { name = { "Diagnostic" } } },
-          { sign = { name = { "DapBreakpoint.*" } } },
+          { sign = { name = { "Dap.*" } } },
           { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
           { sign = { name = { "GitSigns.*" } } },
         },
