@@ -71,6 +71,7 @@ return {
           return { "treesitter", "indent" }
         end,
         fold_virt_text_handler = handler,
+        open_fold_hl_timeout = 200,
       })
     end,
   },
