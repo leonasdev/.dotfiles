@@ -118,7 +118,14 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
-      vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "@text.strike" })
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "*",
+        callback = function()
+          vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
+        end,
+        group = vim.api.nvim_create_augroup("RelinkIndentBlanklineHightLightGroup", { clear = true }),
+        desc = "Relink IndentBlankline Highlight Group",
+      })
       require("indent_blankline").setup({
         char = "",
         context_char = "│",
