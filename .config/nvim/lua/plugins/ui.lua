@@ -43,6 +43,9 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     event = "BufEnter",
+    cond = function()
+      return vim.loop.fs_stat(vim.loop.cwd() .. "/.git")
+    end,
     config = function()
       require("gitsigns").setup({
         signs = {
