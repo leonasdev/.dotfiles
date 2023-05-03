@@ -23,7 +23,6 @@ return {
           vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#586e75" })
           vim.api.nvim_set_hl(0, "LazyButton", { link = "Visual" })
           vim.api.nvim_set_hl(0, "LazyButtonActive", { link = "IncSearch" })
-          vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
           vim.cmd("highlight GitSignsAdd guibg=none")
           vim.cmd("highlight GitSignsChange guibg=none")
           vim.cmd("highlight GitSignsDelete guibg=none")
