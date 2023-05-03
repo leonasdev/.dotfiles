@@ -11,7 +11,8 @@ return {
         python = {
           analysis = {
             diagnosticMode = "openFilesOnly",
-            -- diagnosticMode = "workspace"
+            extraPaths = { "third_party" },
+            typeCheckingMode = "off",
           },
         },
       },
