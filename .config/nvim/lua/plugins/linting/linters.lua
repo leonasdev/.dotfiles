@@ -7,7 +7,6 @@ return {
   pylint = {
     name = "pylint", -- for mason installer
     to_register_wrap = function()
-      print(require("util").config_finder({ ".pylintrc", "pylintrc" }, default_config_dir))
       return require("null-ls").register(require("null-ls").builtins.diagnostics.pylint.with({
         filetypes = { "python" },
         extra_args = {
