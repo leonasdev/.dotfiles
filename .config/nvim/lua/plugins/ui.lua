@@ -124,6 +124,7 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
+      vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "*",
         callback = function()
