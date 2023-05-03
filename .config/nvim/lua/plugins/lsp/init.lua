@@ -124,14 +124,6 @@ return {
 
       -- nvim-cmp source for neovim's built-in LSP
       { "hrsh7th/cmp-nvim-lsp" },
-
-      -- Use Neovim as a language server to inject LSP
-      {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function()
-          require("null-ls").setup()
-        end,
-      },
     },
     config = function()
       lsp_related_ui_adjust()

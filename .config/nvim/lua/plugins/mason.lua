@@ -25,6 +25,7 @@ return {
           local langueage_servers = require("plugins.lsp.langueage_servers")
           local formatters = require("plugins.formatting.formatters")
           local adapters = require("plugins.dap.adapters")
+          local linters = require("plugins.linting.linters")
           local tool_names = {}
           for _, server in pairs(langueage_servers) do
             table.insert(tool_names, server.name)
@@ -34,6 +35,9 @@ return {
           end
           for _, adapter in pairs(adapters) do
             table.insert(tool_names, adapter.name)
+          end
+          for _, linter in pairs(linters) do
+            table.insert(tool_names, linter.name)
           end
           require("mason-tool-installer").setup({
             ensure_installed = tool_names,

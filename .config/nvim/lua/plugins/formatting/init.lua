@@ -48,27 +48,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-return {
-  -- bridges mason.nvim with the null-ls plugin
-  {
-    "jay-babu/mason-null-ls.nvim",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "jose-elias-alvarez/null-ls.nvim",
-    },
-    config = function()
-      local formatters = require("plugins.formatting.formatters")
-      local handlers = {}
-      table.insert(handlers, function() end) -- disables automatic setup of all null-ls sources
-      for formatter, setting in pairs(formatters) do
-        if setting.disabled == false or setting.disabled == nil then
-          handlers[formatter] = setting.handler
-        end
-      end
+local formatters = require("plugins.formatting.formatters")
+local sources = {} -- a list of to_register_wrap
+for formatter, setting in pairs(formatters) do
+  if not setting.disabled then
+    sources[formatter] = setting.to_register_wrap
+  end
+end
 
-      require("mason-null-ls").setup({
-        handlers = handlers,
-      })
-    end,
-  },
+return {
+  "jose-elias-alvarez/null-ls.nvim",
+  opts = sources, -- passed to the parent spec's config()
 }

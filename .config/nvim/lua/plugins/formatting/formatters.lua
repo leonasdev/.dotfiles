@@ -1,44 +1,21 @@
----@param config_names table
-local function formatting_config_finder(config_names)
-  local path_separator = "/"
-  local config_path = vim.fn.stdpath("config") .. "/lua/plugins/formatting/configs/"
-  if _G.IS_WINDOWS then
-    path_separator = "\\"
-    config_path = vim.fn.stdpath("config") .. "\\lua\\plugins\\formatting\\configs\\"
-  end
+local default_config_dir = vim.fn.stdpath("config") .. "/lua/plugins/formatting/configs/"
 
-  -- search from current working dir
-  for _, name in ipairs(config_names) do
-    if vim.loop.fs_stat(vim.loop.cwd() .. path_separator .. name) then
-      return vim.loop.cwd() .. path_separator .. name
-    end
-  end
-
-  -- search from /lua/plugins/format/
-  for _, name in ipairs(config_names) do
-    if vim.loop.fs_stat(config_path .. name) then
-      return config_path .. name
-    end
-  end
-
-  return {}
-end
-
-local nls = require("null-ls")
-
+-- we need to wrap to_register to a function, since null-ls will loaded after
+-- See https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
+-- for a list of available built-in sources
 return {
   rustfmt = {
     name = "rustfmt", -- for mason installer
-    handler = function(source_name, methods)
-      nls.register(nls.builtins.formatting.rustfmt.with({
+    to_register_wrap = function()
+      return require("null-ls").register(require("null-ls").builtins.formatting.rustfmt.with({
         filetypes = { "rust" },
       }))
     end,
   },
   prettier = {
     name = "prettier",
-    handler = function(source_name, methods)
-      nls.register(nls.builtins.formatting.prettier.with({
+    to_register_wrap = function()
+      return require("null-ls").register(require("null-ls").builtins.formatting.prettier.with({
         filetypes = { "html", "css", "scss" },
         extra_args = { "--print-width", "120" },
       }))
@@ -46,8 +23,8 @@ return {
   },
   dprint = {
     name = "dprint",
-    handler = function(source_name, methods)
-      nls.register(nls.builtins.formatting.dprint.with({
+    to_register_wrap = function()
+      return require("null-ls").register(require("null-ls").builtins.formatting.dprint.with({
         filetypes = {
           "javascriptreact",
           "typescript",
@@ -56,16 +33,22 @@ return {
           "javascript",
         },
         -- check if project have dprint configuration
-        extra_args = { "--config", formatting_config_finder({ "dprint.json", ".dprint.json" }) },
+        extra_args = {
+          "--config",
+          require("util").config_finder({ "dprint.json", ".dprint.json" }, default_config_dir),
+        },
       }))
     end,
   },
   stylua = {
     name = "stylua",
-    handler = function(source_name, methods)
-      nls.register(nls.builtins.formatting.stylua.with({
+    to_register_wrap = function()
+      return require("null-ls").register(require("null-ls").builtins.formatting.stylua.with({
         filetypes = { "lua" },
-        extra_args = { "--config-path", formatting_config_finder({ "stylua.toml", ".stylua.toml" }) },
+        extra_args = {
+          "--config-path",
+          require("util").config_finder({ "stylua.toml", ".stylua.toml" }, default_config_dir),
+        },
       }))
     end,
   },
