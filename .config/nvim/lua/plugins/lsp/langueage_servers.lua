@@ -18,10 +18,6 @@ return {
       },
     },
   },
-  debugpy = {
-    name = "debugpy",
-    disabled = true,
-  },
   rust_analyzer = {
     name = "rust-analyzer",
     config = {
