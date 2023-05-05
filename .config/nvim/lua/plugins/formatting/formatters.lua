@@ -6,25 +6,28 @@ local default_config_dir = vim.fn.stdpath("config") .. "/lua/plugins/formatting/
 return {
   rustfmt = {
     name = "rustfmt", -- for mason installer
+    disabled = false,
     to_register_wrap = function()
-      return require("null-ls").register(require("null-ls").builtins.formatting.rustfmt.with({
+      return require("null-ls").builtins.formatting.rustfmt.with({
         filetypes = { "rust" },
-      }))
+      })
     end,
   },
   prettier = {
     name = "prettier",
+    disabled = false,
     to_register_wrap = function()
-      return require("null-ls").register(require("null-ls").builtins.formatting.prettier.with({
+      return require("null-ls").builtins.formatting.prettier.with({
         filetypes = { "html", "css", "scss" },
         extra_args = { "--print-width", "120" },
-      }))
+      })
     end,
   },
   dprint = {
     name = "dprint",
+    disabled = false,
     to_register_wrap = function()
-      return require("null-ls").register(require("null-ls").builtins.formatting.dprint.with({
+      return require("null-ls").builtins.formatting.dprint.with({
         filetypes = {
           "javascriptreact",
           "typescript",
@@ -37,19 +40,20 @@ return {
           "--config",
           require("util").config_finder({ "dprint.json", ".dprint.json" }, default_config_dir),
         },
-      }))
+      })
     end,
   },
   stylua = {
     name = "stylua",
+    disabled = false,
     to_register_wrap = function()
-      return require("null-ls").register(require("null-ls").builtins.formatting.stylua.with({
+      return require("null-ls").builtins.formatting.stylua.with({
         filetypes = { "lua" },
         extra_args = {
           "--config-path",
           require("util").config_finder({ "stylua.toml", ".stylua.toml" }, default_config_dir),
         },
-      }))
+      })
     end,
   },
 }
