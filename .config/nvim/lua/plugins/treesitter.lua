@@ -98,6 +98,7 @@ return {
         keymaps = {
           normal = "s",
           normal_cur = "ss",
+          visual = "s",
         },
       })
     end,
