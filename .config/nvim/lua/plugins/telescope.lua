@@ -99,6 +99,7 @@ return {
       { "gd", lsp_definitions, mode = "n", desc = "LSP Find Definitions" },
       { "gr", lsp_references, mode = "n", desc = "LSP Find References" },
       { "gi", lsp_implementations, mode = "n", desc = "LSP Find Implementations" },
+      { "<leader>u", "<cmd>Telescope undo<cr>", mode = "n", desc = "Undo Tree" },
     },
     config = function()
       require("telescope").setup({
@@ -110,6 +111,7 @@ return {
               ["<c-j>"] = require("telescope.actions").move_selection_next,
               ["<c-k>"] = require("telescope.actions").move_selection_previous,
               ["<c-s>"] = require("telescope.actions").select_vertical,
+              ["<c-h>"] = { "<c-s-w>", type = "command" }, -- using Ctrl+Backspace delete a word
             },
           },
         },
@@ -133,10 +135,21 @@ return {
               },
             },
           },
+          undo = {
+            mappings = {
+              i = {
+                -- ["<cr>"] = require("telescope-undo.actions").yank_additions,
+                -- ["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
+                -- ["<C-cr>"] = require("telescope-undo.actions").restore,
+                ["<cr>"] = require("telescope-undo.actions").restore,
+              },
+            },
+          },
         },
       })
 
       require("telescope").load_extension("fzf")
+      require("telescope").load_extension("undo")
     end,
   },
 
@@ -156,6 +169,12 @@ return {
   -- enable passing arguments to the live_grep of telescope
   {
     "nvim-telescope/telescope-live-grep-args.nvim",
+    lazy = true,
+  },
+
+  -- A telescope extension to view and search your undo tree
+  {
+    "debugloop/telescope-undo.nvim",
     lazy = true,
   },
 
