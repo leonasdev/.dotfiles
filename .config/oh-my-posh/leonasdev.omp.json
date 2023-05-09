@@ -8,7 +8,7 @@
         {
           "foreground": "#268bd2",
           "style": "diamond",
-          "template": "<#45F1C2> \uf508 </>{{ .UserName }} <#fdf6e3>on </>",
+          "template": "<#45F1C2> \ueb99 </>{{ .UserName }} <#fdf6e3>on </>",
           "type": "session"
         },
         {
