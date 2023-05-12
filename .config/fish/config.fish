@@ -18,7 +18,7 @@ if status is-interactive
 
     alias ls "ls -p -G"
     alias la "ls -a"
-    alias ll "ls -l"
+    alias ll "ls -lA"
     alias lla "ll -A"
 
     if type -q exa
