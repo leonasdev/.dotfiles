@@ -47,6 +47,16 @@ local function find_files_or_git_files()
   end
 end
 
+local function find_files()
+  local opts = {
+    previewer = enable_previewer,
+    no_ignore = true, -- set false to ignore files by .gitignore
+    hidden = false, -- set false to ignore dotfiles
+  }
+
+  require("telescope.builtin").find_files(opts)
+end
+
 local function live_grep()
   -- require('telescope.builtin').live_grep()
   require("telescope").extensions.live_grep_args.live_grep_args()
@@ -87,7 +97,7 @@ return {
     cmd = "Telescope",
     keys = {
       { "<C-p>", find_files_or_git_files, mode = "n", desc = "Find Files or Git Files" },
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", mode = "n", desc = "Find Files" },
+      { "<leader>ff", find_files, mode = "n", desc = "Find Files" },
       { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
       { "<C-f>", "<cmd>Telescope grep_string<cr>", mode = "v", desc = "Grep String" },
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", mode = "n", desc = "Help Pages" },
@@ -112,6 +122,7 @@ return {
               ["<c-k>"] = require("telescope.actions").move_selection_previous,
               ["<c-s>"] = require("telescope.actions").select_vertical,
               ["<c-h>"] = { "<c-s-w>", type = "command" }, -- using Ctrl+Backspace delete a word
+              ["<c-bs>"] = { "<c-s-w>", type = "command" }, -- using Ctrl+Backspace delete a word
               ["<C-u>"] = require("telescope.actions").results_scrolling_up,
               ["<C-d>"] = require("telescope.actions").results_scrolling_down,
             },
