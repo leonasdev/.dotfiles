@@ -35,7 +35,6 @@ return {
   },
   clangd = {
     name = "clangd",
-    disabled = not _G.IS_WINDOWS, -- false represent don't use this server
   },
   gopls = {
     name = "gopls",
