@@ -74,11 +74,11 @@ return {
       })
 
       -- Must installed zig via scoop in Windows
-      if _G.IS_WINDOWS then
-        require("nvim-treesitter.install").compilers = { "zig" }
-      else
-        require("nvim-treesitter.install").compilers = { "clang", "gcc", "cc", "cl", "zig" }
-      end
+      -- if _G.IS_WINDOWS then
+      --   require("nvim-treesitter.install").compilers = { "zig" }
+      -- else
+      --   require("nvim-treesitter.install").compilers = { "gcc", "clang", "gcc", "cc", "cl", "zig" }
+      -- end
     end,
   },
 

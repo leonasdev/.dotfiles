@@ -36,7 +36,7 @@ Installation will overwrite the following's config:
 - oh-my-posh
 
 ## ⚡️Requirements
-1. Nerd Fonts:
+1. Nerd Fonts (**>= 3.0!!**):
     - Any Nerd Font is required to display the glyph correctly.
     - [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
     - **[JetBrains Mono NL](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/JetBrainsMono/NoLigatures) is recommended.**
@@ -94,11 +94,11 @@ Installation will overwrite the following's config:
 </details>
 
 ## ✅TODO:
-- [ ] Add `nvim-dap` support
+- [x] Add `nvim-dap` support
 - [ ] Improve the which-key config
 - [ ] Colorscheme
   - Curretlly using `ishan9299/nvim-solarized-lua` with some manual config
   - Considering make a own colorscheme (with semantic token highlighting supported)
 - [ ] A better way to manage my dotfiles, instead of using `git bare repository`
   - GNU stow?
-- [ ] Add my kitty config
+- [x] Add my kitty config

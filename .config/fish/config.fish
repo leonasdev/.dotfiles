@@ -9,7 +9,7 @@ set -gx PATH bin $PATH
 set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 
-set -Ux nvm_default_version v19
+set -Ux nvm_default_version latest
 
 if status is-interactive
 # Commands to run in interactive sessions can go here
@@ -18,7 +18,7 @@ if status is-interactive
 
     alias ls "ls -p -G"
     alias la "ls -a"
-    alias ll "ls -l"
+    alias ll "ls -lA"
     alias lla "ll -A"
 
     if type -q exa
