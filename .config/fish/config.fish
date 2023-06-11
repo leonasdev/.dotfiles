@@ -11,8 +11,12 @@ set -gx PATH ~/.local/bin $PATH
 
 set -Ux nvm_default_version latest
 
+set -x ZELLIJ_AUTO_EXIT true
+
 if status is-interactive
 # Commands to run in interactive sessions can go here
+    # Auto-start zellij when opening fish
+    eval (zellij setup --generate-auto-start fish | string collect)
     # aliases
     alias g git
 

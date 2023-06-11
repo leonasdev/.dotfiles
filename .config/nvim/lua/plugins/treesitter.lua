@@ -40,6 +40,7 @@ return {
           "scss",
           "lua",
           "rust",
+          "kdl",
         },
         auto_install = true,
         autotag = { -- dependency with 'nvim-ts-autotag'
