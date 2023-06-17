@@ -34,8 +34,9 @@ end, { desc = "Clear highlight of search, messages, floating windows" })
 keymap.set("n", "+", "<C-a>")
 keymap.set("n", "-", "<C-x>")
 
--- Select all
-keymap.set("n", "<C-a>", "gg<S-v>G")
+-- Go to start-of-line/end-of-line
+keymap.set("n", "H", "0")
+keymap.set("n", "L", "$")
 
 -- Scrolling
 keymap.set("n", "<C-d>", "<C-d>zz")
