@@ -83,6 +83,7 @@ return {
     },
   },
   solidity = {
+    name = "nomicfoundation-solidity-language-server",
     config = {
       cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
       filetypes = { "solidity" },
