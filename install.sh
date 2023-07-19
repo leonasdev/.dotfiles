@@ -302,11 +302,6 @@ function install_deps() {
     echo "Added eval oh-my-posh to .bashrc and .profile"
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
-  if ! command -v zellij &>/dev/null; then
-    echo -e "${BOLD}${BLUE}Installing zellij... (could take a while)${NC}"
-    cargo install -q --locked zellij
-    echo -e "${GREEN}${BOLD}Done${NC}"
-  fi
 }
 
 function detect_platform() {
