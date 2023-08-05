@@ -1,0 +1,33 @@
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.15.0.0
+  generator: "Weasel::UIStyleSettings"
+  modified_time: "Thu Aug  3 00:58:35 2023"
+  rime_version: 1.8.5
+patch:
+  "style/display_tray_icon": false
+  "style/inline_preedit": true
+  "style/font_face": "PingFang TC"
+  "style/font_point": 12
+  "style/label_font_point": 12
+  "style/comment_font_point": 12
+  "style/label_font_face": "PingFang TC"
+  "style/comment_font_face": "PingFang TC"
+  "style/label_format": "%s "
+  "style/layout/min_width": 0
+  "style/layout/border": 1
+  "style/color_scheme": my_color
+  "preset_color_schemes/my_color":
+    author: "leonasdev <leonasdev@github.com>"
+    back_color: 0x272727
+    border_color: 0x191919
+    candidate_text_color: 0xffffff
+    comment_text_color: 0xffffff
+    hilited_back_color: 0x383838
+    hilited_candidate_back_color: 0x383838
+    hilited_candidate_text_color: 0xffffff
+    hilited_comment_text_color: 0xffffff
+    hilited_text_color: 0xffffff
+    label_color: 0xffffff
+    name: Steam
+    text_color: 0xffffff
