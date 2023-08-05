@@ -5,10 +5,6 @@ My personal dotfiles that include an aesthetic and feature-rich neovim config
 
 ---
 
-- **Shout out to [@Takuya Matsuyama](https://github.com/craftzdog) who inspired my configuration of neovim**
-- **Shout out to my Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
-- **Shout out to my Neovim mentor [@tjdevries](https://github.com/tjdevries)**
-
 # 💫Showcase
 ![Screenshot from 2023-04-14 03-02-50](https://user-images.githubusercontent.com/39915562/231865254-0917e7bc-12a2-40e9-9138-58da6e0d1d54.png)
 ![Screenshot from 2023-04-14 02-32-54](https://user-images.githubusercontent.com/39915562/231860282-b3aead77-8a03-4fe7-a9fd-6ab4d3c84977.png)
@@ -102,3 +98,8 @@ Installation will overwrite the following's config:
 - [ ] A better way to manage my dotfiles, instead of using `git bare repository`
   - GNU stow?
 - [x] Add my kitty config
+
+## Acknowledge
+- **Config inspiration [@Takuya Matsuyama](https://github.com/craftzdog)**
+- **Vim mentor [@ThePrimeagen](https://github.com/ThePrimeagen)**
+- **Neovim mentor [@tjdevries](https://github.com/tjdevries)**
