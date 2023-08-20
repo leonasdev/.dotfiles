@@ -153,4 +153,68 @@ return {
       })
     end,
   },
+
+  {
+    "echasnovski/mini.animate",
+    version = false,
+    config = function()
+      local isCoworking = false
+      vim.api.nvim_create_user_command("CoworkingToggle", function()
+        local Util = require("lazy.core.util")
+        if isCoworking then
+          local animate = require("mini.animate")
+          animate.setup({
+            cursor = {
+              enable = false,
+            },
+            scroll = {
+              enable = false,
+              timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
+            },
+            resize = {
+              enable = false,
+            },
+            open = {
+              enable = false,
+            },
+            close = {
+              enable = false,
+            },
+          })
+
+          vim.keymap.set("n", "<C-d>", "<C-d>zz")
+          vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+          isCoworking = false
+          Util.info("Disabled coworking mode", { title = "Coworking" })
+        else
+          local animate = require("mini.animate")
+          animate.setup({
+            cursor = {
+              enable = false,
+            },
+            scroll = {
+              enable = true,
+              timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
+            },
+            resize = {
+              enable = false,
+            },
+            open = {
+              enable = false,
+            },
+            close = {
+              enable = false,
+            },
+          })
+
+          vim.keymap.set("n", "<C-d>", "<C-d>")
+          vim.keymap.set("n", "<C-u>", "<C-u>")
+
+          isCoworking = true
+          Util.warn("Enabled coworking mode", { title = "Coworking" })
+        end
+      end, { desc = "Toggle coworking mode (add scrolling animation)" })
+    end,
+  },
 }
