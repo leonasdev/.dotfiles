@@ -159,62 +159,55 @@ return {
     version = false,
     config = function()
       local isCoworking = false
-      vim.api.nvim_create_user_command("CoworkingToggle", function()
-        local Util = require("lazy.core.util")
+      local animate = require("mini.animate")
+      local Util = require("lazy.core.util")
+
+      local coworking_setup = function()
         if isCoworking then
-          local animate = require("mini.animate")
           animate.setup({
-            cursor = {
-              enable = false,
-            },
-            scroll = {
-              enable = false,
-              timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
-            },
-            resize = {
-              enable = false,
-            },
-            open = {
-              enable = false,
-            },
-            close = {
-              enable = false,
-            },
-          })
-
-          vim.keymap.set("n", "<C-d>", "<C-d>zz")
-          vim.keymap.set("n", "<C-u>", "<C-u>zz")
-
-          isCoworking = false
-          Util.info("Disabled coworking mode", { title = "Coworking" })
-        else
-          local animate = require("mini.animate")
-          animate.setup({
-            cursor = {
-              enable = false,
-            },
+            cursor = { enable = false },
             scroll = {
               enable = true,
-              timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
+              timing = animate.gen_timing.cubic({ duration = 50, unit = "total" }),
             },
-            resize = {
-              enable = false,
-            },
-            open = {
-              enable = false,
-            },
-            close = {
-              enable = false,
-            },
+            resize = { enable = false },
+            open = { enable = false },
+            close = { enable = false },
           })
 
           vim.keymap.set("n", "<C-d>", "<C-d>")
           vim.keymap.set("n", "<C-u>", "<C-u>")
 
-          isCoworking = true
-          Util.warn("Enabled coworking mode", { title = "Coworking" })
+          vim.opt.relativenumber = false
+          vim.opt.number = true
+        else
+          animate.setup({
+            cursor = { enable = false },
+            scroll = { enable = false },
+            resize = { enable = false },
+            open = { enable = false },
+            close = { enable = false },
+          })
+
+          vim.keymap.set("n", "<C-d>", "<C-d>zz")
+          vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+          vim.opt.relativenumber = true
+          vim.opt.number = true
         end
+      end
+
+      vim.api.nvim_create_user_command("CoworkingToggle", function()
+        isCoworking = not isCoworking
+        if isCoworking then
+          Util.warn("Enabled coworking mode", { title = "Coworking" })
+        else
+          Util.info("Disabled coworking mode", { title = "Coworking" })
+        end
+        coworking_setup()
       end, { desc = "Toggle coworking mode (add scrolling animation)" })
+
+      coworking_setup()
     end,
   },
 }
