@@ -297,6 +297,10 @@ return {
             prev = "<M-k>",
           },
         },
+        filetypes = {
+          gitcommit = true,
+          gitrebase = true,
+        },
       })
     end,
   },
