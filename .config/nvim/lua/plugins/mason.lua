@@ -2,25 +2,13 @@ return {
   -- managing tool
   {
     "williamboman/mason.nvim",
-    -- It's important that you set up the plugins in the following order:
-    -- 1. mason.nvim
-    -- 2. mason-lspconfig.nvim
-    -- 3. Setup servers via lspconfig
-    priority = 100,
     dependencies = {
       -- bridges mason with the lspconfig
-      {
-        priority = 80,
-        "williamboman/mason-lspconfig.nvim",
-        config = function()
-          require("mason-lspconfig").setup({})
-        end,
-      },
+      { "williamboman/mason-lspconfig.nvim" },
 
       -- Install and upgrade third party tools automatically
       {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        priority = 90,
         config = function()
           local langueage_servers = require("plugins.lsp.langueage_servers")
           local formatters = require("plugins.formatting.formatters")
@@ -56,6 +44,8 @@ return {
           border = "rounded",
         },
       })
+
+      require("mason-lspconfig").setup()
     end,
   },
 }
