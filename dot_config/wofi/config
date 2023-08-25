@@ -1,0 +1,9 @@
+width=30%
+height=30%
+show=drun
+allow_images=true
+prompt=Search...
+allow_markup=true
+no_actions=true
+image_size=30
+gtk_dark=true
