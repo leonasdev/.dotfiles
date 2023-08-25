@@ -10,7 +10,6 @@ function fish_user_key_bindings
   bind \cj down-line
   bind \ck up-line
 
-  bind \cp change_directory_with_fzf
 end
 
 function change_directory_with_fzf
