@@ -60,6 +60,10 @@ window#waybar {
   /* border-radius: 22px; */
 }
 
+tooltip {
+  border-radius: 6px;
+}
+
 /* Every modules */
 #battery,
 #clock,
