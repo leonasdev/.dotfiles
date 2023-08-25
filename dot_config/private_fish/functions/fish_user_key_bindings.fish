@@ -14,5 +14,5 @@ function fish_user_key_bindings
 end
 
 function change_directory_with_fzf
-  cd $(fdfind --type=directory -H -d=2 . ~ | fzf); commandline -f repaint
+  cd $(fd --type=directory -H -d=2 . ~ | fzf); commandline -f repaint
 end
