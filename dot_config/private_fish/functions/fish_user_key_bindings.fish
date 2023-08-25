@@ -14,5 +14,8 @@ function fish_user_key_bindings
 end
 
 function change_directory_with_fzf
-  cd $(fd --type=directory -H -d=2 . ~ | fzf); commandline -f repaint
+  set -l selected $(fd --type=directory -H -d=2 . ~ | fzf); commandline -f repaint
+  if test -n "$selected"
+    cd $selected
+  end
 end
