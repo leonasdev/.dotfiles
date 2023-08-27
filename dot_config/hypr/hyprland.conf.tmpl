@@ -20,9 +20,12 @@ OR EDIT THIS ONE ACCORDING TO THE WIKI INSTRUCTIONS.
 #  ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
 #
 # See https://wiki.hyprland.org/Configuring/Monitors/
+{{- if eq .chezmoi.hostname "surface-pro" }}
+monitor=eDP-1,preferred,auto,1.75
+monitor=HDMI-A-1,highrr,auto,1
+{{- else }}
 monitor=,1920x1080@240,auto,auto
-# monitor=eDP-1,preferred,auto,1.75
-# monitor=HDMI-A-1,highrr,auto,1
+{{- end }}
 
 # unscale XWayland
 # xwayland {
@@ -44,7 +47,9 @@ exec-once = hyprpaper
 exec-once = /usr/lib/polkit-kde-authentication-agent-1
 exec-once = waybar
 exec-once = fcitx5 -d
-# exec-once = swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'systemctl suspend' before-sleep 'swaylock -f -c 000000'
+{{- if eq .chezmoi.hostname "surface-pro" }}
+exec-once = swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'systemctl suspend' before-sleep 'swaylock -f -c 000000'
+{{- end }}
 
 
 #  ███████╗███╗   ██╗██╗   ██╗
@@ -59,6 +64,8 @@ env = XCURSOR_SIZE,24
 env = XDG_CURRENT_DESKTOP,Hyprland
 env = XDG_SESSION_TYPE,wayland
 env = XDG_SESSION_DESKTOP,Hyprland
+{{- if eq .chezmoi.hostname "surface-pro" }}
+{{- else }}
 env = LIBVA_DRIVER_NAME,nvidia
 env = XDG_SESSION_TYPE,wayland
 env = GBM_BACKEND,nvidia-drm
@@ -66,6 +73,7 @@ env = __GLX_VENDOR_LIBRARY_NAME,nvidia
 env = WLR_NO_HARDWARE_CURSORS,1
 env = GTK_IM_MODULE,fcitx5
 env = QT_IM_MODULE,fcitx5
+{{- end }}
 
 
 # ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗
