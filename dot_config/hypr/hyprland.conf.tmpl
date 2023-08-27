@@ -20,8 +20,9 @@ OR EDIT THIS ONE ACCORDING TO THE WIKI INSTRUCTIONS.
 #  ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
 #
 # See https://wiki.hyprland.org/Configuring/Monitors/
-monitor=eDP-1,preferred,auto,1.75
-monitor=HDMI-A-1,highrr,auto,1
+monitor=,1920x1080@240,auto,auto
+# monitor=eDP-1,preferred,auto,1.75
+# monitor=HDMI-A-1,highrr,auto,1
 
 # unscale XWayland
 # xwayland {
@@ -43,7 +44,7 @@ exec-once = hyprpaper
 exec-once = /usr/lib/polkit-kde-authentication-agent-1
 exec-once = waybar
 exec-once = fcitx5 -d
-exec-once = swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'systemctl suspend' before-sleep 'swaylock -f -c 000000'
+# exec-once = swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'systemctl suspend' before-sleep 'swaylock -f -c 000000'
 
 
 #  ███████╗███╗   ██╗██╗   ██╗
@@ -58,6 +59,13 @@ env = XCURSOR_SIZE,24
 env = XDG_CURRENT_DESKTOP,Hyprland
 env = XDG_SESSION_TYPE,wayland
 env = XDG_SESSION_DESKTOP,Hyprland
+env = LIBVA_DRIVER_NAME,nvidia
+env = XDG_SESSION_TYPE,wayland
+env = GBM_BACKEND,nvidia-drm
+env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+env = WLR_NO_HARDWARE_CURSORS,1
+env = GTK_IM_MODULE,fcitx5
+env = QT_IM_MODULE,fcitx5
 
 
 # ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗
@@ -198,6 +206,9 @@ windowrulev2 = float,class:(chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc__index.html-
 windowrulev2 = size 55% 65%,class:(chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc__index.html-Default)
 windowrulev2 = center,class:(chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc__index.html-Default)
 
+# Move pipewire screensharing prompt to workspace 99
+windowrulev2 = workspace 99 silent,title:(is sharing your screen\.$)
+
 # windowrulev2 = fullscreen,class:(wlfreerdp)
 
 #  ██████╗ ██╗███╗   ██╗██████╗ ███████╗
@@ -242,7 +253,7 @@ bind = $mainMod, 6, workspace, 6
 bind = $mainMod, 7, workspace, 7
 bind = $mainMod, 8, workspace, 8
 bind = $mainMod, 9, workspace, 9
-bind = $mainMod, 0, workspace, 10
+bind = $mainMod, 0, workspace, 99
 
 # Move active window to a workspace with mainMod + SHIFT + [0-9]
 bind = $mainMod SHIFT, 1, movetoworkspace, 1
@@ -255,6 +266,7 @@ bind = $mainMod SHIFT, 7, movetoworkspace, 7
 bind = $mainMod SHIFT, 8, movetoworkspace, 8
 bind = $mainMod SHIFT, 9, movetoworkspace, 9
 bind = $mainMod SHIFT, 0, movetoworkspace, 10
+bind = $mainMod, s, movetoworkspacesilent, 99
 
 # Scroll through existing workspaces with mainMod + scroll
 bind = $mainMod, mouse_down, workspace, e+1
