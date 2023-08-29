@@ -46,7 +46,7 @@ exec-once = dunst
 exec-once = hyprpaper
 exec-once = /usr/lib/polkit-kde-authentication-agent-1
 exec-once = waybar
-exec-once = fcitx -d
+exec-once = fcitx5 -d
 {{- if eq .chezmoi.hostname "surface-pro" }}
 exec-once = swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'systemctl suspend' before-sleep 'swaylock -f -c 000000'
 {{- end }}
@@ -67,6 +67,8 @@ env = XDG_SESSION_DESKTOP,Hyprland
 env = GTK_IM_MODULE,fcitx
 env = QT_IM_MODULE,fcitx
 env = XMODIFIERS @im=fcitx
+env = SDL_IM_MODULE fcitx
+env = GLFW_IM_MODULE ibus
 {{- if eq .chezmoi.hostname "surface-pro" }}
 {{- else }}
 env = LIBVA_DRIVER_NAME,nvidia
