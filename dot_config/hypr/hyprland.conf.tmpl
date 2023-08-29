@@ -66,7 +66,7 @@ env = XDG_SESSION_TYPE,wayland
 env = XDG_SESSION_DESKTOP,Hyprland
 env = GTK_IM_MODULE,fcitx
 env = QT_IM_MODULE,fcitx
-env = XMODIFIERS "@im=fcitx"
+env = XMODIFIERS @im=fcitx
 {{- if eq .chezmoi.hostname "surface-pro" }}
 {{- else }}
 env = LIBVA_DRIVER_NAME,nvidia
