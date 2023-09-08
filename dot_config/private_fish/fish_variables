@@ -40,4 +40,4 @@ SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_pager_color_selected_background:\x2dr
 SETUVAR fish_user_paths:/usr/local/go/bin\x1e/home/leonasdev/\x2ecargo/bin
-SETUVAR --export nvm_default_version:latest
+SETUVAR --export nvm_default_version:lts/gallium

@@ -9,7 +9,7 @@ set -gx PATH bin $PATH
 set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 
-set -Ux nvm_default_version latest
+set -gx nvm_default_version lts/gallium
 
 set -x ZELLIJ_AUTO_EXIT true
 
