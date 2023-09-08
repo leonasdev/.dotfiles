@@ -4,7 +4,7 @@ function fish_user_key_bindings
   bind -e \cp # unbind ctrl-p
   bind \cy accept-autosuggestion
   bind \cb 'cd ..; commandline -f repaint'
-  bind \cw 'prevd; commandline -f repaint'
+  bind \cn 'prevd; commandline -f repaint'
   bind \cs cancel-commandline
   bind \ch backward-kill-path-component # \ch means ctrl+backspace in xterm based terminal-emulator
   bind \cj down-line
