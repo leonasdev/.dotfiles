@@ -52,6 +52,8 @@ exec-once = waybar
 exec-once = fcitx5 -d
 {{- if eq .chezmoi.hostname "surface-pro" }}
 exec-once = swayidle -w timeout 300 'swaylock -f -c 000000' timeout 600 'systemctl suspend' before-sleep 'swaylock -f -c 000000'
+# Enables inhibit_idle when playing audio
+exec-once sway-audio-idle-inhibit
 {{- end }}
 
 
