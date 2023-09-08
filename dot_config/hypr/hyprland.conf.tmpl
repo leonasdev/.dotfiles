@@ -28,9 +28,12 @@ monitor=,1920x1080@240,auto,auto
 {{- end }}
 
 # unscale XWayland
-# xwayland {
-#   force_zero_scaling = true
-# }
+xwayland {
+  force_zero_scaling = true
+  # use_nearest_neighbor = false
+}
+# toolkit-specific scale
+env = GDK_SCALE,2
 
 
 #  ███████╗██╗  ██╗███████╗ ██████╗
@@ -212,10 +215,14 @@ windowrulev2 = size 60% 40%,class:(pavucontrol),title:(Volume Control)
 windowrulev2 = float,class:(blueman-manager),title:(Bluetooth Devices)
 windowrulev2 = size 50% 50%,class:(blueman-manager),title:(Bluetooth Devices)
 
-# Naver LINE
+# Naver LINE - wayland
 windowrulev2 = float,class:(chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc__index.html-Default)
 windowrulev2 = size 55% 65%,class:(chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc__index.html-Default)
 windowrulev2 = center,class:(chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc__index.html-Default)
+# Naver LINE - xwayland
+windowrulev2 = float,class:(Google-chrome-unstable),title:(ophjlpahpchlmihnnnihgmmeilfjmjjc_/index.html)
+windowrulev2 = size 55% 65%,class:(Google-chrome-unstable),title:(ophjlpahpchlmihnnnihgmmeilfjmjjc_/index.html)
+windowrulev2 = center,class:(Google-chrome-unstable),title:(ophjlpahpchlmihnnnihgmmeilfjmjjc_/index.html)
 
 # Move pipewire screensharing prompt to workspace 99
 windowrulev2 = workspace 99 silent,title:(is sharing your screen\.$)
