@@ -3,7 +3,11 @@ Vertical Candidate List=True
 # Use mouse wheel to go to prev or next page
 WheelForPaging=True
 # Font
+{{- if eq .chezmoi.hostname "surface-pro" }}
 Font="Noto Sans CJK TC 16"
+{{- else }}
+Font="Noto Sans CJK TC 12"
+{{- end }}
 # Menu Font
 MenuFont="JetBrainsMonoNL Nerd Font 12"
 # Tray Font
