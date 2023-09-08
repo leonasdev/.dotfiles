@@ -13,6 +13,8 @@ set -Ux nvm_default_version latest
 
 set -x ZELLIJ_AUTO_EXIT true
 
+fish_ssh_agent
+
 if status is-interactive
 # Commands to run in interactive sessions can go here
     # aliases

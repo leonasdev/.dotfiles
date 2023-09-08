@@ -4,7 +4,7 @@ Name=Line Launcher
 GenericName=Naver Line
 Icon=/home/leonasdev/.local/share/icons/hicolor/512x512/apps/line-launcher.png
 TryExec=google-chrome-unstable
-Exec=google-chrome-unstable --app='chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html' --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime
+Exec=google-chrome-unstable --app='chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html' --force-device-scale-factor=1.75
 Terminal=false
 MimeType=x-scheme-handler/line;
 Categories=Network;
