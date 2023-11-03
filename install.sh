@@ -293,6 +293,11 @@ function install_deps() {
     sudo apt install -qqy python3-venv
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
+  if ! command -v fzf &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing fzf...${NC}"
+    sudo apt install -qqy fzf
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
   if ! command -v oh-my-posh &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing oh-my-posh...${NC}"
     sudo wget -q https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
