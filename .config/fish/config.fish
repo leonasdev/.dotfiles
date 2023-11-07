@@ -13,6 +13,12 @@ set -Ux nvm_default_version v16
 
 set -x ZELLIJ_AUTO_EXIT true
 
+# fzf colorscheme
+set -Ux FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
+" --color=bg+:-1,bg:-1,spinner:#cb4b16,hl:#b58900"\
+" --color=fg:#93a1a1,header:#268bd2,info:#b58900,pointer:#268bd2"\
+" --color=marker:#268bd2,fg+:#eee8d5,prompt:#b58900,hl+:#cb4b16"
+
 if status is-interactive
 # Commands to run in interactive sessions can go here
     # aliases
