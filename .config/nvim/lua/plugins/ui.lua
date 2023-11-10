@@ -1,7 +1,7 @@
 return {
   -- nerd font supported icons
   {
-    "kyazdani42/nvim-web-devicons",
+    "nvim-tree/nvim-web-devicons",
     lazy = true,
   },
 
@@ -13,9 +13,14 @@ return {
       require("lualine").setup({
         options = {
           globalstatus = true,
+          disabled_filetypes = {
+            statusline = { "alpha" },
+            winbar = {},
+          },
         },
         extensions = {
           "neo-tree",
+          "nvim-dap-ui",
         },
       })
 
@@ -145,15 +150,23 @@ return {
   {
     "luukvbaal/statuscol.nvim",
     config = function()
-      local builtin = require("statuscol.builtin")
-      require("statuscol").setup({
-        ft_ignore = { "neo-tree" },
-        segments = {
-          { sign = { name = { "Diagnostic" } } },
-          { sign = { name = { "Dap.*" } } },
-          { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
-          { sign = { name = { "GitSigns.*" } } },
-        },
+      -- temporary solution to https://github.com/luukvbaal/statuscol.nvim/issues/90
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "AlphaClosed",
+        desc = "Prevent from statuscol.nvim caused alpha not centered",
+        once = true,
+        callback = function()
+          local builtin = require("statuscol.builtin")
+          require("statuscol").setup({
+            ft_ignore = { "alpha", "neo-tree" },
+            segments = {
+              { sign = { name = { "Diagnostic" } } },
+              { sign = { name = { "Dap.*" } } },
+              { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
+              { sign = { name = { "GitSigns.*" } } },
+            },
+          })
+        end,
       })
     end,
   },
@@ -161,6 +174,7 @@ return {
   {
     "echasnovski/mini.animate",
     version = false,
+    cmd = "CoworkingToggle",
     config = function()
       local isCoworking = false
       local animate = require("mini.animate")
@@ -212,6 +226,94 @@ return {
       end, { desc = "Toggle coworking mode (add scrolling animation)" })
 
       coworking_setup()
+    end,
+  },
+
+  -- a lua powered greeter like vim-startify / dashboard-nvim
+  {
+    "goolord/alpha-nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      local util = require("util")
+      local dashboard = require("alpha.themes.dashboard")
+
+      -- local logo = {
+      --   [[0    0    0    0    0    0]],
+      --   [[1    1    1    1    1    1]],
+      --   [[1    1    1    1    1    1]],
+      --   [[0    0    0    1    0    0]],
+      --   [[1    0    1    0    1    1]],
+      --   [[1    1    1    1    0    1]],
+      --   [[1    0    1    1    0    0]],
+      --   [[0    1    1    0    1    1]],
+      -- }
+      --
+      local version = "v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
+      dashboard.section.header.val = "NVIM " .. version
+
+      local userName = "Leon"
+      local greeting = util.get_greeting(userName)
+
+      local greetHeading = {
+        type = "text",
+        val = greeting,
+        opts = {
+          position = "center",
+          hl = "String",
+        },
+      }
+
+      dashboard.section.buttons.val = {
+        util.button("n", " " .. " New file", "<cmd> enew <cr>"),
+        util.button("ctrl + p", " " .. " Find file", "<cmd> Telescope find_files <cr>"),
+        util.button("q", " " .. " Quit", "<cmd> qa <cr>"),
+      }
+
+      dashboard.config.layout = {
+        { type = "padding", val = vim.fn.max({ 2, vim.fn.floor(vim.fn.winheight(0) * 0.35) }) },
+        dashboard.section.header,
+        { type = "padding", val = 1 },
+        greetHeading,
+        { type = "padding", val = 2 },
+        dashboard.section.buttons,
+        { type = "padding", val = 1 },
+        dashboard.section.footer,
+        { type = "padding", val = 100 },
+      }
+
+      for _, button in ipairs(dashboard.section.buttons.val) do
+        button.opts.hl = "AlphaButtons"
+        button.opts.hl_shortcut = "AlphaShortcut"
+      end
+      dashboard.section.header.opts.hl = "AlphaHeader"
+      dashboard.section.buttons.opts.hl = "AlphaButtons"
+      dashboard.section.footer.opts.hl = "AlphaFooter"
+
+      dashboard.config.opts.noautocmd = true
+
+      require("alpha").setup(dashboard.config)
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyVimStarted",
+        desc = "Add load plugins greeting to Alpha dashboad",
+        once = true,
+        callback = function()
+          local stats = require("lazy").stats()
+          local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
+          dashboard.section.footer.val = { "Neovim loaded  " .. stats.count .. " plugins in " .. ms .. "ms" }
+          pcall(vim.cmd.AlphaRedraw)
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "AlphaReady",
+        desc = "Prevent from first ctrl-o not work when enter nvim",
+        once = true,
+        callback = function()
+          local jump_back_key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
+          vim.api.nvim_feedkeys(jump_back_key, "n", false)
+        end,
+      })
     end,
   },
 }
