@@ -79,10 +79,10 @@ M.get_greeting = function(name)
   local tableTime = os.date("*t")
   local hour = tableTime.hour
   local greetingsTable = {
-    [1] = "󰙃  Why are you still up? ",
-    [2] = "  Good morning, ",
-    [3] = "  Good afternoon, ",
-    [4] = "󰖔  Good evening, ",
+    [1] = "󰙃  Why are you still up, " .. name .. "?",
+    [2] = "  Good morning, " .. name,
+    [3] = "  Good afternoon, " .. name,
+    [4] = "󰖔  Good evening, " .. name,
   }
   local greetingIndex = 0
   if hour >= 23 or hour < 7 then
@@ -94,7 +94,7 @@ M.get_greeting = function(name)
   elseif hour >= 18 and hour < 23 then
     greetingIndex = 4
   end
-  return greetingsTable[greetingIndex] .. name
+  return greetingsTable[greetingIndex]
 end
 
 return M
