@@ -283,9 +283,9 @@ function install_deps() {
   #   cargo install -q tree-sitter-cli
   #   echo -e "${GREEN}${BOLD}Done${NC}"
   # fi
-  if ! command -v exa &>/dev/null; then
-    echo -e "${BOLD}${BLUE}Installing exa... (could take a while)${NC}"
-    cargo install -q exa
+  if ! command -v eza &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing eza... (could take a while)${NC}"
+    cargo install -q eza
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v python3-venv &>/dev/null; then

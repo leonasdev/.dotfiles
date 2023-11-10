@@ -29,8 +29,8 @@ if status is-interactive
     alias ll "ls -lA"
     alias lla "ll -A"
 
-    if type -q exa
-    alias ll "exa -l -g --icons"
+    if type -q eza
+    alias ll "eza -l -g --icons"
     alias lla "ll -a"
     end
     fish_add_path $HOME/.cargo/bin
