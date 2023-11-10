@@ -123,8 +123,16 @@ return {
               ["<c-s>"] = require("telescope.actions").select_vertical,
               ["<c-h>"] = { "<c-s-w>", type = "command" }, -- using Ctrl+Backspace delete a word
               ["<c-bs>"] = { "<c-s-w>", type = "command" }, -- using Ctrl+Backspace delete a word
-              ["<C-u>"] = require("telescope.actions").results_scrolling_up,
-              ["<C-d>"] = require("telescope.actions").results_scrolling_down,
+              ["<C-u>"] = function(prompt_bufnr)
+                for _ = 1, 10 do
+                  require("telescope.actions").move_selection_previous(prompt_bufnr)
+                end
+              end,
+              ["<C-d>"] = function(prompt_bufnr)
+                for _ = 1, 10 do
+                  require("telescope.actions").move_selection_next(prompt_bufnr)
+                end
+              end,
             },
           },
         },
