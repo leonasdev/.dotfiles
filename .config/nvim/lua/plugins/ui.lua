@@ -158,7 +158,7 @@ return {
         callback = function()
           local builtin = require("statuscol.builtin")
           require("statuscol").setup({
-            ft_ignore = { "alpha", "neo-tree" },
+            ft_ignore = { "alpha", "neo-tree", "oil" },
             segments = {
               { sign = { name = { "Diagnostic" } } },
               { sign = { name = { "Dap.*" } } },

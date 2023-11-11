@@ -103,7 +103,6 @@ return {
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", mode = "n", desc = "Help Pages" },
       { "<leader>fe", "<cmd>Telescope diagnostics<cr>", mode = "n", desc = "Diagnostics" },
       { "<leader>fn", edit_neovim, mode = "n", desc = "Edit Neovim" },
-      { "<C-n>", file_browser, mode = "n", desc = "File Browser" },
       { "<leader>hi", "<cmd>Telescope highlights<cr>", mode = "n", desc = "Neovim Highlight Groups" },
       { "<leader>/", current_buffer_fuzzy_find, mode = "n", desc = "Fuzzy Find in Current Buffer" },
       { "gd", lsp_definitions, mode = "n", desc = "LSP Find Definitions" },
@@ -143,19 +142,6 @@ return {
             override_file_sorter = true, -- override the file sorter
             case_mode = "smart_case", -- or "ignore_case" or "respect_case", the default case_mode is "smart_case"
           },
-          file_browser = {
-            previewer = false,
-            theme = "dropdown",
-            -- disables netrw and use telescope-file-browser in its place
-            hijack_netrw = true,
-            initial_mode = "normal",
-            git_status = false,
-            mappings = {
-              i = {
-                ["<esc>"] = false,
-              },
-            },
-          },
           undo = {
             mappings = {
               i = {
@@ -179,12 +165,6 @@ return {
     "nvim-telescope/telescope-fzf-native.nvim",
     lazy = true,
     build = "make",
-  },
-
-  -- file browser extension for telescope.nvim
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    lazy = true,
   },
 
   -- enable passing arguments to the live_grep of telescope
