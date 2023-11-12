@@ -1,3 +1,5 @@
+local MAX_RESULT = 2000
+
 -- Ignore files bigger than a threshold
 local new_maker = function(filepath, bufnr, opts)
   opts = opts or {}
@@ -33,6 +35,7 @@ local function find_files_or_git_files()
     local opts = {
       previewer = enable_previewer,
       show_untracked = true,
+      temp__scrolling_limit = MAX_RESULT,
     }
 
     require("telescope.builtin").git_files(opts)
@@ -41,6 +44,7 @@ local function find_files_or_git_files()
       previewer = enable_previewer,
       no_ignore = true, -- set false to ignore files by .gitignore
       hidden = true, -- set false to ignore dotfiles
+      temp__scrolling_limit = MAX_RESULT,
     }
 
     require("telescope.builtin").find_files(opts)
@@ -52,9 +56,16 @@ local function find_files()
     previewer = enable_previewer,
     no_ignore = true, -- set false to ignore files by .gitignore
     hidden = false, -- set false to ignore dotfiles
+    temp__scrolling_limit = MAX_RESULT,
   }
 
   require("telescope.builtin").find_files(opts)
+end
+
+local function grep_string()
+  require("telescope.builtin").grep_string({
+    temp__scrolling_limit = MAX_RESULT,
+  })
 end
 
 local function live_grep()
@@ -62,8 +73,16 @@ local function live_grep()
   require("telescope").extensions.live_grep_args.live_grep_args()
 end
 
-local function file_browser()
-  require("telescope").extensions.file_browser.file_browser({})
+local function highlights()
+  require("telescope.builtin").highlights({
+    temp__scrolling_limit = MAX_RESULT,
+  })
+end
+
+local function help_tags()
+  require("telescope.builtin").help_tags({
+    temp__scrolling_limit = MAX_RESULT,
+  })
 end
 
 local function current_buffer_fuzzy_find()
@@ -99,11 +118,11 @@ return {
       { "<C-p>", find_files_or_git_files, mode = "n", desc = "Find Files or Git Files" },
       { "<leader>ff", find_files, mode = "n", desc = "Find Files" },
       { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
-      { "<C-f>", "<cmd>Telescope grep_string<cr>", mode = "v", desc = "Grep String" },
-      { "<leader>fh", "<cmd>Telescope help_tags<cr>", mode = "n", desc = "Help Pages" },
+      { "<C-f>", grep_string, mode = "v", desc = "Grep String" },
+      { "<leader>fh", help_tags, mode = "n", desc = "Help Pages" },
       { "<leader>fe", "<cmd>Telescope diagnostics<cr>", mode = "n", desc = "Diagnostics" },
       { "<leader>fn", edit_neovim, mode = "n", desc = "Edit Neovim" },
-      { "<leader>hi", "<cmd>Telescope highlights<cr>", mode = "n", desc = "Neovim Highlight Groups" },
+      { "<leader>hi", highlights, mode = "n", desc = "Neovim Highlight Groups" },
       { "<leader>/", current_buffer_fuzzy_find, mode = "n", desc = "Fuzzy Find in Current Buffer" },
       { "gd", lsp_definitions, mode = "n", desc = "LSP Find Definitions" },
       { "gr", lsp_references, mode = "n", desc = "LSP Find References" },

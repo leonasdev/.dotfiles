@@ -99,7 +99,7 @@ return {
     "sainnhe/gruvbox-material",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       vim.api.nvim_create_autocmd("ColorScheme", {
@@ -143,7 +143,7 @@ return {
     "folke/tokyonight.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("tokyonight").setup({
@@ -157,7 +157,7 @@ return {
     "EdenEast/nightfox.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("nightfox").setup({
@@ -176,7 +176,7 @@ return {
     "rebelot/kanagawa.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("kanagawa").setup({
@@ -194,7 +194,7 @@ return {
     name = "catppuccin",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("catppuccin").setup({
@@ -208,7 +208,7 @@ return {
     "Mofiqul/vscode.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("vscode").setup({
@@ -222,7 +222,7 @@ return {
     "arturgoms/moonbow.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("moonbow").setup({
@@ -235,7 +235,7 @@ return {
   {
     "briones-gabriel/darcula-solid.nvim",
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     dependencies = {
       {
