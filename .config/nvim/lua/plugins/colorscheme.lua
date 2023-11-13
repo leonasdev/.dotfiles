@@ -126,7 +126,7 @@ return {
     "ellisonleao/gruvbox.nvim",
     lazy = true,
     keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme enable_preview=true<cr>", desc = "Select Colorscheme with Preview" },
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
     },
     config = function()
       require("gruvbox").setup({
