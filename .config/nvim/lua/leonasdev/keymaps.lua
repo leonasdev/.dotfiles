@@ -13,6 +13,10 @@ keymap.set("x", "p", "P")
 -- using delete without yank
 keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yank" })
 
+-- using change without yank
+keymap.set({ "n", "v" }, "c", '"_c', { desc = "Change without yank" })
+keymap.set({ "n", "v" }, "C", '"_C', { desc = "Change without yank" })
+
 -- escape insert mode
 keymap.set("i", "jk", "<ESC>")
 
