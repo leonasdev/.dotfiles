@@ -69,14 +69,34 @@ return {
   {
     "j-hui/fidget.nvim",
     event = "LspAttach",
-    tag = "legacy",
     config = function()
       require("fidget").setup({
-        text = {
-          spinner = "meter",
+        -- text = {
+        --   spinner = "meter",
+        -- },
+        -- window = {
+        --   blend = 0, -- set 0 if using transparent background, otherwise set 100
+        -- },
+        progress = {
+          poll_rate = 200,
+          ignore_done_already = true,
+          display = {
+            done_ttl = 0.5,
+            -- done_icon = " ",
+            -- Icon shown when LSP progress tasks are in progress
+            progress_icon = { pattern = "meter", period = 1 },
+            -- Highlight group for in-progress LSP tasks
+            progress_style = "WarningMsg",
+            group_style = "WarningMsg", -- Highlight group for group name (LSP server name)
+            icon_style = "WarningMsg", -- Highlight group for group icons
+            done_style = "WarningMsg", -- Highlight group for completed LSP tasks
+          },
         },
-        window = {
-          blend = 0, -- set 0 if using transparent background, otherwise set 100
+        notification = {
+          -- override_vim_notify = true,
+          window = {
+            winblend = 0,
+          },
         },
       })
     end,
