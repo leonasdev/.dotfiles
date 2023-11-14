@@ -1,46 +1,10 @@
 return {
-
   {
-    "craftzdog/solarized-osaka.nvim",
     lazy = false,
     priority = 1000,
+    dir = "~/personal/my-colorscheme/",
     config = function()
-      require("solarized-osaka").setup({
-        transparent = true,
-        -- styles = {
-        --   sidebars = "transparent",
-        --   floats = "transparent",
-        -- },
-        -- on_highlights = function(highlights, colors)
-        --   highlights.Visual = {
-        --     bg = colors.fg,
-        --     fg = colors.bg,
-        --   }
-        --   highlights.AlphaButtons = {
-        --     link = "Conceal",
-        --   }
-        --   highlights.AlphaHeader = {
-        --     link = "Debug",
-        --   }
-        --   highlights.AlphaShortcut = {
-        --     link = "@keyword",
-        --   }
-        -- end,
-      })
-      local colors = require("solarized-osaka.colors").default
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        pattern = "solarized-osaka",
-        callback = function()
-          vim.api.nvim_set_hl(0, "Visual", { bg = colors.fg, fg = colors.bg })
-          vim.api.nvim_set_hl(0, "AlphaButtons", { link = "Conceal" })
-          vim.api.nvim_set_hl(0, "AlphaHeader", { link = "Debug" })
-          vim.api.nvim_set_hl(0, "AlphaShortcut", { link = "@keyword" })
-        end,
-        group = vim.api.nvim_create_augroup("FixSolarizedOsaka", { clear = true }),
-        desc = "Fix some highlight for solarized-osaka colorscheme",
-      })
-
-      -- vim.cmd([[colorscheme solarized-osaka]])
+      -- vim.cmd([[colorscheme my-colorscheme]])
     end,
   },
 
@@ -91,6 +55,52 @@ return {
 
       vim.g.solarized_termtrans = 1
       vim.cmd("colorscheme solarized")
+    end,
+  },
+
+  {
+    "craftzdog/solarized-osaka.nvim",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function()
+      require("solarized-osaka").setup({
+        transparent = false,
+        -- styles = {
+        --   sidebars = "transparent",
+        --   floats = "transparent",
+        -- },
+        -- on_highlights = function(highlights, colors)
+        --   highlights.Visual = {
+        --     bg = colors.fg,
+        --     fg = colors.bg,
+        --   }
+        --   highlights.AlphaButtons = {
+        --     link = "Conceal",
+        --   }
+        --   highlights.AlphaHeader = {
+        --     link = "Debug",
+        --   }
+        --   highlights.AlphaShortcut = {
+        --     link = "@keyword",
+        --   }
+        -- end,
+      })
+      local colors = require("solarized-osaka.colors").default
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "solarized-osaka",
+        callback = function()
+          vim.api.nvim_set_hl(0, "Visual", { bg = colors.fg, fg = colors.bg })
+          vim.api.nvim_set_hl(0, "AlphaButtons", { link = "Conceal" })
+          vim.api.nvim_set_hl(0, "AlphaHeader", { link = "Debug" })
+          vim.api.nvim_set_hl(0, "AlphaShortcut", { link = "@keyword" })
+        end,
+        group = vim.api.nvim_create_augroup("FixSolarizedOsaka", { clear = true }),
+        desc = "Fix some highlight for solarized-osaka colorscheme",
+      })
+
+      -- vim.cmd([[colorscheme solarized-osaka]])
     end,
   },
 
@@ -242,5 +252,30 @@ return {
         "rktjmp/lush.nvim",
       },
     },
+  },
+
+  -- astrotheme
+  {
+    "AstroNvim/astrotheme",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function()
+      require("astrotheme").setup()
+    end,
+  },
+
+  -- rose-pine
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function()
+      require("rose-pine").setup()
+    end,
   },
 }

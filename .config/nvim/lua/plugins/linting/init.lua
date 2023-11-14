@@ -7,6 +7,6 @@ for linter, setting in pairs(linters) do
 end
 
 return {
-  "jose-elias-alvarez/null-ls.nvim",
+  "nvimtools/none-ls.nvim",
   opts = sources, -- passed to the parent spec's config()
 }
