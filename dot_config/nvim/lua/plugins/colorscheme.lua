@@ -1,4 +1,14 @@
 return {
+  {
+    dir = "~/personal/my-colorscheme/",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd("colorscheme my-colorscheme")
+      -- vim.cmd("colorscheme solarized")
+    end,
+  },
+
   -- main colorscheme
   -- solarized
   {
@@ -41,7 +51,7 @@ return {
       })
 
       vim.g.solarized_termtrans = 1
-      vim.cmd("colorscheme solarized")
+      -- vim.cmd("colorscheme solarized")
     end,
   },
 
