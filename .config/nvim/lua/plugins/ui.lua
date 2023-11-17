@@ -89,7 +89,7 @@ return {
             progress_style = "WarningMsg",
             group_style = "WarningMsg", -- Highlight group for group name (LSP server name)
             icon_style = "WarningMsg", -- Highlight group for group icons
-            done_style = "WarningMsg", -- Highlight group for completed LSP tasks
+            done_style = "Conditional", -- Highlight group for completed LSP tasks
           },
         },
         notification = {
