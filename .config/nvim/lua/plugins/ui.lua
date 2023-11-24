@@ -170,23 +170,15 @@ return {
   {
     "luukvbaal/statuscol.nvim",
     config = function()
-      -- temporary solution to https://github.com/luukvbaal/statuscol.nvim/issues/90
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "AlphaClosed",
-        desc = "Prevent from statuscol.nvim caused alpha not centered",
-        once = true,
-        callback = function()
-          local builtin = require("statuscol.builtin")
-          require("statuscol").setup({
-            ft_ignore = { "alpha", "neo-tree", "oil" },
-            segments = {
-              { sign = { name = { "Diagnostic" } } },
-              { sign = { name = { "Dap.*" } } },
-              { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
-              { sign = { name = { "GitSigns.*" } } },
-            },
-          })
-        end,
+      local builtin = require("statuscol.builtin")
+      require("statuscol").setup({
+        ft_ignore = { "alpha", "neo-tree", "oil" },
+        segments = {
+          { sign = { name = { "Diagnostic" } } },
+          { sign = { name = { "Dap.*" } } },
+          { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
+          { sign = { name = { "GitSigns.*" } } },
+        },
       })
     end,
   },
@@ -308,8 +300,6 @@ return {
       dashboard.section.header.opts.hl = "AlphaHeader"
       dashboard.section.buttons.opts.hl = "AlphaButtons"
       dashboard.section.footer.opts.hl = "AlphaFooter"
-
-      dashboard.config.opts.noautocmd = true
 
       require("alpha").setup(dashboard.config)
 
