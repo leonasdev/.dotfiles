@@ -31,8 +31,10 @@ if status is-interactive
     alias lla "ll -A"
 
     if type -q eza
-    alias ll "eza -l -g --icons"
-    alias lla "ll -a"
+        alias ls "eza --icons"
+        alias lsa "ls -a"
+        alias ll "eza -l -g --icons"
+        alias lla "ll -a"
     end
     fish_add_path $HOME/.cargo/bin
     fish_add_path /usr/local/go/bin
