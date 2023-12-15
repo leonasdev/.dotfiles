@@ -17,7 +17,7 @@ return {
     end,
   },
   staticcheck = {
-    name = { "staticcheck", version = "2023.1.6" }, -- for mason installer
+    name = { "staticcheck" }, -- for mason installer
     to_register_wrap = function()
       return require("null-ls").register(require("null-ls").builtins.diagnostics.staticcheck.with({
         filetypes = { "go" },
