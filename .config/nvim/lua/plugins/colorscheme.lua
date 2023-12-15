@@ -278,4 +278,26 @@ return {
       require("rose-pine").setup()
     end,
   },
+
+  {
+    "Shatur/neovim-ayu",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function()
+      require("ayu").setup({
+        mirage = false, -- Set to `true` to use `mirage` variant instead of `dark` for dark background.
+        overrides = {}, -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
+      })
+    end,
+  },
+
+  {
+    "ribru17/bamboo.nvim",
+    lazy = true,
+    function()
+      require("bamboo").setup()
+    end,
+  },
 }

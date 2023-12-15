@@ -81,4 +81,13 @@ return {
       })
     end,
   },
+  gofunpt = {
+    name = "gofumpt",
+    disabled = false,
+    to_register_wrap = function()
+      return require("null-ls").builtins.formatting.gofumpt.with({
+        filetypes = { "go" },
+      })
+    end,
+  },
 }

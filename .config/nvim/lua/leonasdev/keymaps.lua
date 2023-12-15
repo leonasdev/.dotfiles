@@ -106,4 +106,4 @@ vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window 
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
-keymap.set("n", "<M-k>", "<cmd>TSHighlightCapturesUnderCursor<cr>", { desc = "Highlight captures under cursor" })
+keymap.set("n", "<M-k>", "<cmd>Inspect<cr>", { desc = "Highlight captures under cursor" })
