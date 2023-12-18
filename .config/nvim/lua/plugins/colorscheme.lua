@@ -296,7 +296,7 @@ return {
   {
     "ribru17/bamboo.nvim",
     lazy = true,
-    function()
+    config = function()
       require("bamboo").setup()
     end,
   },
