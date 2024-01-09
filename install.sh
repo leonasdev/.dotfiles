@@ -271,7 +271,7 @@ function install_deps() {
   if ! command -v go &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing golang...${NC}"
     sudo rm -rf /usr/local/go
-    curl -sSL https://go.dev/dl/go1.20.3.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
+    curl -sSL https://go.dev/dl/go1.21.5.linux-amd64.tar.gz | sudo tar -C /usr/local -xzf -
     export PATH=$PATH:/usr/local/go/bin
     echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.bashrc
     echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.profile
