@@ -23,8 +23,8 @@ Neovim:
 - Git integration with [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim), [vim-fugitive](https://github.com/lewis6991/gitsigns.nvim)
 
 # 🚀Getting Started
-## ❗Must Read
-**Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
+> [!CAUTION]
+> **Please use my settings with care and at your own risk. Make sure you understand their effects before applying them.**
 
 Installation will overwrite the following's config:
 - Neovim
@@ -35,7 +35,7 @@ Installation will overwrite the following's config:
 1. Nerd Fonts (**>= 3.0!!**):
     - Any Nerd Font is required to display the glyph correctly.
     - [ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
-    - **[JetBrains Mono NL](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/JetBrainsMono/NoLigatures) is recommended.**
+        - **[JetBrains Mono NL](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/JetBrainsMono/NoLigatures) is recommended.**
 
 2. Node (>=16.20.0) & Npm:
     - Bash
@@ -82,10 +82,11 @@ Installation will overwrite the following's config:
   ```fish
   bash (curl -s https://raw.githubusercontent.com/leonasdev/.dotfiles/master/install.sh | psub)
   ```
-
-- <details><summary>WSL 2 User Only</summary>
-
-  To use the Windows clipboard from within WSL, [`win32yank.exe`](https://github.com/equalsraf/win32yank) has to be on our `$PATH`. (e.g. `C:\Windows\System32\`)
+  
+> [!NOTE]
+> **For WSL user:**
+> 
+> To use the Windows clipboard from within WSL, [`win32yank.exe`](https://github.com/equalsraf/win32yank) has to be in `$PATH`. (e.g. copy `win32yank.exe` to `C:\Windows\System32\`)
 
 </details>
 

@@ -177,7 +177,7 @@ return {
           { sign = { name = { "Diagnostic" } } },
           { sign = { name = { "Dap.*" } } },
           { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
-          { sign = { name = { "GitSigns.*" } } },
+          { sign = { namespace = { "gitsign" }, auto = false } },
         },
       })
     end,
