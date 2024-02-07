@@ -54,6 +54,10 @@ return {
           add = { text = "│" },
           change = { text = "│" },
         },
+        current_line_blame = false,
+        current_line_blame_opts = {
+          delay = 200,
+        },
         -- signs = {
         --   add = { text = '+' },
         --   change = { text = '~' },
