@@ -45,6 +45,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
 
     if client.supports_method("textDocument/formatting") then
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -54,6 +55,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
           if not require("plugins.formatting.autoformat").autoformat then
             return
           end
+
+          if vim.tbl_contains(require("plugins.formatting.autoformat").disable_autoformat, ft) then
+            return
+          end
+
           formatting_buffer()
         end,
       })
