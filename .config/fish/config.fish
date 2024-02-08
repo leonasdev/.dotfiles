@@ -32,6 +32,8 @@ if status is-interactive
     alias ll "ls -lA"
     alias lla "ll -A"
 
+    alias cz chezmoi
+
     if type -q eza
         alias ls "eza --icons"
         alias lsa "ls -a"
