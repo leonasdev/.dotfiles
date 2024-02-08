@@ -20,6 +20,8 @@ set -Ux FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
 " --color=fg:#93a1a1,header:#268bd2,info:#b58900,pointer:#268bd2"\
 " --color=marker:#268bd2,fg+:#eee8d5,prompt:#b58900,hl+:#cb4b16"
 
+set -x GPG_TTY (tty)
+
 if status is-interactive
 # Commands to run in interactive sessions can go here
     # aliases
