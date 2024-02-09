@@ -1,0 +1,90 @@
+name: Sync across different OS on specific files
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+    paths:
+      - '.github/**'
+      - '.config/nvim/**'
+      - '.config/fish/**'
+      - '.config/tmux/**'
+      - '.config/kitty/**'
+      - '.config/oh-my-posh/**'
+      - '.config/gtk-3.0/**'
+      - '.config/btop/**'
+
+env:
+  SYNC_BRANCHES: |
+    master
+    windows
+    arch
+  ALL_PATHS: |
+    .github
+    .config/nvim
+    .config/fish
+    .config/tmux
+    .config/kitty
+    .config/oh-my-posh
+    .config/gtk-3.0
+    .config/btop
+  WINDOWS_SYNC_PATHS: |
+    .github
+    .config/nvim
+    .config/oh-my-posh
+
+jobs:
+  sync-to-other-branches:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync to other branches
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo -e "Changed files: $CHANGED_FILES\n"
+
+          # Sync files from target branch to current branch.
+          sync_files_from() {
+            [ "$branch" == "windows" ] && WATCHED_PATHS=${WINDOWS_SYNC_PATHS} || WATCHED_PATHS=${ALL_PATHS}
+            echo -e "Files need to be sync:\n${WATCHED_PATHS}"
+
+            echo "${WATCHED_PATHS}" | while read -r path; do
+              if [ -z "$path" ]; then
+                continue  # Skip empty lines
+              fi
+              echo "Syncing $path"
+              echo "git checkout $1 -- ${path}"
+              git checkout $1 -- "${path}"
+              if [ $? -eq 0 ]; then
+                echo -e "Successfully checkout $path\n"
+              else
+                echo -e "Failed to sync $path\n"
+              fi
+            done
+          }
+
+          echo "${SYNC_BRANCHES}" | while read -r branch; do
+            if [ -z "$branch" ]; then
+              continue  # Skip empty lines
+            fi
+            if [ "$branch" == "${{ github.ref_name }}" ]; then
+              echo "Skipping branch: $branch"
+              continue
+            fi
+            git checkout "$branch"
+            echo -e "Sync files from branch ${{ github.ref_name }} to $branch\n"
+            sync_files_from "${{ github.ref_name }}"
+            git status
+            git config --local user.email "s8952889@gmail.com"
+            git config --local user.name "Leon"
+            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git diff-index --quiet HEAD || git commit -m "Sync files from branch ${{ github.ref_name }} to $branch"
+            git push
+          done
