@@ -19,7 +19,7 @@ env:
   SYNC_BRANCHES: |
     master
     windows
-    arch
+    archlinux
   ALL_PATHS: |
     .github
     .config/nvim
