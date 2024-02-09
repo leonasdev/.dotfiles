@@ -56,5 +56,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<Esc>", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
-
--- testing
