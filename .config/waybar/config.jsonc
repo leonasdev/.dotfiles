@@ -7,7 +7,7 @@
     // "height": 30,
     "modules-left": [
         // "custom/launcher",
-        "wlr/workspaces",
+        "hyprland/workspaces",
         // "custom/media",
         "hyprland/window"
         // "custom/power"
@@ -148,7 +148,7 @@
         "format": "{}",
         "max-length": 30
     },
-    "wlr/workspaces": {
+    "hyprland/workspaces": {
         "disable-scroll": false,
         "disable-markup": false,
         "all-outputs": false,
