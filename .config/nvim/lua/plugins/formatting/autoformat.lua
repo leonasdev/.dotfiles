@@ -18,4 +18,8 @@ function M.toggle()
   end
 end
 
+M.disable_autoformat = {
+  "dockerfile",
+}
+
 return M

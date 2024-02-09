@@ -90,4 +90,7 @@ return {
       single_file_support = true,
     },
   },
+  dockerls = {
+    name = "dockerfile-language-server",
+  },
 }

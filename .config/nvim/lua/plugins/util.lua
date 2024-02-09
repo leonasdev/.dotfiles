@@ -1,10 +1,4 @@
 return {
-  -- lua library for neovim
-  {
-    "nvim-lua/plenary.nvim",
-    lazy = true,
-  },
-
   -- Distraction-free coding for Neovim
   {
     "folke/zen-mode.nvim",
@@ -105,6 +99,46 @@ return {
         },
         window = {
           border = "single",
+        },
+      })
+    end,
+  },
+
+  -- lua library for neovim
+  {
+    "nvim-lua/plenary.nvim",
+    lazy = true,
+  },
+
+  -- Neovim file explorer: edit your filesystem like a buffer
+  {
+    "stevearc/oil.nvim",
+    cmd = "Oil",
+    keys = {
+      { "<C-n>", "<CMD>Oil --float<CR>", mode = "n", desc = "Open parent directory" },
+    },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      local function discard_and_close()
+        require("oil").discard_all_changes()
+        require("oil.actions").close.callback()
+      end
+      require("oil").setup({
+        default_file_explorer = true,
+        columns = {
+          "icon",
+        },
+        view_options = {
+          show_hidden = true,
+        },
+        float = {
+          padding = 2,
+          max_width = 78,
+          max_height = 14,
+        },
+        keymaps = {
+          ["<esc>"] = discard_and_close,
+          ["<c-n>"] = discard_and_close,
         },
       })
     end,

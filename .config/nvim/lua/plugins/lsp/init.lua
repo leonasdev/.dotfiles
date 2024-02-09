@@ -20,6 +20,9 @@ local function lsp_related_ui_adjust()
       prefix = " - ",
     },
     severity_sort = true,
+    signs = {
+      linehl = { "DiagnosticErrorLn", "DiagnosticWarnLn", "DiagnosticInfoLn", "DiagnosticHintLn" },
+    },
   })
 end
 

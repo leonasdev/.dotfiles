@@ -13,6 +13,10 @@ keymap.set("x", "p", "P")
 -- using delete without yank
 keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yank" })
 
+-- using change without yank
+keymap.set({ "n", "v" }, "c", '"_c', { desc = "Change without yank" })
+keymap.set({ "n", "v" }, "C", '"_C', { desc = "Change without yank" })
+
 -- escape insert mode
 keymap.set("i", "jk", "<ESC>")
 
@@ -101,3 +105,5 @@ vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window he
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+
+keymap.set("n", "<M-k>", "<cmd>Inspect<cr>", { desc = "Highlight captures under cursor" })

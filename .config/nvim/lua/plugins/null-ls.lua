@@ -1,7 +1,7 @@
 return {
   -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua.
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     config = function(_, opts) -- opts is received from child spec (formatting, linting)
       local sources = {} -- a list of to_register
       for _, to_register_wrap in pairs(opts) do
