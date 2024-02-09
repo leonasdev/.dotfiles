@@ -1,0 +1,36 @@
+[Desktop Entry]
+Name=Todoist (8.6.0)
+Exec=/home/leonasdev/Applications/Todoist-linux-x86_64-8.6.0.AppImage --no-sandbox --force-device-scale-factor=1.75 %U
+Terminal=false
+Type=Application
+Icon=appimagekit_ac34e166a8aa4202c010afed732a9e27_todoist
+StartupWMClass=Todoist
+X-AppImage-Version=8.6.0
+MimeType=x-scheme-handler/todoist;x-scheme-handler/com.todoist;
+Comment=The Best To-Do List App & Task Manager
+Categories=Office;
+
+TryExec=/home/leonasdev/Applications/Todoist-linux-x86_64-8.6.0.AppImage
+X-AppImage-Old-Icon=todoist
+X-AppImage-Old-Name=Todoist
+X-AppImage-Identifier=ac34e166a8aa4202c010afed732a9e27
+Actions=Remove;
+X-AppImageLauncher-Version=2.2.0 (git commit 0f91801), built on 2023-08-09 02:35:14 UTC
+
+[Desktop Action Remove]
+Name=Remove AppImage from system
+Icon=AppImageLauncher
+Exec=/usr/lib/appimagelauncher/remove "/home/leonasdev/Applications/Todoist-linux-x86_64-8.6.0.AppImage"
+Name[ast]=Desaniciar AppImage del sistema
+Name[cs]=Odebrat AppImage ze systému
+Name[de]=AppImage vom System entfernen
+Name[en]=Remove AppImage from system
+Name[es]=Eliminar Appimage del Sistema
+Name[fr]=Supprimer l'AppImage du système
+Name[it]=Rimuovi AppImage dal sistema
+Name[nl]=AppImage deïnstalleren
+Name[pl]=Usuń AppImage z systemu
+Name[pt]=Remover AppImage do sistema
+Name[pt_PT]=Remover AppImage do sistema
+Name[ru]=Удалить AppImage из системы
+Name[zh_Hans]=从系统中移除 AppImage
