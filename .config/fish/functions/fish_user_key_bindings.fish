@@ -7,8 +7,6 @@ function fish_user_key_bindings
   bind \cn 'prevd; commandline -f repaint'
   bind \cs cancel-commandline
   bind \ch backward-kill-path-component # \ch means ctrl+backspace in xterm based terminal-emulator
-  bind \cj down-line
-  bind \ck up-line
 
   bind \cp change_directory_with_fzf
 end
