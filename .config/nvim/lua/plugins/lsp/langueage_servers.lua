@@ -7,11 +7,13 @@ return {
     name = "pyright",
     disabled = false,
     config = {
+      root_dir = function(fname)
+        return require("lspconfig.util").root_pattern(".git")(fname)
+      end,
       settings = {
         python = {
           analysis = {
             diagnosticMode = "openFilesOnly",
-            extraPaths = { "third_party" },
             typeCheckingMode = "off",
           },
         },
