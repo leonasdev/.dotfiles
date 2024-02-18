@@ -5,7 +5,7 @@ keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- set q to do nothing because it's so annoying (default is recording macro)
 -- turned on when you need
-keymap.set("n", "q", "")
+-- keymap.set("n", "q", "")
 
 -- greatest remap ever (Paste over selection without yanking)
 keymap.set("x", "p", "P")

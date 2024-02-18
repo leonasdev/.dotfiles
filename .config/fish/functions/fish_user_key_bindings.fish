@@ -12,7 +12,15 @@ function fish_user_key_bindings
 end
 
 function change_directory_with_fzf
-  set -l selected $(fd --type=directory . . ~/ -H -E .git -E .npm -E .cache -d 3 | fzf); commandline -f repaint
+  if type -q fdfind
+    set fd_cmd fdfind # in Ubuntu, fd is installed as fdfind
+  else if type -q fd # in Arch Linux, fd is installed as fd
+    set fd_cmd fd
+  else
+    echo "Neither fdfind nor fd can be found."
+    return 1
+  end
+  set -l selected ($fd_cmd --type=directory . . ~/ -H -E .git -E .npm -E .cache -d 3 | fzf); commandline -f repaint
   if test -n "$selected"
     cd $selected
   end
