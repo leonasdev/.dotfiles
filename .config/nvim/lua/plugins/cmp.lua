@@ -300,6 +300,7 @@ return {
         filetypes = {
           gitcommit = true,
           gitrebase = true,
+          yaml = true,
           oil = false,
         },
       })
