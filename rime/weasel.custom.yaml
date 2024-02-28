@@ -1,33 +1,40 @@
-customization:
-  distribution_code_name: Weasel
-  distribution_version: 0.15.0.0
-  generator: "Weasel::UIStyleSettings"
-  modified_time: "Thu Aug  3 00:58:35 2023"
-  rime_version: 1.8.5
 patch:
+  "global_ascii": true
+  "style/antialias_mode": cleartype
   "style/display_tray_icon": false
   "style/inline_preedit": true
-  "style/font_face": "PingFang TC"
+  "style/font_face": "NotoSans TC,PingFang TC"
   "style/font_point": 12
-  "style/label_font_point": 12
+  "style/label_font_point": 10
   "style/comment_font_point": 12
-  "style/label_font_face": "PingFang TC"
-  "style/comment_font_face": "PingFang TC"
-  "style/label_format": "%s "
+  "style/label_font_face": "Noto Sans TC,PingFang TC"
+  "style/comment_font_face": "Noto Sans TC,PingFang TC"
+  "style/label_format": "%s"
   "style/layout/min_width": 0
   "style/layout/border": 1
   "style/color_scheme": my_color
+  "style/layout/shadow_radius": 4
+  "style/layout/corner_radius": 4
+  "style/layout/round_corner": 4
+  "style/layout/hilite_padding_x": 8
+  "style/mark_text": "|"
+  "app_options/windowsterminal.exe/ascii_mode": true
+  "app_options/windowsterminal.exe/vim_mode": true
   "preset_color_schemes/my_color":
     author: "leonasdev <leonasdev@github.com>"
+    color_format: rgba
     back_color: 0x272727
-    border_color: 0x191919
+    shadow_color: 0x27272780
+    border_color: 0x17171750
     candidate_text_color: 0xffffff
     comment_text_color: 0xffffff
     hilited_back_color: 0x383838
+    hilited_label_color: 0xffffff
     hilited_candidate_back_color: 0x383838
     hilited_candidate_text_color: 0xffffff
     hilited_comment_text_color: 0xffffff
     hilited_text_color: 0xffffff
-    label_color: 0xffffff
-    name: Steam
+    hilited_mark_color: 0x4cc2ff
+    # label_color: 0x272727
+    name: Windows 11
     text_color: 0xffffff
