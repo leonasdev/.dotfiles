@@ -9,13 +9,137 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
+    dependencies = { "AndreM222/copilot-lualine" },
     config = function()
+      local git_blame = require("gitblame")
+      git_blame.setup({
+        display_virtual_text = false,
+      })
+
       require("lualine").setup({
         options = {
           globalstatus = true,
           disabled_filetypes = {
             statusline = { "alpha" },
             winbar = {},
+          },
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = {
+            -- { "branch", icon = "" },
+            { "branch", icon = "" },
+            -- { "diff", colored = true, symbols = { added = " ", modified = " ", removed = " " } },
+            "diff",
+          },
+          lualine_c = {
+            {
+              "filetype",
+              icon_only = true,
+              padding = { left = 2, right = 1 },
+            },
+            {
+              "filename",
+              file_status = true, -- Displays file status (readonly status, modified status)
+              newfile_status = false, -- Display new file status (new file means no write after created)
+              path = 1, -- 0: Just the filename
+              -- 1: Relative path
+              -- 2: Absolute path
+              -- 3: Absolute path, with tilde as the home directory
+              -- 4: Filename and parent dir, with tilde as the home directory
+
+              shorting_target = 40, -- Shortens path to leave 40 spaces in the window
+              -- for other components. (terrible name, any suggestions?)
+              symbols = {
+                modified = "[+]", -- Text to show when the file is modified.
+                readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
+                unnamed = "[No Name]", -- Text to show for unnamed buffers.
+                newfile = "[New]", -- Text to show for newly created file before first write
+              },
+            },
+          },
+          lualine_x = {
+            -- {
+            --   git_blame.get_current_blame_text,
+            --   cond = git_blame.is_blame_text_available,
+            -- },
+            -- "encoding",
+            -- {
+            --   function()
+            --     return " "
+            --   end,
+            --   cond = function()
+            --     return next(vim.lsp.get_active_clients()) ~= nil
+            --   end,
+            -- },
+            {
+              "diagnostics",
+              -- padding = { left = 0, right = 1 },
+            },
+            -- {
+            --   "bo:filetype",
+            --   padding = { left = 0, right = 1 },
+            -- },
+            -- "fileformat",
+            -- "filetype",
+            {
+              "copilot",
+              show_colors = false,
+              symbols = {
+                status = {
+                  icons = {
+                    enabled = " ",
+                    sleep = " ", -- auto-trigger disabled
+                    disabled = " ",
+                    warning = " ",
+                    -- unknown = " ",
+                    unknown = "",
+                  },
+                },
+              },
+              show_loading = false,
+            },
+            {
+              function()
+                local autoformat = require("plugins.formatting.autoformat").autoformat
+                return autoformat and "󰚔 on" or "󰚔 off"
+              end,
+            },
+          },
+          lualine_y = {
+            -- "progress",
+            "encoding",
+            -- {
+            --   function()
+            --     local enc = (vim.bo.fenc ~= "" and vim.bo.fenc) or vim.o.enc
+            --     return enc:lower() .. "[" .. vim.bo.fileformat:lower() .. "]"
+            --   end,
+            -- },
+          },
+          lualine_z = {
+            {
+              "location",
+              padding = { left = 1, right = 0 },
+            },
+            -- {
+            --   function()
+            --     local line = vim.fn.line(".")
+            --     local column = vim.fn.col(".")
+            --     local total_line = vim.fn.line("$")
+            --     return string.format("%d/%d :%d", line, total_line, column)
+            --   end,
+            --   padding = { left = 0, right = 1 },
+            -- },
+            -- {
+            --   function()
+            --     local line = vim.fn.line(".")
+            --     local column = vim.fn.col(".")
+            --     return string.format("%d,%d", line, column)
+            --   end,
+            -- },
+            "progress",
           },
         },
         extensions = {
