@@ -4,6 +4,12 @@ return {
     priority = 1000,
     dir = "~/personal/my-colorscheme/",
     config = function()
+      require("my-colorscheme").setup({
+        transparent = true,
+        lualine = {
+          transparent = false,
+        },
+      })
       -- vim.cmd([[colorscheme my-colorscheme]])
     end,
   },
@@ -14,6 +20,7 @@ return {
     "ishan9299/nvim-solarized-lua",
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
+    dir = "~/personal/nvim-solarized-lua",
     config = function()
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "solarized",
@@ -46,12 +53,12 @@ return {
 
       -- temporory disable semantic tokens highlight,
       -- since ishan9299/nvim-solarized-lua not support it yet
-      vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          client.server_capabilities.semanticTokensProvider = nil
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("LspAttach", {
+      --   callback = function(args)
+      --     local client = vim.lsp.get_client_by_id(args.data.client_id)
+      --     client.server_capabilities.semanticTokensProvider = nil
+      --   end,
+      -- })
 
       vim.g.solarized_termtrans = 1
       vim.cmd("colorscheme solarized")
