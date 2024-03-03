@@ -15,6 +15,7 @@ return {
         },
       }))
     end,
+    disabled = true,
   },
   staticcheck = {
     name = { "staticcheck" }, -- for mason installer

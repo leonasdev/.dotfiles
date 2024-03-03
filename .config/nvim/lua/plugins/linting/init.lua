@@ -7,6 +7,22 @@ for linter, setting in pairs(linters) do
 end
 
 return {
-  "nvimtools/none-ls.nvim",
-  opts = sources, -- passed to the parent spec's config()
+  {
+    "nvimtools/none-ls.nvim",
+    opts = sources, -- passed to the parent spec's config()
+  },
+
+  {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require("lint").linters_by_ft = {
+        python = { "pylint" },
+      }
+      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged", "BufEnter" }, {
+        callback = function()
+          require("lint").try_lint()
+        end,
+      })
+    end,
+  },
 }

@@ -43,6 +43,7 @@ return {
           vim.api.nvim_set_hl(0, "AlphaHeader", { link = "Debug" })
           vim.api.nvim_set_hl(0, "AlphaShortcut", { italic = true, fg = "#859900" })
           vim.api.nvim_set_hl(0, "AlphaFooter", { link = "String" })
+          vim.api.nvim_set_hl(0, "CurSearch", { link = "IncSearch" })
           vim.cmd("highlight GitSignsAdd guibg=none")
           vim.cmd("highlight GitSignsChange guibg=none")
           vim.cmd("highlight GitSignsDelete guibg=none")
