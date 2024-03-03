@@ -11,11 +11,6 @@ return {
     event = "VeryLazy",
     dependencies = { "AndreM222/copilot-lualine" },
     config = function()
-      local git_blame = require("gitblame")
-      git_blame.setup({
-        display_virtual_text = false,
-      })
-
       require("lualine").setup({
         options = {
           globalstatus = true,
