@@ -37,6 +37,9 @@ return {
   },
   clangd = {
     name = "clangd",
+    config = {
+      cmd = { "clangd", "--offset-encoding=utf-16" },
+    },
   },
   gopls = {
     name = "gopls",
