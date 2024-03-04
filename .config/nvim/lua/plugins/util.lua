@@ -143,4 +143,34 @@ return {
       })
     end,
   },
+
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    keys = {
+      { "<leader>mp", "<CMD>MarkdownPreviewToggle<CR>", mode = "n", desc = "Markdown preview" },
+    },
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
+    config = function()
+      if _G.IS_WSL then
+        -- Open the preview page in new window
+        vim.cmd([[
+          function! MdpOpenPreview(url) abort
+            let l:mdp_browser = '/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe'
+            let l:mdp_browser_opts = '--new-window'
+            if !filereadable(substitute(l:mdp_browser, '\\ ', ' ', 'g'))
+              let l:mdp_browser = '/mnt/c/Program\ Files\ \(x86\)/Microsoft/Edge/Application/msedge.exe'
+              let l:mdp_browser_opts = '--new-window'
+            endif
+            execute join(['silent! !', l:mdp_browser, l:mdp_browser_opts, a:url])
+          endfunction
+          let g:mkdp_browserfunc = 'MdpOpenPreview'
+      ]])
+      end
+      -- vim.g.mkdp_echo_preview_url = 1 -- set to 1, echo preview page URL in command line when opening preview page
+    end,
+  },
 }
