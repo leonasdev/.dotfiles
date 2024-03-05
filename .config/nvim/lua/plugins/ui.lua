@@ -11,6 +11,11 @@ return {
     event = "VeryLazy",
     dependencies = { "AndreM222/copilot-lualine" },
     config = function()
+      local mode_width = 0
+      local branch_width = 0
+      local diff_width = 0
+      local filetype_width = 0
+      local filename_width = 0
       require("lualine").setup({
         options = {
           globalstatus = true,
@@ -20,23 +25,97 @@ return {
           },
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
+          refresh = {
+            statusline = 500,
+          },
         },
         sections = {
-          lualine_a = { "mode" },
+          lualine_a = {
+            {
+              "mode",
+              fmt = function(str)
+                if str == "" then
+                  mode_width = 0
+                  return ""
+                end
+                mode_width = #str + 2 -- 2 is the length of padding
+                return str
+              end,
+            },
+          },
           lualine_b = {
             -- { "branch", icon = "" },
-            { "branch", icon = "" },
+            {
+              "branch",
+              icon = "",
+              fmt = function(str)
+                if str == "" then
+                  branch_width = 0
+                  return ""
+                end
+                branch_width = #str + 2 + 2 -- 4 is the length of icon (unicode), 2 is the length of padding
+                return str
+              end,
+            },
             -- { "diff", colored = true, symbols = { added = " ", modified = " ", removed = " " } },
-            "diff",
+            {
+              "diff",
+              fmt = function(str)
+                if str == "" then
+                  diff_width = 0
+                  return ""
+                end
+                local evaled_str = vim.api.nvim_eval_statusline(str, {}).str
+                diff_width = #evaled_str + 2 -- 2 is the length of padding
+                return str
+              end,
+            },
           },
           lualine_c = {
             {
+              -- fill space to center the filetype + filename
+              function()
+                local used_space = mode_width + branch_width + diff_width
+                local win_width = vim.opt.columns:get()
+                local fill_space =
+                  string.rep(" ", math.floor((win_width - filename_width - filetype_width) / 2) - used_space)
+                return fill_space
+              end,
+              padding = { left = 0, right = 0 },
+            },
+            {
               "filetype",
+              fmt = function(str)
+                if str == "" then
+                  filetype_width = 0
+                  return ""
+                end
+                filetype_width = 1 + 2 -- 4 is the length of icon (unicode), 2 is the length of padding
+                return str
+              end,
               icon_only = true,
-              padding = { left = 1, right = 1 },
             },
             {
               "filename",
+              fmt = function(str)
+                if str == "" then
+                  filename_width = 0
+                  return ""
+                end
+
+                local used_space = mode_width + branch_width + diff_width
+                local win_width = vim.opt.columns:get()
+                local free_space = (math.floor(win_width / 2) - used_space) * 2
+
+                -- if the filename is longer than the free space, use the filename
+                if free_space < #str + filetype_width + 10 then
+                  str = vim.fn.expand("%:t")
+                end
+
+                filename_width = #str + 2 -- 2 is the length of padding
+
+                return str
+              end,
               file_status = true, -- Displays file status (readonly status, modified status)
               newfile_status = false, -- Display new file status (new file means no write after created)
               path = 1, -- 0: Just the filename
@@ -45,7 +124,7 @@ return {
               -- 3: Absolute path, with tilde as the home directory
               -- 4: Filename and parent dir, with tilde as the home directory
 
-              shorting_target = 40, -- Shortens path to leave 40 spaces in the window for other components. (terrible name, any suggestions?)
+              shorting_target = 0, -- Shortens path to leave 40 spaces in the window for other components. (terrible name, any suggestions?)
 
               symbols = {
                 modified = "[+]", -- Text to show when the file is modified.
@@ -105,7 +184,12 @@ return {
           },
           lualine_y = {
             -- "progress",
-            "encoding",
+            {
+              "encoding",
+              cond = function()
+                return vim.opt.columns:get() > 80
+              end,
+            },
             -- {
             --   function()
             --     local enc = (vim.bo.fenc ~= "" and vim.bo.fenc) or vim.o.enc
