@@ -127,4 +127,7 @@ return {
       vim.api.nvim_set_keymap("n", "<leader>tc", ":TSContextToggle<CR>", { noremap = true, silent = true })
     end,
   },
+
+  -- vim syntax for helm templates (yaml + gotmpl + sprig + custom)
+  { "towolf/vim-helm" },
 }
