@@ -44,6 +44,9 @@ require("lazy").setup("plugins", {
   change_detection = {
     notify = false,
   },
+  dev = {
+    path = "~/personal",
+  },
 })
 
 -- close lazy panel with esc
