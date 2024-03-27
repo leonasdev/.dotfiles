@@ -1,16 +1,17 @@
 return {
   {
+    "leonasdev/my-colorscheme",
     lazy = false,
     priority = 1000,
-    dir = "~/personal/my-colorscheme/",
+    dev = false,
     config = function()
       require("my-colorscheme").setup({
-        transparent = true,
+        transparent = false,
         lualine = {
           transparent = false,
         },
       })
-      -- vim.cmd([[colorscheme my-colorscheme]])
+      vim.cmd([[colorscheme my-colorscheme]])
     end,
   },
 
@@ -69,7 +70,7 @@ return {
       })
 
       -- vim.g.solarized_termtrans = 1
-      vim.cmd("colorscheme solarized")
+      -- vim.cmd("colorscheme solarized")
     end,
   },
 
