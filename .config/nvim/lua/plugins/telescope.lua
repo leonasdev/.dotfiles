@@ -128,6 +128,7 @@ return {
       { "gr", lsp_references, mode = "n", desc = "LSP Find References" },
       { "gi", lsp_implementations, mode = "n", desc = "LSP Find Implementations" },
       { "<leader>u", "<cmd>Telescope undo<cr>", mode = "n", desc = "Undo Tree" },
+      { "<C-t>", "<cmd>Telescope resume<cr>", mode = "n", desc = "Resume Last List" },
     },
     config = function()
       require("telescope").setup({
