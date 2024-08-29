@@ -11,7 +11,7 @@ return {
           transparent = false,
         },
       })
-      vim.cmd([[colorscheme my-colorscheme]])
+      -- vim.cmd([[colorscheme my-colorscheme]])
     end,
   },
 
@@ -70,7 +70,7 @@ return {
       })
 
       -- vim.g.solarized_termtrans = 1
-      -- vim.cmd("colorscheme solarized")
+      vim.cmd("colorscheme solarized")
     end,
   },
 
