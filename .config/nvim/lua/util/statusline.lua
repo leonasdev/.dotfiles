@@ -165,11 +165,17 @@ M.sections = {
         },
       },
       show_loading = false,
+      on_click = function()
+        vim.cmd("Copilot toggle")
+      end,
     },
     {
       function()
         local autoformat = require("plugins.formatting.autoformat").autoformat
         return autoformat and "󰚔 on" or "󰚔 off"
+      end,
+      on_click = function()
+        vim.cmd("FormatToggle")
       end,
     },
   },
