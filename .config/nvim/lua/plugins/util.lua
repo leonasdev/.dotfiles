@@ -88,6 +88,10 @@ return {
   -- displays a popup with possible keybindings of the command
   {
     "folke/which-key.nvim",
+    dependencies = {
+      "echasnovski/mini.icons",
+      "nvim-tree/nvim-web-devicons",
+    },
     config = function()
       vim.o.timeout = true
       vim.timeoutlen = 300
@@ -97,7 +101,7 @@ return {
             g = false,
           },
         },
-        window = {
+        win = {
           border = "single",
         },
       })
