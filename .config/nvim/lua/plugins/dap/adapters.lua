@@ -7,4 +7,7 @@ return {
   delve = {
     name = "delve", -- for mason installer
   },
+  codelldb = {
+    name = "codelldb",
+  },
 }
