@@ -47,13 +47,13 @@ return {
       },
 
       -- An extension for nvim-dap, providing default configurations for python and methods to debug individual test methods or classes.
-      {
-        "mfussenegger/nvim-dap-python",
-        config = function()
-          local adapter_python_path = require("plugins.dap.adapters").debugpy.path
-          require("dap-python").setup(adapter_python_path)
-        end,
-      },
+      -- {
+      --   "mfussenegger/nvim-dap-python",
+      --   config = function()
+      --     local adapter_python_path = require("plugins.dap.adapters").debugpy.path
+      --     require("dap-python").setup(adapter_python_path)
+      --   end,
+      -- },
 
       {
         "leoluz/nvim-dap-go",

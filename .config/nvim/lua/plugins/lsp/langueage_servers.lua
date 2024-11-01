@@ -41,9 +41,9 @@ return {
       cmd = { "clangd", "--offset-encoding=utf-16" },
     },
   },
-  gopls = {
-    name = "gopls",
-  },
+  -- gopls = {
+  --   name = "gopls",
+  -- },
   tsserver = {
     name = "typescript-language-server",
   },

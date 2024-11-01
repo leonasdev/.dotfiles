@@ -100,6 +100,40 @@ for formatter, setting in pairs(formatters) do
 end
 
 return {
-  "nvimtools/none-ls.nvim",
-  opts = sources, -- passed to the parent spec's config()
+  {
+    "nvimtools/none-ls.nvim",
+    opts = sources, -- passed to the parent spec's config()
+  },
+
+  {
+    "stevearc/conform.nvim",
+    config = function()
+      vim.api.nvim_create_user_command("FormatToggle", function()
+        require("plugins.formatting.autoformat").toggle()
+      end, { desc = "Toggle Format on Save" })
+
+      require("conform").setup({
+        formatters_by_ft = {
+          python = { "black" },
+        },
+        formatters = {
+          black = {
+            prepend_args = { "-S", "-l", "120" },
+          },
+        },
+        format_on_save = function(bufnr)
+          if not require("plugins.formatting.autoformat").autoformat then
+            return
+          end
+
+          local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+          if vim.tbl_contains(require("plugins.formatting.autoformat").disable_autoformat, ft) then
+            return
+          end
+
+          return { timeout_ms = 500, lsp_format = "fallback" }
+        end,
+      })
+    end,
+  },
 }

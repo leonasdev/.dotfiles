@@ -282,28 +282,28 @@ return {
     end,
   },
 
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        suggestion = {
-          auto_trigger = true,
-          keymap = {
-            accept = "<Down>",
-            accept_line = "<Right>",
-            next = "<M-j>",
-            prev = "<M-k>",
-          },
-        },
-        filetypes = {
-          gitcommit = true,
-          gitrebase = true,
-          yaml = true,
-          oil = false,
-        },
-      })
-    end,
-  },
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   cmd = "Copilot",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("copilot").setup({
+  --       suggestion = {
+  --         auto_trigger = true,
+  --         keymap = {
+  --           accept = "<Down>",
+  --           accept_line = "<Right>",
+  --           next = "<M-j>",
+  --           prev = "<M-k>",
+  --         },
+  --       },
+  --       filetypes = {
+  --         gitcommit = true,
+  --         gitrebase = true,
+  --         yaml = true,
+  --         oil = false,
+  --       },
+  --     })
+  --   end,
+  -- },
 }

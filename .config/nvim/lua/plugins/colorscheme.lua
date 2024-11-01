@@ -1,19 +1,19 @@
 return {
-  {
-    "leonasdev/my-colorscheme",
-    lazy = false,
-    priority = 1000,
-    dev = false,
-    config = function()
-      require("my-colorscheme").setup({
-        transparent = false,
-        lualine = {
-          transparent = false,
-        },
-      })
-      -- vim.cmd([[colorscheme my-colorscheme]])
-    end,
-  },
+  -- {
+  --   "leonasdev/my-colorscheme",
+  --   lazy = false,
+  --   priority = 1000,
+  --   dev = false,
+  --   config = function()
+  --     require("my-colorscheme").setup({
+  --       transparent = false,
+  --       lualine = {
+  --         transparent = false,
+  --       },
+  --     })
+  --     -- vim.cmd([[colorscheme my-colorscheme]])
+  --   end,
+  -- },
 
   -- main colorscheme
   -- solarized
@@ -21,7 +21,7 @@ return {
     "ishan9299/nvim-solarized-lua",
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
-    dir = "~/personal/nvim-solarized-lua",
+    -- dir = "~/personal/nvim-solarized-lua",
     config = function()
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "solarized",
@@ -69,7 +69,7 @@ return {
         end,
       })
 
-      -- vim.g.solarized_termtrans = 1
+      vim.g.solarized_termtrans = 1
       vim.cmd("colorscheme solarized")
     end,
   },
@@ -238,7 +238,7 @@ return {
     },
     config = function()
       require("vscode").setup({
-        transparent = true,
+        transparent = false,
       })
     end,
   },
