@@ -312,6 +312,9 @@ return {
   {
     "ribru17/bamboo.nvim",
     lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
     config = function()
       require("bamboo").setup()
     end,
