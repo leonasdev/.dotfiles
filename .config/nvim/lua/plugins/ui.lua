@@ -1,3 +1,5 @@
+local util = require("util")
+
 return {
   -- nerd font supported icons
   {
@@ -58,8 +60,8 @@ return {
     config = function()
       require("gitsigns").setup({
         signs = {
-          add = { text = "│" },
-          change = { text = "│" },
+          add = { text = "┃" },
+          change = { text = "┃" },
         },
         current_line_blame = false,
         current_line_blame_opts = {
@@ -182,12 +184,70 @@ return {
     "luukvbaal/statuscol.nvim",
     config = function()
       local builtin = require("statuscol.builtin")
+
+      local function get_num_wraps()
+        -- Calculate the actual buffer width, accounting for splits, number columns, and other padding
+        local wrapped_lines = vim.api.nvim_win_call(0, function()
+          local winid = vim.api.nvim_get_current_win()
+
+          -- get the width of the buffer
+          local winwidth = vim.api.nvim_win_get_width(winid)
+          local numberwidth = vim.wo.number and vim.wo.numberwidth or 0
+          local signwidth = vim.fn.exists("*sign_define") == 1 and vim.fn.sign_getdefined() and 2 or 0
+          local foldwidth = vim.wo.foldcolumn or 0
+
+          -- subtract the number of empty spaces in your statuscol. I have
+          -- four extra spaces in mine, to enhance readability for me
+          local bufferwidth = winwidth - numberwidth - signwidth - foldwidth - 4
+
+          -- fetch the line and calculate its display width
+          local line = vim.fn.getline(vim.v.lnum)
+          local line_length = vim.fn.strdisplaywidth(line)
+
+          return math.floor(line_length / bufferwidth)
+        end)
+
+        return wrapped_lines
+      end
+
       require("statuscol").setup({
+        relculright = true, -- whether to right-align the cursor line number with 'relativenumber' set
         ft_ignore = { "alpha", "neo-tree", "oil" },
         segments = {
           { sign = { name = { "Diagnostic" } } },
-          { sign = { name = { "Dap.*" } } },
-          { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
+          { sign = { name = { "Dap.*" } }, click = "v:lua.ScLa" },
+          { -- line number
+            text = {
+              " ",
+              "%=",
+              -- TODO: turn into absolute line number when in visual mode
+              function(args)
+                local v_hl = ""
+                local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
+                if mode == "v" then
+                  local v_range = util.get_visual_range()
+                  local is_in_range = vim.v.lnum >= v_range[1] and vim.v.lnum <= v_range[3]
+                  v_hl = is_in_range and "%#CursorLineNr#" or ""
+                end
+
+                if vim.v.virtnum < 0 then
+                  return "-"
+                elseif vim.v.virtnum > 0 and (vim.wo.number or vim.wo.relativenumber) then
+                  local num_wraps = get_num_wraps()
+
+                  if vim.v.virtnum == num_wraps then
+                    return v_hl .. "┗"
+                  else
+                    return v_hl .. "┣"
+                  end
+                end
+
+                return v_hl .. builtin.lnumfunc(args)
+              end,
+              " ",
+            },
+            click = "v:lua.ScLa",
+          },
           { sign = { namespace = { "gitsign" }, auto = false } },
         },
       })
@@ -257,7 +317,6 @@ return {
     "goolord/alpha-nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      local util = require("util")
       local dashboard = require("alpha.themes.dashboard")
 
       -- local logo = {
