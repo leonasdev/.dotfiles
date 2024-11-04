@@ -60,8 +60,8 @@ return {
     config = function()
       require("gitsigns").setup({
         signs = {
-          add = { text = "┃" },
-          change = { text = "┃" },
+          add = { text = "│" },
+          change = { text = "│" },
         },
         current_line_blame = false,
         current_line_blame_opts = {
@@ -218,8 +218,6 @@ return {
           { sign = { name = { "Dap.*" } }, click = "v:lua.ScLa" },
           { -- line number
             text = {
-              " ",
-              "%=",
               -- TODO: turn into absolute line number when in visual mode
               function(args)
                 local v_hl = ""
@@ -236,15 +234,14 @@ return {
                   local num_wraps = get_num_wraps()
 
                   if vim.v.virtnum == num_wraps then
-                    return v_hl .. "┗"
+                    return v_hl .. "%=" .. "└"
                   else
-                    return v_hl .. "┣"
+                    return v_hl .. "%=" .. "├"
                   end
                 end
 
                 return v_hl .. builtin.lnumfunc(args)
               end,
-              " ",
             },
             click = "v:lua.ScLa",
           },
