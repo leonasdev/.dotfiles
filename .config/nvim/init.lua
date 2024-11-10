@@ -52,7 +52,7 @@ require("lazy").setup("plugins", {
     path = "~/personal",
   },
   git = {
-    timeout = 15,
+    timeout = 60,
   },
 })
 
