@@ -3,7 +3,7 @@ return {
     "leonasdev/my-colorscheme",
     lazy = false,
     priority = 1000,
-    dev = false,
+    dev = true,
     config = function()
       require("my-colorscheme").setup({
         transparent = false,
@@ -318,5 +318,34 @@ return {
     config = function()
       require("bamboo").setup()
     end,
+  },
+
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function() end,
+  },
+
+  {
+    "projekt0n/github-nvim-theme",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function()
+      require("github-theme").setup()
+    end,
+  },
+
+  {
+    "olimorris/onedarkpro.nvim",
+    lazy = true,
+    keys = {
+      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
+    },
+    config = function() end,
   },
 }

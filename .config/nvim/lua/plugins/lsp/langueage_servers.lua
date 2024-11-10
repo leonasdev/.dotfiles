@@ -44,7 +44,7 @@ return {
   gopls = {
     name = "gopls",
   },
-  tsserver = {
+  ts_ls = {
     name = "typescript-language-server",
   },
   cssls = {

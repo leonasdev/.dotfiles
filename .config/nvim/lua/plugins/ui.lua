@@ -12,6 +12,7 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     dependencies = { "AndreM222/copilot-lualine" },
+    commit = "640260d7c2d98779cab89b1e7088ab14ea354a02", -- i have some issue with latest commit (delay between mode switching)
     config = function()
       require("lualine").setup({
         options = {
@@ -390,6 +391,15 @@ return {
           local jump_back_key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
           vim.api.nvim_feedkeys(jump_back_key, "n", false)
         end,
+      })
+    end,
+  },
+  {
+    "nvzone/showkeys",
+    cmd = "ShowkeysToggle",
+    config = function()
+      require("showkeys").setup({
+        position = "bottom-left",
       })
     end,
   },

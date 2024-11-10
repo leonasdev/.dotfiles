@@ -28,6 +28,10 @@ require("lazy").setup("plugins", {
   },
   ui = {
     border = "rounded",
+    icons = {
+      loaded = "",
+      not_loaded = "",
+    },
   },
   performance = {
     rtp = {
@@ -46,6 +50,9 @@ require("lazy").setup("plugins", {
   },
   dev = {
     path = "~/personal",
+  },
+  git = {
+    timeout = 15,
   },
 })
 
