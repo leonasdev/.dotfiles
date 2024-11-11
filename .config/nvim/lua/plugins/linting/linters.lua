@@ -6,6 +6,7 @@ local default_config_dir = vim.fn.stdpath("config") .. "/lua/plugins/linting/con
 return {
   pylint = {
     name = { "pylint", version = "2.4.0" }, -- for mason installer
+    disabled = true,
     to_register_wrap = function()
       return require("null-ls").register(require("null-ls").builtins.diagnostics.pylint.with({
         filetypes = { "python" },
@@ -15,7 +16,6 @@ return {
         },
       }))
     end,
-    disabled = true,
   },
   staticcheck = {
     name = { "staticcheck" }, -- for mason installer

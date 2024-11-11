@@ -49,7 +49,7 @@ return {
   },
   yapf = {
     name = { "yapf", version = "0.22.0" },
-    disabled = false,
+    disabled = true,
     to_register_wrap = function()
       return require("null-ls").builtins.formatting.yapf.with({
         filetypes = { "python" },
@@ -59,7 +59,7 @@ return {
   },
   isort = {
     name = { "isort" },
-    disabled = false,
+    disabled = true,
     to_register_wrap = function()
       return require("null-ls").builtins.formatting.isort.with({
         filetypes = { "python" },
@@ -80,5 +80,9 @@ return {
         filetypes = { "go" },
       })
     end,
+  },
+  black = {
+    name = "black",
+    disabled = true,
   },
 }
