@@ -2,6 +2,9 @@ return {
   -- Distraction-free coding for Neovim
   {
     "folke/zen-mode.nvim",
+    keys = {
+      { "<C-w>m", "<CMD>ZenMode<CR>", mode = "n" },
+    },
     cmd = "ZenMode",
     config = function()
       vim.api.nvim_set_hl(0, "ZenBg", { ctermbg = 0 })

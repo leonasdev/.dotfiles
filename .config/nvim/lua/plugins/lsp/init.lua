@@ -10,13 +10,14 @@ local function lsp_related_ui_adjust()
   end
 
   vim.diagnostic.config({
+    update_in_insert = true,
     virtual_text = {
       prefix = "●",
       severity_sort = true,
     },
     float = {
       border = "rounded",
-      source = "always", -- Or "if_many"
+      source = true, -- Or "if_many"
       prefix = " - ",
     },
     severity_sort = true,
