@@ -1,6 +1,19 @@
 patch:
-  switches/@0/reset: 1
-  switches/@0/states: [ 中, 英 ]
+  simplifier:
+    opencc_config: t2tw.json
+    option_name: zh_tw
+  switches:
+    - name: zh_tw
+      reset: 1
+    - name: ascii_mode
+      reset: 1 # default to english
+      states: [ 中, 英 ]
+    - name: full_shape
+      states: [ 半角, 全角 ]
+    - name: simplification
+      states: [ 漢字, 汉字 ]
+    - name: ascii_punct
+      states: [ 。，, ．， ]
   punctuator:
     full_shape:
       ' ' : { commit: '　' }
