@@ -1,0 +1,29 @@
+patch:
+  schema_list:
+    - schema: luna_pinyin
+    - schema: bopomofo_tw
+  switcher/caption: (輸入法)
+  menu/page_size: 9
+  ascii_composer/switch_key:
+    Shift_L: commit_code
+  key_binder:
+    bindings:
+      - {accept: "Control+j", send: Down, when: composing}
+      - {accept: "Control+k", send: Up, when: composing}
+      - {accept: "Right", send: Page_Down, when: composing}
+      - {accept: "Left", send: Page_Up, when: composing}
+      - {accept: "Control+l", send: Page_Down, when: composing}
+      - {accept: "Control+h", send: Page_Up, when: composing}
+      - {accept: comma, send: Page_Up, when: paging}
+      - {accept: period, send: Page_Down, when: has_menu}
+      - {accept: "Control+Shift+1", select: .next, when: always}
+      - {accept: "Control+Shift+2", toggle: ascii_mode, when: always}
+      - {accept: "Control+Shift+3", toggle: full_shape, when: always}
+      - {accept: "Control+Shift+4", toggle: simplification, when: always}
+      - {accept: "Control+Shift+5", toggle: extended_charset, when: always}
+      - {accept: "Control+Shift+exclam", select: .next, when: always}
+      - {accept: "Control+Shift+at", toggle: ascii_mode, when: always}
+      - {accept: "Control+Shift+numbersign", toggle: full_shape, when: always}
+      - {accept: "Control+Shift+dollar", toggle: simplification, when: always}
+      - {accept: "Control+Shift+percent", toggle: extended_charset, when: always}
+      - {accept: "Shift+space", toggle: full_shape, when: always}

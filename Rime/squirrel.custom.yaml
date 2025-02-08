@@ -1,0 +1,28 @@
+patch:
+  style/color_scheme: leonasdev
+  style/candidate_list_layout: stack
+  style/text_orientation: horizontal
+  style/translucency: true
+  preset_color_schemes/leonasdev:
+    name: leonasdev
+    author: leonasdev
+    font_point: 16.0
+    label_font_point: 10.0
+    candidate_list_layout: stacked
+    text_orientation: horizontal
+    inline_preedit: true
+    translucency: true
+    corner_radius: 8.0
+    border_height: 1.0
+    border_width: 1.0
+    line_spacing: 4.0
+    color_space: display_p3
+    back_color: 0x4D3F3F3F
+    border_color: 0x000000
+    candidate_text_color: 0xD8FFFFFF
+    comment_text_color: 0x3FFFFFFF
+    hilited_candidate_back_color: 0x80F53214
+    hilited_candidate_text_color: 0xD8FFFFFF
+    hilited_candidate_label_color: 0xFFFFFF
+    text_color: 0x3FFFFFFF
+    hilited_text_color: 0xD8FFFFFF
