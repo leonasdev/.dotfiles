@@ -44,6 +44,7 @@ return {
           "kdl",
         },
         auto_install = true,
+        ignore_install = { "dockerfile" },
         autotag = { -- dependency with 'nvim-ts-autotag'
           enable = true,
         },

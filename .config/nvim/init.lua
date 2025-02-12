@@ -24,7 +24,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {
   install = {
-    colorscheme = { "solarized", "habamax" },
+    colorscheme = { "my-colorscheme", "solarized", "habamax" },
   },
   ui = {
     border = "rounded",

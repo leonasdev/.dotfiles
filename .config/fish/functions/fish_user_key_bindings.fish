@@ -2,7 +2,7 @@ function fish_user_key_bindings
   bind -e \cd # unbind ctrl-d
   bind -e \cu # unbind ctrl-u
   bind -e \cp # unbind ctrl-p
-  bind \cy accept-autosuggestion
+  bind \cy complete
   bind \cb 'cd ..; omp_repaint_prompt'
   bind \cn 'prevd; omp_repaint_prompt'
   bind \cs cancel-commandline

@@ -98,12 +98,16 @@ return {
           ["<C-u>"] = cmp.mapping.scroll_docs(-4),
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions. <C-Space> not work in windows terminal
           ["<C-e>"] = cmp.mapping.abort(), -- close completion window
+          ["<C-y>"] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
+            select = true, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+          }),
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
-              cmp.confirm({
-                behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
-                select = true, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-              })
+              -- cmp.confirm({
+              --   behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
+              --   select = true, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+              -- })
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
             else
