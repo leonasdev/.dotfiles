@@ -17,8 +17,9 @@ keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yank" })
 keymap.set({ "n", "v" }, "c", '"_c', { desc = "Change without yank" })
 keymap.set({ "n", "v" }, "C", '"_C', { desc = "Change without yank" })
 
--- clear highlight of search
-keymap.set("n", "<leader>nh", "<cmd>nohl<cr>", { desc = "Clear highlight" })
+-- quick fix list navigation
+keymap.set("n", "<leader>qn", "<cmd>cnext<cr>", { desc = "Quick fix list: next" })
+keymap.set("n", "<leader>qp", "<cmd>cprev<cr>", { desc = "Quick fix list: previous" })
 
 -- clear highlight of search, messages, floating windows
 keymap.set({ "n", "i" }, "<Esc>", function()
