@@ -34,7 +34,8 @@ local function find_files_or_git_files()
   if vim.loop.fs_stat(vim.loop.cwd() .. "/.git") then
     local opts = {
       previewer = enable_previewer,
-      show_untracked = true,
+      show_untracked = false,
+      recurse_submodules = true,
       temp__scrolling_limit = MAX_RESULT,
     }
 
@@ -115,7 +116,7 @@ return {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
     keys = {
-      { "<C-p>", find_files_or_git_files, mode = "n", desc = "Find Files or Git Files" },
+      { "<leader>p", find_files_or_git_files, mode = "n", desc = "Find Files or Git Files" },
       { "<leader>ff", find_files, mode = "n", desc = "Find Files" },
       { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
       { "<C-f>", grep_string, mode = "v", desc = "Grep String" },

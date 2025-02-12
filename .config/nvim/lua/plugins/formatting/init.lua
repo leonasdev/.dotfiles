@@ -113,14 +113,21 @@ return {
 
       require("conform").setup({
         formatters_by_ft = {
-          python = { "black" },
+          python = { "ruff_format" },
         },
         formatters = {
-          black = {
-            prepend_args = { "-S", "-l", "120" },
+          ruff_format = {
+            prepend_args = {
+              "--config",
+              'target-version="py38"',
+              "--config",
+              'format.quote-style="preserve"',
+              "--config",
+              "line-length=120",
+            },
           },
         },
-        format_on_save = function(bufnr)
+        format_after_save = function(bufnr)
           if not require("plugins.formatting.autoformat").autoformat then
             return
           end
@@ -130,7 +137,7 @@ return {
             return
           end
 
-          return { timeout_ms = 500, lsp_format = "fallback" }
+          return { timeout_ms = 2000, lsp_format = "fallback" }
         end,
       })
     end,
