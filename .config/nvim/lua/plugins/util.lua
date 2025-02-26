@@ -99,6 +99,7 @@ return {
       vim.o.timeout = true
       vim.timeoutlen = 300
       require("which-key").setup({
+        preset = "modern",
         plugins = {
           presets = {
             g = false,
