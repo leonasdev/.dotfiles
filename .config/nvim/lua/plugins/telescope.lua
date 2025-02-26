@@ -118,7 +118,7 @@ return {
     keys = {
       { "<leader>p", find_files_or_git_files, mode = "n", desc = "Find Files or Git Files" },
       { "<leader>ff", find_files, mode = "n", desc = "Find Files" },
-      { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
+      -- { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
       { "<C-f>", grep_string, mode = "v", desc = "Grep String" },
       { "<leader>fh", help_tags, mode = "n", desc = "Help Pages" },
       { "<leader>fe", "<cmd>Telescope diagnostics<cr>", mode = "n", desc = "Diagnostics" },
@@ -129,7 +129,7 @@ return {
       { "gr", lsp_references, mode = "n", desc = "LSP Find References" },
       { "gi", lsp_implementations, mode = "n", desc = "LSP Find Implementations" },
       { "<leader>u", "<cmd>Telescope undo<cr>", mode = "n", desc = "Undo Tree" },
-      { "<C-t>", "<cmd>Telescope resume<cr>", mode = "n", desc = "Resume Last List" },
+      -- { "<C-t>", "<cmd>Telescope resume<cr>", mode = "n", desc = "Resume Last List" },
     },
     config = function()
       require("telescope").setup({

@@ -110,7 +110,15 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter-context",
-    event = "BufEnter",
+    keys = {
+      {
+        "<leader>tc",
+        function()
+          require("treesitter-context").toggle()
+        end,
+        desc = "Toggle Treesitter Context",
+      },
+    },
     config = function()
       require("treesitter-context").setup({
         enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -127,7 +135,6 @@ return {
         on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
       })
       vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = true })
-      vim.api.nvim_set_keymap("n", "<leader>tc", ":TSContextToggle<CR>", { noremap = true, silent = true })
     end,
   },
 

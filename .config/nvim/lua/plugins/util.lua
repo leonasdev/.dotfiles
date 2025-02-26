@@ -105,7 +105,7 @@ return {
           },
         },
         win = {
-          border = "single",
+          border = "rounded",
         },
       })
     end,
