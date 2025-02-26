@@ -57,6 +57,15 @@ return {
   -- git decorations
   {
     "lewis6991/gitsigns.nvim",
+    keys = {
+      {
+        "<leader>tb",
+        function()
+          require("gitsigns").toggle_current_line_blame()
+        end,
+        desc = "Toggle Current Line Blame",
+      },
+    },
     event = "BufEnter",
     config = function()
       require("gitsigns").setup({
