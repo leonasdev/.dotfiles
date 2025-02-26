@@ -32,9 +32,9 @@ keymap.set({ "n", "i" }, "<Esc>", function()
   end
 end, { desc = "Clear highlight of search, messages, floating windows" })
 
--- Increment/decrement
-keymap.set("n", "+", "<C-a>")
-keymap.set("n", "-", "<C-x>")
+-- Disable increment/decrement
+keymap.set({ "n", "v" }, "<C-a>", "<nop>")
+keymap.set({ "n", "v" }, "<C-x>", "<nop>")
 
 -- Go to start-of-line/end-of-line
 keymap.set("n", "H", "0")

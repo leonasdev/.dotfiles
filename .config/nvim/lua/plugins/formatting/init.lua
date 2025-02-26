@@ -67,6 +67,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.api.nvim_create_user_command("FormatToggle", function()
         require("plugins.formatting.autoformat").toggle()
       end, { desc = "Toggle Format on Save" })
+      vim.keymap.set("n", "<leader>tf", function()
+        require("plugins.formatting.autoformat").toggle()
+      end, { expr = true, desc = "Toggle Format on Save" })
 
       -- TODO: Format command in visual mode and normal mode
       -- vim.api.nvim_create_user_command("Format", format
