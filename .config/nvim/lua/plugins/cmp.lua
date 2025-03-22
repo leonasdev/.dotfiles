@@ -79,13 +79,6 @@ return {
       end
 
       cmp.setup({
-        matching = {
-          -- disallow_fuzzy_matching = true,
-          -- disallow_fullfuzzy_matching = true,
-          -- disallow_partial_fuzzy_matching = true,
-          -- disallow_partial_matching = true,
-          -- disallow_prefix_unmatching = false,
-        },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -102,18 +95,18 @@ return {
             behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
             select = true, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
           }),
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              -- cmp.confirm({
-              --   behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
-              --   select = true, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-              -- })
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
+          -- ["<Tab>"] = cmp.mapping(function(fallback)
+          --   if cmp.visible() then
+          --     cmp.confirm({
+          --       behavior = cmp.ConfirmBehavior.Replace, -- e.g. console.log -> console.inlog -> console.info
+          --       select = true, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+          --     })
+          --   elseif luasnip.expand_or_jumpable() then
+          --     luasnip.expand_or_jump()
+          --   else
+          --     fallback()
+          --   end
+          -- end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
           -- ordering is matter
@@ -138,6 +131,7 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         formatting = {
+          expandable_indicator = true,
           fields = { "kind", "abbr", "menu" },
           format = lspkind.cmp_format({
             mode = "symbol_text", -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
@@ -196,6 +190,7 @@ return {
           { name = "buffer" },
         },
         formatting = {
+          expandable_indicator = true,
           fields = { "abbr", "kind" },
           format = lspkind.cmp_format({
             mode = "symbol_text", -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
@@ -267,6 +262,7 @@ return {
           },
         },
         formatting = {
+          expandable_indicator = true,
           fields = { "abbr", "kind" },
           format = lspkind.cmp_format({
             mode = "symbol_text", -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
