@@ -119,7 +119,7 @@ return {
       { "<leader>p", find_files_or_git_files, mode = "n", desc = "Find Files or Git Files" },
       { "<leader>ff", find_files, mode = "n", desc = "Find Files" },
       -- { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
-      { "<C-f>", grep_string, mode = "v", desc = "Grep String" },
+      -- { "<C-f>", grep_string, mode = "v", desc = "Grep String" },
       { "<leader>fh", help_tags, mode = "n", desc = "Help Pages" },
       { "<leader>fe", "<cmd>Telescope diagnostics<cr>", mode = "n", desc = "Diagnostics" },
       { "<leader>fn", edit_neovim, mode = "n", desc = "Edit Neovim" },
