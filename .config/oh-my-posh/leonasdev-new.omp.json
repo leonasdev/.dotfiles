@@ -15,7 +15,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "<#5ca8cc>\ueb99 </>{{ .UserName }} <#cccca5>on</> ",
+          "template": " <#5ca8cc>\ueb99 </>{{ .UserName }} <#cccca5>at</> ",
           "foreground": "#5ca8cc",
           "type": "session",
           "style": "diamond"
