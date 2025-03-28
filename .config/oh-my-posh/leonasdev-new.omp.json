@@ -62,7 +62,8 @@
             "branch_icon": "\ue725 ",
             "cache_duration": "none",
             "fetch_status": true,
-            "fetch_upstream_icon": true
+            "fetch_upstream_icon": true,
+            "commit_icon": "\uF417 "
           },
           "template": "{{ .HEAD }} {{ if .Working.Changed }}{{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}</>{{ end }} ",
           "foreground": "#78ba8d",
