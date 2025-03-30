@@ -11,7 +11,10 @@ return {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
         config = function()
           local langueage_servers = require("plugins.lsp.langueage_servers")
-          local formatters = require("plugins.formatting.formatters")
+          local formatters = {}
+          for _, formatter in pairs(require("conform").list_all_formatters()) do
+            table.insert(formatters, formatter.command)
+          end
           local adapters = require("plugins.dap.adapters")
           local linters = require("plugins.linting.linters")
           local tool_names = {}
@@ -19,7 +22,7 @@ return {
             table.insert(tool_names, server.name)
           end
           for _, formatter in pairs(formatters) do
-            table.insert(tool_names, formatter.name)
+            table.insert(tool_names, formatter)
           end
           for _, adapter in pairs(adapters) do
             table.insert(tool_names, adapter.name)
