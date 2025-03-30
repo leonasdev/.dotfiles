@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
   "transient_prompt": {
-    "template": "[{{ .Segments.Time.Text }}]<#5ca8cc> \u276f</> ",
+    "template": "[{{ .Segments.Time.Text }}]<#5ca8cc> ❯</> ",
     "foreground": "#999982",
     "background": "transparent"
   },
@@ -15,7 +15,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": " <#5ca8cc>\ueb99 </>{{ .UserName }} <#cccca5>at</> ",
+          "template": " <#5ca8cc> </>{{ .UserName }} <#cccca5>at</> ",
           "foreground": "#5ca8cc",
           "type": "session",
           "style": "diamond"
@@ -39,12 +39,7 @@
         {
           "type": "shell",
           "style": "plain",
-          "foreground": "#5ca8cc",
-          "properties": {
-            "mapped_shell_names": {
-              "fish": "fish"
-            }
-          }
+          "foreground": "#5ca8cc"
         },
         {
           "foreground": "#cccca5",
@@ -59,13 +54,13 @@
           "type": "git",
           "style": "plain",
           "properties": {
-            "branch_icon": "\ue725 ",
+            "branch_icon": " ",
             "cache_duration": "none",
             "fetch_status": true,
             "fetch_upstream_icon": true,
-            "commit_icon": "\uF417 "
+            "commit_icon": " "
           },
-          "template": "{{ .HEAD }} {{ if .Working.Changed }}{{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}</>{{ end }} ",
+          "template": "{{ .HEAD }} {{ if .Working.Changed }}{{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}</>{{ end }} ",
           "foreground": "#78ba8d",
           "foreground_templates": [
             "{{ if or (.Working.Changed) (.Staging.Changed) }}#caa944{{ end }}",
@@ -96,7 +91,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "\u276f ",
+          "template": "❯ ",
           "foreground": "#5ca8cc",
           "type": "text",
           "style": "plain"
