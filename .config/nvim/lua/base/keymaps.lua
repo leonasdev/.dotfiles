@@ -22,11 +22,11 @@ keymap.set("n", "<leader>qn", "<cmd>cnext<cr>", { desc = "Quick fix list: next" 
 keymap.set("n", "<leader>qp", "<cmd>cprev<cr>", { desc = "Quick fix list: previous" })
 
 -- clear highlight of search, messages, floating windows
-keymap.set({ "n", "i" }, "<Esc>", function()
+keymap.set("n", "<Esc>", function()
   vim.cmd([[nohl]]) -- clear highlight of search
   vim.cmd([[stopinsert]]) -- clear messages (the line below statusline)
   for _, win in ipairs(vim.api.nvim_list_wins()) do -- clear all floating windows
-    if vim.api.nvim_win_get_config(win).relative == "win" then
+    if vim.api.nvim_win_get_config(win).relative == "win" and vim.api.nvim_win_get_config(win).focusable then
       vim.api.nvim_win_close(win, false)
     end
   end
@@ -41,8 +41,8 @@ keymap.set("n", "H", "0")
 keymap.set("n", "L", "$")
 
 -- Scrolling
-keymap.set("n", "<C-d>", "<C-d>zz")
-keymap.set("n", "<C-u>", "<C-u>zz")
+keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz")
+keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz")
 
 -- Delete a word using Ctrl+Backspace
 keymap.set("i", "<C-BS>", "<C-w>")
@@ -103,6 +103,9 @@ vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window he
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+
+vim.keymap.set("n", "<c-w>'", "<cmd>vnew<cr>", { desc = "Vertical Split New" })
+vim.keymap.set("n", '<c-w>"', "<cmd>new<cr>", { desc = "Horizontal Split New" })
 
 keymap.set("n", "<M-k>", "<cmd>Inspect<cr>", { desc = "Highlight captures under cursor" })
 
