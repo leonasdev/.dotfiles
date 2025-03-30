@@ -15,12 +15,26 @@ return {
   {
     "mfussenegger/nvim-lint",
     config = function()
-      require("lint").linters_by_ft = {}
+      require("lint").linters_by_ft = {
+        dockerfile = { "hadolint" },
+        python = { "pylint" },
+      }
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged", "BufEnter" }, {
         callback = function()
           require("lint").try_lint()
         end,
       })
+
+      vim.api.nvim_create_user_command("LintInfo", function()
+        local filetype = vim.bo.filetype
+        local linters_by_ft = require("lint").linters_by_ft[filetype]
+
+        if linters_by_ft then
+          print("Linters for " .. filetype .. ": " .. table.concat(linters_by_ft, ", "))
+        else
+          print("No linters configured for filetype: " .. filetype)
+        end
+      end, {})
     end,
   },
 }

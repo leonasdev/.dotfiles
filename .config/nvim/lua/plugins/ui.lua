@@ -77,13 +77,12 @@ return {
         current_line_blame_opts = {
           delay = 200,
         },
-        -- signs = {
-        --   add = { text = '+' },
-        --   change = { text = '~' },
-        --   delete = { text = '_' },
-        --   topdelete = { text = '‾' },
-        --   changedelete = { text = '~' },
-        -- },
+        worktrees = {
+          {
+            toplevel = vim.env.HOME,
+            gitdir = vim.env.HOME .. "/.dotfiles",
+          },
+        },
       })
     end,
   },
@@ -224,11 +223,13 @@ return {
         relculright = true, -- whether to right-align the cursor line number with 'relativenumber' set
         ft_ignore = { "alpha", "neo-tree", "oil" },
         segments = {
-          { sign = { name = { "Diagnostic" } } },
+          { sign = { namespace = { "diagnostic" } } },
           { sign = { name = { "Dap.*" } }, click = "v:lua.ScLa" },
           { -- line number
             text = {
               -- TODO: turn into absolute line number when in visual mode
+
+              -- highlight the line number of selection in virtual mode
               function(args)
                 local v_hl = ""
                 local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
@@ -326,17 +327,6 @@ return {
     config = function()
       local dashboard = require("alpha.themes.dashboard")
 
-      -- local logo = {
-      --   [[0    0    0    0    0    0]],
-      --   [[1    1    1    1    1    1]],
-      --   [[1    1    1    1    1    1]],
-      --   [[0    0    0    1    0    0]],
-      --   [[1    0    1    0    1    1]],
-      --   [[1    1    1    1    0    1]],
-      --   [[1    0    1    1    0    0]],
-      --   [[0    1    1    0    1    1]],
-      -- }
-      --
       local version = "v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
       dashboard.section.header.val = "NVIM " .. version
 

@@ -26,7 +26,7 @@ return {
     end,
   },
   hadolint = {
-    name = "hadolint", -- for mason installer
+    name = { "hadolint" }, -- for mason installer
     to_register_wrap = function()
       return require("null-ls").register(require("null-ls").builtins.diagnostics.hadolint.with({
         filetypes = { "dockerfile" },

@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
   "transient_prompt": {
-    "template": "# ",
-    "foreground": "#fdf6e3",
+    "template": "[{{ .Segments.Time.Text }}]<#5ca8cc> ❯</> ",
+    "foreground": "#999982",
     "background": "transparent"
   },
   "console_title_template": "{{.Shell}} in {{.PWD}}",
@@ -15,20 +15,19 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "<#45F1C2> \ueb99 </>{{ .UserName }} <#fdf6e3>on </>",
-          "foreground": "#268bd2",
+          "template": " <#5ca8cc> </>{{ .UserName }} <#cccca5>at</> ",
+          "foreground": "#5ca8cc",
           "type": "session",
           "style": "diamond"
         },
         {
-          "properties": {
-            "cache_duration": "none",
-            "time_format": "January 02<#fdf6e3>,</> Monday <#fdf6e3>at</> 3:04 PM"
-          },
-          "template": "{{ .CurrentDate | date .Format }}",
-          "foreground": "#268bd2",
           "type": "time",
-          "style": "diamond"
+          "style": "plain",
+          "foreground": "#5ca8cc",
+          "template": "{{ .CurrentDate | date .Format}}",
+          "properties": {
+            "time_format": "2006-01-02 03:04"
+          }
         }
       ],
       "newline": true
@@ -38,47 +37,48 @@
       "alignment": "left",
       "segments": [
         {
-          "properties": {
-            "cache_duration": "none"
-          },
-          "leading_diamond": " \ue0b6",
-          "template": " {{ .Name }} ",
-          "foreground": "#fdf6e3",
-          "background": "#268bd2",
           "type": "shell",
-          "style": "diamond"
+          "style": "plain",
+          "foreground": "#5ca8cc"
         },
         {
+          "foreground": "#cccca5",
           "properties": {
-            "cache_duration": "none",
             "style": "full"
           },
-          "template": " {{ .Path }} ",
-          "foreground": "#fdf6e3",
-          "powerline_symbol": "\ue0b0",
-          "background": "#073642",
-          "type": "path",
-          "style": "powerline"
+          "style": "plain",
+          "template": "{{ .Path }} ",
+          "type": "path"
         },
         {
+          "type": "git",
+          "style": "plain",
           "properties": {
-            "branch_icon": "\ue725 ",
+            "branch_icon": " ",
             "cache_duration": "none",
             "fetch_status": true,
-            "fetch_upstream_icon": true
+            "fetch_upstream_icon": true,
+            "commit_icon": " "
           },
-          "template": " {{ .HEAD }} {{ if .Working.Changed }}{{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}</>{{ end }} ",
-          "foreground": "#002b36",
-          "powerline_symbol": "\ue0b0",
-          "background": "#859900",
-          "type": "git",
-          "style": "powerline",
-          "background_templates": [
-            "{{ if or (.Working.Changed) (.Staging.Changed) }}#b58900{{ end }}",
-            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#cb4b16{{ end }}",
-            "{{ if gt .Ahead 0 }}#6c71c4{{ end }}",
-            "{{ if gt .Behind 0 }}#6c71c4{{ end }}"
+          "template": "{{ .HEAD }} {{ if .Working.Changed }}{{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}</>{{ end }} ",
+          "foreground": "#78ba8d",
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}#caa944{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#cc5f29{{ end }}",
+            "{{ if gt .Ahead 0 }}#c480bd{{ end }}",
+            "{{ if gt .Behind 0 }}#c480bd{{ end }}"
           ]
+        },
+        {
+          "type": "status",
+          "style": "plain",
+          "template": "[{{ .String }}]",
+          "foreground_templates": [
+            "{{ if .Error }}#e94969{{ end }}"
+          ],
+          "properties": {
+            "always_enabled": false
+          }
         }
       ],
       "newline": true
@@ -91,8 +91,8 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": " # ",
-          "foreground": "#45F1C2",
+          "template": "❯ ",
+          "foreground": "#5ca8cc",
           "type": "text",
           "style": "plain"
         }

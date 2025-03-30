@@ -10,32 +10,32 @@ function M.config_finder(config_names, default_dir)
     default_dir = default_dir .. "/"
   end
 
-  local config_dir = ""
+  local found_config = ""
 
   -- search from project recursively
   for _, name in ipairs(config_names) do
-    local found_root = require("lspconfig").util.root_pattern(name)(vim.loop.cwd())
+    local found_root = vim.fs.root(0, name)
     if found_root then
-      config_dir = found_root .. "/" .. name
+      found_config = found_root .. "/" .. name
       if _G.IS_WINDOWS then
-        config_dir = string.gsub(config_dir, "/", "\\\\")
+        found_config = string.gsub(found_config, "/", "\\\\")
       end
-      return config_dir
+      return found_config
     end
   end
 
   -- search from defalut_dir
   for _, name in ipairs(config_names) do
     if vim.loop.fs_stat(default_dir .. name) then
-      config_dir = default_dir .. name
+      found_config = default_dir .. name
       if _G.IS_WINDOWS then
-        config_dir = string.gsub(config_dir, "/", "\\\\")
+        found_config = string.gsub(found_config, "/", "\\\\")
       end
-      return config_dir
+      return found_config
     end
   end
 
-  return config_dir
+  return found_config
 end
 
 --- Create a button entity to use with the alpha dashboard

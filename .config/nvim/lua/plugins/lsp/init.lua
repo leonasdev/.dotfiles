@@ -1,45 +1,45 @@
-local function lsp_related_ui_adjust()
-  require("lspconfig.ui.windows").default_options.border = "rounded"
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
-
-  local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-  end
-
+local function setup_diagnostic()
   vim.diagnostic.config({
-    update_in_insert = true,
+    update_in_insert = false,
+    severity_sort = true,
     virtual_text = {
       prefix = "●",
       severity_sort = true,
     },
     float = {
       border = "rounded",
-      source = true, -- Or "if_many"
+      source = true, -- Always show the source of diagnostic
       prefix = " - ",
     },
-    severity_sort = true,
     signs = {
-      linehl = { "DiagnosticErrorLn", "DiagnosticWarnLn", "DiagnosticInfoLn", "DiagnosticHintLn" },
+      linehl = {
+        [vim.diagnostic.severity.ERROR] = "DiagnosticErrorLn",
+        [vim.diagnostic.severity.WARN] = "DiagnosticWarnLn",
+        [vim.diagnostic.severity.INFO] = "DiagnosticInfoLn",
+        [vim.diagnostic.severity.HINT] = "DiagnosticHintLn",
+      },
+      text = {
+        [vim.diagnostic.severity.ERROR] = " ",
+        [vim.diagnostic.severity.WARN] = " ",
+        [vim.diagnostic.severity.INFO] = " ",
+        [vim.diagnostic.severity.HINT] = "",
+      },
     },
   })
 end
 
-local function lspconfig_setup()
+local function setup_lsp()
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-
       local opts = { buffer = bufnr }
 
-      vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
-      vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
+      vim.keymap.set("n", "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
+      vim.keymap.set("n", "<leader>dp", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
       vim.keymap.set("n", "<leader>dd", vim.diagnostic.open_float, opts)
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-      vim.keymap.set({ "i", "n" }, "<C-s>", vim.lsp.buf.signature_help, opts)
+      vim.keymap.set("n", "K", function() vim.lsp.buf.hover({ border = "rounded" }) end, opts)
+      vim.keymap.set({ "i", "n" }, "<C-s>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, opts)
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
@@ -47,11 +47,6 @@ local function lspconfig_setup()
       vim.api.nvim_create_autocmd("CursorHold", {
         buffer = bufnr,
         callback = function()
-          local float_opts = {
-            focusable = false,
-            close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-          }
-
           if not vim.b.diagnostics_pos then
             vim.b.diagnostics_pos = { nil, nil }
           end
@@ -61,7 +56,10 @@ local function lspconfig_setup()
             (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
             and #vim.diagnostic.get() > 0
           then
-            vim.diagnostic.open_float(nil, float_opts)
+            vim.diagnostic.open_float({
+              nil,
+              close_events = { "CursorMoved", "CursorMovedI", "InsertEnter", "InsertCharPre", "FocusLost" },
+            })
           end
 
           vim.b.diagnostics_pos = cursor_pos
@@ -74,12 +72,14 @@ local function lspconfig_setup()
       --
       -- When you move your cursor, the highlights will be cleared (the second autocommand).
       if client and client.server_capabilities.documentHighlightProvider then
-        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "InsertLeave" }, {
+          group = vim.api.nvim_create_augroup("CursorHighlightDocument", { clear = true }),
           buffer = bufnr,
           callback = vim.lsp.buf.document_highlight,
         })
 
-        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+        vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
+          group = vim.api.nvim_create_augroup("ClearReferences", { clear = true }),
           buffer = bufnr,
           callback = vim.lsp.buf.clear_references,
         })
@@ -88,7 +88,10 @@ local function lspconfig_setup()
   })
 
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+  local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  if ok then
+    capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+  end
 
   local setup_server = function(server, config)
     if not config then
@@ -131,10 +134,15 @@ return {
 
       -- for develop neovim
       {
-        "folke/neodev.nvim",
-        config = function()
-          require("neodev").setup()
-        end,
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+          library = {
+            -- See the configuration section for more details
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          },
+        },
       },
 
       -- managing tool
@@ -142,13 +150,10 @@ return {
 
       -- bridges mason with the lspconfig
       { "williamboman/mason-lspconfig.nvim" },
-
-      -- nvim-cmp source for neovim's built-in LSP
-      { "hrsh7th/cmp-nvim-lsp" },
     },
     config = function()
-      lsp_related_ui_adjust()
-      lspconfig_setup()
+      setup_diagnostic()
+      setup_lsp()
     end,
   },
 }
