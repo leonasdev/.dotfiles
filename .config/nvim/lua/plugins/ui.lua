@@ -60,9 +60,7 @@ return {
     keys = {
       {
         "<leader>tb",
-        function()
-          require("gitsigns").toggle_current_line_blame()
-        end,
+        function() require("gitsigns").toggle_current_line_blame() end,
         desc = "Toggle Current Line Blame",
       },
     },
@@ -73,14 +71,21 @@ return {
           add = { text = "│" },
           change = { text = "│" },
         },
-        current_line_blame = false,
+        current_line_blame = true,
         current_line_blame_opts = {
+          -- virt_text = false,
+          -- virt_text_pos = "eol", -- or "overlay" "right_align"
           delay = 200,
         },
+        -- current_line_blame_formatter = " <author>, <author_time:%R> - <summary>",
         worktrees = {
           {
             toplevel = vim.env.HOME,
             gitdir = vim.env.HOME .. "/.dotfiles",
+          },
+          {
+            toplevel = vim.env.HOME,
+            gitdir = vim.env.HOME .. "/personal/.dotfiles",
           },
         },
       })
@@ -175,9 +180,7 @@ return {
       vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "*",
-        callback = function()
-          vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
-        end,
+        callback = function() vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" }) end,
         group = vim.api.nvim_create_augroup("RelinkIndentBlanklineHightLightGroup", { clear = true }),
         desc = "Relink IndentBlankline Highlight Group",
       })
