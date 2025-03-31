@@ -73,15 +73,16 @@ return {
     },
     {
       "<C-t>",
-      function()
-        Snacks.picker.resume()
-      end,
+      function() Snacks.picker.resume() end,
       mode = "n",
     },
   },
   ---@type snacks.Config
   opts = {
+    bigfile = { enabled = true },
+    rename = { enabled = true },
     picker = {
+      enabled = true,
       win = {
         input = {
           keys = {

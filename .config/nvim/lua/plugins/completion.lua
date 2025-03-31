@@ -289,8 +289,18 @@ local blink_cmp = {
 
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
-      documentation = { auto_show = false },
+      list = {
+        selection = {
+          preselect = false,
+        },
+      },
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 0,
+        window = { border = "rounded" },
+      },
       menu = {
+        border = "rounded",
         draw = {
           columns = {
             { "kind_icon" },
@@ -302,7 +312,7 @@ local blink_cmp = {
               ellipsis = false,
               width = { fill = true },
               text = function(ctx) return "(" .. ctx.kind .. ")" end,
-              highlight = function(ctx) return ctx.kind_hl end,
+              highlight = function(ctx) return "BlinkCmpLabel" end,
             },
           },
         },
@@ -326,8 +336,8 @@ local blink_cmp = {
 }
 
 return {
-  nvim_cmp,
-  -- blink_cmp,
+  -- nvim_cmp,
+  blink_cmp,
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
