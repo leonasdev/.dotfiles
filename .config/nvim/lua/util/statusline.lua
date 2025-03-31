@@ -71,9 +71,7 @@ M.sections = {
         return fill_space
       end,
       padding = { left = 0, right = 0 },
-      cond = function()
-        return vim.opt.columns:get() > 60
-      end,
+      cond = function() return vim.opt.columns:get() > 60 end,
     },
     {
       "filetype",
@@ -137,8 +135,7 @@ M.sections = {
   },
   lualine_x = {
     -- {
-    --   git_blame.get_current_blame_text,
-    --   cond = git_blame.is_blame_text_available,
+    --   function() return vim.b.gitsigns_blame_line_dict.author end,
     -- },
     -- {
     --   function()
@@ -165,27 +162,21 @@ M.sections = {
         },
       },
       show_loading = false,
-      on_click = function()
-        vim.cmd("Copilot toggle")
-      end,
+      on_click = function() vim.cmd("Copilot toggle") end,
     },
     {
       function()
         local autoformat = require("plugins.formatting.autoformat").autoformat
         return autoformat and "󰚔 on" or "󰚔 off"
       end,
-      on_click = function()
-        vim.cmd("FormatToggle")
-      end,
+      on_click = function() vim.cmd("FormatToggle") end,
     },
   },
   lualine_y = {
     -- "progress",
     {
       "encoding",
-      cond = function()
-        return vim.opt.columns:get() > 80
-      end,
+      cond = function() return vim.opt.columns:get() > 80 end,
     },
     -- {
     --   function()
