@@ -12,7 +12,7 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     dependencies = { "AndreM222/copilot-lualine" },
-    commit = "640260d7c2d98779cab89b1e7088ab14ea354a02", -- i have some issue with latest commit (delay between mode switching)
+    -- commit = "640260d7c2d98779cab89b1e7088ab14ea354a02", -- i have some issue with latest commit (delay between mode switching)
     config = function()
       require("lualine").setup({
         options = {
@@ -23,9 +23,9 @@ return {
           },
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
-          refresh = {
-            statusline = 500,
-          },
+          -- refresh = {
+          --   statusline = 500,
+          -- },
         },
         sections = require("util.statusline").sections,
         extensions = {
@@ -73,7 +73,7 @@ return {
         },
         current_line_blame = true,
         current_line_blame_opts = {
-          -- virt_text = false,
+          virt_text = false,
           -- virt_text_pos = "eol", -- or "overlay" "right_align"
           delay = 200,
         },
