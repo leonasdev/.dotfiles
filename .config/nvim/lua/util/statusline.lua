@@ -6,6 +6,39 @@ local diff_width = 0
 local filetype_width = 0
 local filename_width = 0
 
+--- @param trunc_width number trunctates component when screen width is less then trunc_width
+--- @param trunc_len number truncates component to trunc_len number of chars
+--- @param hide_width number hides component when window width is smaller then hide_width
+--- @param no_ellipsis boolean whether to disable adding '...' at end after truncation
+--- return function that can format the component accordingly
+local function trunc_fmt(trunc_width, trunc_len, hide_width, no_ellipsis)
+  return function(str)
+    local win_width = vim.fn.winwidth(0)
+    if hide_width and win_width < hide_width then
+      return ""
+    elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+      return str:sub(1, trunc_len) .. (no_ellipsis and "" or "...")
+    end
+    return str
+  end
+end
+
+--- @param trunc_width number trunctates component when screen width is less then trunc_width
+--- @param trunc_len number truncates component to trunc_len number of chars
+--- @param hide_width number hides component when window width is smaller then hide_width
+--- return function that can format the component accordingly
+local function trunc_cond(trunc_width, trunc_len, hide_width)
+  return function()
+    local win_width = vim.fn.winwidth(0)
+    if hide_width and win_width < hide_width then
+      return false
+    elseif trunc_width and trunc_len and win_width < trunc_width then
+      return false
+    end
+    return true
+  end
+end
+
 M.sections = {
   lualine_a = {
     {
@@ -43,6 +76,16 @@ M.sections = {
     -- { "diff", colored = true, symbols = { added = " ", modified = " ", removed = " " } },
     {
       "diff",
+      source = function()
+        local gitsigns = vim.b.gitsigns_status_dict
+        if gitsigns then
+          return {
+            added = gitsigns.added,
+            modified = gitsigns.changed,
+            removed = gitsigns.removed,
+          }
+        end
+      end,
       cond = function()
         local should_show = vim.opt.columns:get() > 60
         if not should_show then
@@ -134,18 +177,46 @@ M.sections = {
     },
   },
   lualine_x = {
+    -- TODO: move this to lualine_c without break the centered filename
+    {
+      function()
+        local current_blame_line = vim.b.gitsigns_blame_line_dict
+        if current_blame_line.author == "Not Committed Yet" then
+          return ""
+        end
+
+        return "󰜘 "
+          .. current_blame_line.author
+          .. " ("
+          .. require("gitsigns.util").get_relative_time(current_blame_line.author_time)
+          .. ")"
+      end,
+      color = function()
+        local hl = vim.api.nvim_get_hl(0, { name = "GitSignsCurrentLineBlame" })
+        return { fg = string.format("#%06x", hl.fg) }
+      end,
+      cond = trunc_cond(120, 20, 60),
+      -- TODO: on_click do git show or something
+    },
+    { "diagnostics" },
+    {
+      "lsp_status",
+      icon = " ",
+      ignore_lsp = { "null-ls" },
+    },
+  },
+  lualine_y = {
+    -- "progress",
     -- {
-    --   function() return vim.b.gitsigns_blame_line_dict.author end,
+    --   "encoding",
+    --   cond = function() return vim.opt.columns:get() > 80 end,
     -- },
     -- {
     --   function()
-    --     return " "
-    --   end,
-    --   cond = function()
-    --     return next(vim.lsp.get_active_clients()) ~= nil
+    --     local enc = (vim.bo.fenc ~= "" and vim.bo.fenc) or vim.o.enc
+    --     return enc:lower() .. "[" .. vim.bo.fileformat:lower() .. "]"
     --   end,
     -- },
-    { "diagnostics" },
     {
       "copilot",
       show_colors = false,
@@ -171,23 +242,30 @@ M.sections = {
       end,
       on_click = function() vim.cmd("FormatToggle") end,
     },
-  },
-  lualine_y = {
-    -- "progress",
     {
-      "encoding",
-      cond = function() return vim.opt.columns:get() > 80 end,
+      function() return "Spaces: " .. vim.o.tabstop end,
+      cond = function()
+        local disabled_filetypes = { "snacks_picker_input", "TelescopePrompt", "oil" }
+        for _, ft in ipairs(disabled_filetypes) do
+          if vim.o.ft == ft then
+            return false
+          end
+        end
+        return true
+      end,
     },
-    -- {
-    --   function()
-    --     local enc = (vim.bo.fenc ~= "" and vim.bo.fenc) or vim.o.enc
-    --     return enc:lower() .. "[" .. vim.bo.fileformat:lower() .. "]"
-    --   end,
-    -- },
   },
   lualine_z = {
+    -- {
+    --   "location",
+    --   padding = { left = 1, right = 0 },
+    -- },
     {
-      "location",
+      function()
+        local line = vim.fn.line(".")
+        local total_line = vim.fn.line("$")
+        return string.format("%d/%d", line, total_line)
+      end,
       padding = { left = 1, right = 0 },
     },
     -- {

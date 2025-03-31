@@ -81,6 +81,10 @@ return {
   opts = {
     bigfile = { enabled = true },
     rename = { enabled = true },
+    words = {
+      enabled = true,
+      modes = { "n" },
+    },
     picker = {
       enabled = true,
       win = {
