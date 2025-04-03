@@ -52,6 +52,7 @@ local function setup_lsp()
           end
 
           local cursor_pos = vim.api.nvim_win_get_cursor(0)
+          -- only open_float when cursor pos changed
           if
             (cursor_pos[1] ~= vim.b.diagnostics_pos[1] or cursor_pos[2] ~= vim.b.diagnostics_pos[2])
             and #vim.diagnostic.get() > 0
@@ -142,6 +143,8 @@ return {
             -- See the configuration section for more details
             -- Load luvit types when the `vim.uv` word is found
             { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+            { path = "snacks.nvim", words = { "Snacks" } },
+            { path = "lazy.nvim", words = { "LazyVim" } },
           },
         },
       },

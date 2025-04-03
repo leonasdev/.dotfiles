@@ -76,11 +76,28 @@ return {
       function() Snacks.picker.resume() end,
       mode = "n",
     },
+    {
+      "<leader>fh",
+      function() Snacks.picker.help() end,
+      mode = "n",
+    },
   },
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
     rename = { enabled = true },
+    input = {
+      enabled = true,
+    },
+    ---@type table<string, snacks.win.Config>
+    styles = {
+      input = {
+        relative = "cursor",
+        row = -3,
+        col = 0,
+        width = 40,
+      },
+    },
     words = {
       enabled = true,
       modes = { "n" },

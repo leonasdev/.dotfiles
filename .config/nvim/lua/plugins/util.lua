@@ -6,17 +6,13 @@ return {
       { "<C-w>m", "<CMD>ZenMode<CR>", mode = "n" },
     },
     cmd = "ZenMode",
-    config = function()
-      vim.api.nvim_set_hl(0, "ZenBg", { ctermbg = 0 })
-    end,
+    config = function() vim.api.nvim_set_hl(0, "ZenBg", { ctermbg = 0 }) end,
   },
 
   -- commenting
   {
     "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
-    end,
+    config = function() require("Comment").setup() end,
   },
 
   -- folding
@@ -64,9 +60,7 @@ return {
       end
 
       require("ufo").setup({
-        provider_selector = function(bufnr, filetype, buftype)
-          return { "treesitter", "indent" }
-        end,
+        provider_selector = function(bufnr, filetype, buftype) return { "treesitter", "indent" } end,
         fold_virt_text_handler = handler,
         open_fold_hl_timeout = 200,
       })
@@ -76,9 +70,7 @@ return {
   -- auto detect indent
   {
     "nmac427/guess-indent.nvim",
-    config = function()
-      require("guess-indent").setup()
-    end,
+    config = function() require("guess-indent").setup() end,
   },
 
   -- git wrapper
@@ -108,6 +100,7 @@ return {
         win = {
           border = "rounded",
         },
+        triggers = { "<auto>", mode = "nso" }, -- disable trigger on visual mode (mode="x")
       })
     end,
   },
