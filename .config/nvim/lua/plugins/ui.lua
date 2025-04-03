@@ -95,6 +95,7 @@ return {
   -- Standalone UI for nvim-lsp progress
   {
     "j-hui/fidget.nvim",
+    enabled = false,
     event = "LspAttach",
     config = function()
       require("fidget").setup({
@@ -122,21 +123,6 @@ return {
         notification = {
           -- override_vim_notify = true,
           window = {
-            winblend = 0,
-          },
-        },
-      })
-    end,
-  },
-
-  -- Neovim plugin to improve the default vim.ui interfaces
-  {
-    "stevearc/dressing.nvim",
-    event = "BufEnter",
-    config = function()
-      require("dressing").setup({
-        input = {
-          win_options = {
             winblend = 0,
           },
         },
