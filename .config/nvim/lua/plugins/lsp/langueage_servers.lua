@@ -1,7 +1,6 @@
 return {
-  html = {
-    name = "html-lsp", -- for mason installer
-    disabled = false,
+  lua_ls = {
+    name = "lua-language-server",
   },
   pyright = {
     name = "pyright",
@@ -18,6 +17,22 @@ return {
       },
     },
   },
+  html = {
+    name = "html-lsp", -- for mason installer
+    disabled = false,
+  },
+  clangd = {
+    name = "clangd",
+    config = {
+      cmd = { "clangd", "--offset-encoding=utf-16" },
+    },
+  },
+  gopls = {
+    name = "gopls",
+  },
+  dockerls = {
+    name = "dockerfile-language-server",
+  },
   rust_analyzer = {
     name = "rust-analyzer",
     config = {
@@ -32,15 +47,6 @@ return {
         },
       },
     },
-  },
-  clangd = {
-    name = "clangd",
-    config = {
-      cmd = { "clangd", "--offset-encoding=utf-16" },
-    },
-  },
-  gopls = {
-    name = "gopls",
   },
   ts_ls = {
     name = "typescript-language-server",
@@ -60,9 +66,6 @@ return {
   astro = {
     name = "astro-language-server",
   },
-  lua_ls = {
-    name = "lua-language-server",
-  },
   solidity = {
     name = "nomicfoundation-solidity-language-server",
     config = {
@@ -70,8 +73,5 @@ return {
       filetypes = { "solidity" },
       single_file_support = true,
     },
-  },
-  dockerls = {
-    name = "dockerfile-language-server",
   },
 }

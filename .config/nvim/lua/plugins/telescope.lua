@@ -120,7 +120,7 @@ return {
       { "<leader>ff", find_files, mode = "n", desc = "Find Files" },
       -- { "<C-f>", live_grep, mode = "n", desc = "Live Grep (Args)" },
       -- { "<C-f>", grep_string, mode = "v", desc = "Grep String" },
-      { "<leader>fh", help_tags, mode = "n", desc = "Help Pages" },
+      -- { "<leader>fh", help_tags, mode = "n", desc = "Help Pages" },
       { "<leader>fe", "<cmd>Telescope diagnostics<cr>", mode = "n", desc = "Diagnostics" },
       { "<leader>fn", edit_neovim, mode = "n", desc = "Edit Neovim" },
       { "<leader>hi", highlights, mode = "n", desc = "Neovim Highlight Groups" },
@@ -207,49 +207,37 @@ return {
     keys = {
       {
         "<C-e>",
-        function()
-          require("harpoon.ui").toggle_quick_menu()
-        end,
+        function() require("harpoon.ui").toggle_quick_menu() end,
         mode = "n",
         desc = "Harpoon Menu",
       },
       {
         "<leader>a",
-        function()
-          require("harpoon.mark").add_file()
-        end,
+        function() require("harpoon.mark").add_file() end,
         mode = "n",
         desc = "Harpoon Add File",
       },
       {
         "<C-j>",
-        function()
-          require("harpoon.ui").nav_file(1)
-        end,
+        function() require("harpoon.ui").nav_file(1) end,
         mode = "n",
         desc = "Harpoon Nav File 1",
       },
       {
         "<C-k>",
-        function()
-          require("harpoon.ui").nav_file(2)
-        end,
+        function() require("harpoon.ui").nav_file(2) end,
         mode = "n",
         desc = "Harpoon Nav File 2",
       },
       {
         "<C-l>",
-        function()
-          require("harpoon.ui").nav_file(3)
-        end,
+        function() require("harpoon.ui").nav_file(3) end,
         mode = "n",
         desc = "Harpoon Nav File 3",
       },
       {
         "<C-h>",
-        function()
-          require("harpoon.ui").nav_file(4)
-        end,
+        function() require("harpoon.ui").nav_file(4) end,
         mode = "n",
         desc = "Harpoon Nav File 4",
       },
