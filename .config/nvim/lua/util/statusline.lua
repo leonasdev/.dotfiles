@@ -61,6 +61,8 @@ local components = {
         }
       end
     end,
+    -- symbols = { added = " ", modified = " ", removed = " " },
+    -- symbols = { added = " ", modified = " ", removed = " " },
     cond = function()
       local should_show = vim.opt.columns:get() > 60
       return should_show
