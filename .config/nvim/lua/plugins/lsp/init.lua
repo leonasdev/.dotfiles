@@ -1,9 +1,10 @@
 local function setup_diagnostic()
+  local icons = require("util.icons")
   vim.diagnostic.config({
     update_in_insert = false,
     severity_sort = true,
     virtual_text = {
-      prefix = "●",
+      prefix = icons.diagnostics.virtual_text.prefix,
       severity_sort = true,
     },
     float = {
@@ -19,10 +20,10 @@ local function setup_diagnostic()
         [vim.diagnostic.severity.HINT] = "DiagnosticHintLn",
       },
       text = {
-        [vim.diagnostic.severity.ERROR] = " ",
-        [vim.diagnostic.severity.WARN] = " ",
-        [vim.diagnostic.severity.INFO] = " ",
-        [vim.diagnostic.severity.HINT] = "",
+        [vim.diagnostic.severity.ERROR] = icons.diagnostics.error,
+        [vim.diagnostic.severity.WARN] = icons.diagnostics.warn,
+        [vim.diagnostic.severity.INFO] = icons.diagnostics.info,
+        [vim.diagnostic.severity.HINT] = icons.diagnostics.hint,
       },
     },
   })

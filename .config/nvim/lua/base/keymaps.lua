@@ -25,11 +25,11 @@ keymap.set("n", "<leader>qp", "<cmd>cprev<cr>", { desc = "Quick fix list: previo
 keymap.set("n", "<Esc>", function()
   vim.cmd([[nohl]]) -- clear highlight of search
   vim.cmd([[stopinsert]]) -- clear messages (the line below statusline)
-  for _, win in ipairs(vim.api.nvim_list_wins()) do -- clear all floating windows
-    if vim.api.nvim_win_get_config(win).relative == "win" and vim.api.nvim_win_get_config(win).focusable then
-      vim.api.nvim_win_close(win, false)
-    end
-  end
+  -- for _, win in ipairs(vim.api.nvim_list_wins()) do -- clear all floating windows
+  --   if vim.api.nvim_win_get_config(win).relative == "win" and vim.api.nvim_win_get_config(win).focusable then
+  --     vim.api.nvim_win_close(win, false)
+  --   end
+  -- end
 end, { desc = "Clear highlight of search, messages, floating windows" })
 
 -- Disable increment/decrement
