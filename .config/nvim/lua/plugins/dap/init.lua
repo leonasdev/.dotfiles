@@ -34,15 +34,9 @@ return {
               },
             },
           })
-          dap.listeners.after.event_initialized["dapui_config"] = function()
-            dapui.open()
-          end
-          dap.listeners.before.event_terminated["dapui_config"] = function()
-            dapui.close()
-          end
-          dap.listeners.before.event_exited["dapui_config"] = function()
-            dapui.close()
-          end
+          dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
+          dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
+          dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
         end,
       },
 
@@ -57,23 +51,17 @@ return {
 
       {
         "leoluz/nvim-dap-go",
-        config = function()
-          require("dap-go").setup()
-        end,
+        config = function() require("dap-go").setup() end,
       },
 
       {
         "julianolf/nvim-dap-lldb",
-        config = function()
-          require("dap-lldb").setup()
-        end,
+        config = function() require("dap-lldb").setup() end,
       },
 
       {
         "theHamsta/nvim-dap-virtual-text",
-        config = function()
-          require("nvim-dap-virtual-text").setup({})
-        end,
+        config = function() require("nvim-dap-virtual-text").setup({}) end,
       },
     },
     -- stylua: ignore

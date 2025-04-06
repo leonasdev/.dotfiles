@@ -15,6 +15,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.g.maplocalleader = "\\"
+
+local icons = require("util.icons")
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = { { import = "plugins" } },
@@ -22,8 +25,8 @@ require("lazy").setup({
   ui = {
     border = "rounded",
     icons = {
-      loaded = "",
-      not_loaded = "",
+      loaded = icons.status.check,
+      not_loaded = icons.status.uncheck,
     },
   },
   performance = {
@@ -43,12 +46,4 @@ require("lazy").setup({
 })
 
 -- close lazy panel with esc
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    "lazy",
-  },
-  callback = function(event)
-    vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "<Esc>", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-  end,
-})
+require("lazy.view.config").keys.close = "<esc>"

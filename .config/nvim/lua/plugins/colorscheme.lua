@@ -16,7 +16,6 @@ return {
     end,
   },
 
-  -- main colorscheme
   -- solarized
   {
     "ishan9299/nvim-solarized-lua",
@@ -78,9 +77,6 @@ return {
   {
     "craftzdog/solarized-osaka.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("solarized-osaka").setup({
         transparent = false,
@@ -125,9 +121,6 @@ return {
   {
     "sainnhe/gruvbox-material",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "gruvbox-material",
@@ -152,9 +145,6 @@ return {
   {
     "ellisonleao/gruvbox.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("gruvbox").setup({
         transparent_mode = true,
@@ -169,9 +159,6 @@ return {
   {
     "folke/tokyonight.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("tokyonight").setup({
         transparent = true,
@@ -183,9 +170,6 @@ return {
   {
     "EdenEast/nightfox.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("nightfox").setup({
         options = {
@@ -202,9 +186,6 @@ return {
   {
     "rebelot/kanagawa.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("kanagawa").setup({
         transparent = true,
@@ -220,9 +201,6 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("catppuccin").setup({
         transparent_background = true,
@@ -234,9 +212,6 @@ return {
   {
     "Mofiqul/vscode.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("vscode").setup({
         transparent = true,
@@ -248,9 +223,6 @@ return {
   {
     "arturgoms/moonbow.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("moonbow").setup({
         transparent_mode = true,
@@ -261,9 +233,6 @@ return {
   -- darcula (JetBrains Intellij IDEA default theme)
   {
     "briones-gabriel/darcula-solid.nvim",
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     dependencies = {
       {
         "rktjmp/lush.nvim",
@@ -275,12 +244,7 @@ return {
   {
     "AstroNvim/astrotheme",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
-    config = function()
-      require("astrotheme").setup()
-    end,
+    config = function() require("astrotheme").setup() end,
   },
 
   -- rose-pine
@@ -288,20 +252,12 @@ return {
     "rose-pine/neovim",
     name = "rose-pine",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
-    config = function()
-      require("rose-pine").setup()
-    end,
+    config = function() require("rose-pine").setup() end,
   },
 
   {
     "Shatur/neovim-ayu",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function()
       require("ayu").setup({
         mirage = false, -- Set to `true` to use `mirage` variant instead of `dark` for dark background.
@@ -313,40 +269,24 @@ return {
   {
     "ribru17/bamboo.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
-    config = function()
-      require("bamboo").setup()
-    end,
+    config = function() require("bamboo").setup() end,
   },
 
   {
     "scottmckendry/cyberdream.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function() end,
   },
 
   {
     "projekt0n/github-nvim-theme",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
-    config = function()
-      require("github-theme").setup()
-    end,
+    config = function() require("github-theme").setup() end,
   },
 
   {
     "olimorris/onedarkpro.nvim",
     lazy = true,
-    keys = {
-      { "<leader>cl", "<cmd>Telescope colorscheme<cr>", desc = "Select Colorscheme with Preview" },
-    },
     config = function() end,
   },
 }

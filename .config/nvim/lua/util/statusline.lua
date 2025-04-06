@@ -17,6 +17,8 @@ local function get_used_space(opts)
   return used_space
 end
 
+local icons = require("util.icons")
+
 local components = {
   mode = {
     "mode",
@@ -48,7 +50,6 @@ local components = {
       return str
     end,
   },
-  -- { "diff", colored = true, symbols = { added = " ", modified = " ", removed = " " } },
   diff = {
     "diff",
     source = function()
@@ -61,8 +62,11 @@ local components = {
         }
       end
     end,
-    -- symbols = { added = " ", modified = " ", removed = " " },
-    -- symbols = { added = " ", modified = " ", removed = " " },
+    symbols = {
+      added = icons.diff.added,
+      modified = icons.diff.modified,
+      removed = icons.diff.removed,
+    },
     cond = function()
       local should_show = vim.opt.columns:get() > 60
       return should_show
@@ -158,9 +162,14 @@ local components = {
         .. require("gitsigns.util").get_relative_time(current_blame_line.author_time)
         .. ")"
     end,
+    -- color = "GitSignsCurrentLineBlame",
     color = function()
       local hl = vim.api.nvim_get_hl(0, { name = "GitSignsCurrentLineBlame" })
-      return { fg = string.format("#%06x", hl.fg) }
+      if hl.fg ~= nil then
+        return { fg = string.format("#%06x", hl.fg) }
+      else
+        return "GitSignsCurrentLineBlame"
+      end
     end,
     fmt = function(str)
       local l = vim.fn.strchars(str)

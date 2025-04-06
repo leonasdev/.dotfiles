@@ -1,168 +1,38 @@
-local util = require("util")
-
 return {
-  -- nerd font supported icons
-  {
-    "nvim-tree/nvim-web-devicons",
-    lazy = true,
-  },
-
-  -- status line
+  { "nvim-tree/nvim-web-devicons", lazy = true },
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     dependencies = { "AndreM222/copilot-lualine" },
-    -- commit = "640260d7c2d98779cab89b1e7088ab14ea354a02", -- i have some issue with latest commit (delay between mode switching)
-    config = function()
-      require("lualine").setup({
-        options = {
-          globalstatus = true,
-          disabled_filetypes = {
-            statusline = { "alpha" },
-            winbar = {},
-          },
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "", right = "" },
-          -- refresh = {
-          --   statusline = 500,
-          -- },
+    opts = {
+      options = {
+        globalstatus = true,
+        disabled_filetypes = {
+          statusline = { "alpha" },
         },
-        sections = require("util.statusline").sections,
-        extensions = {
-          "neo-tree",
-          "nvim-dap-ui",
-        },
-      })
-
+        component_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
+      },
+      sections = require("util.statusline").sections,
+      extensions = {
+        "neo-tree",
+        "nvim-dap-ui",
+      },
+    },
+    config = function(_, opts)
+      require("lualine").setup(opts)
       vim.opt.showmode = false
     end,
   },
-
-  -- color highlighter
-  {
-    "NvChad/nvim-colorizer.lua",
-    event = "BufEnter",
-    config = function()
-      require("colorizer").setup({
-        filetypes = { "*" },
-        user_default_options = {
-          names = false,
-          tailwind = "both",
-          mode = "background",
-        },
-      })
-    end,
-  },
-
-  -- git decorations
-  {
-    "lewis6991/gitsigns.nvim",
-    keys = {
-      {
-        "<leader>tb",
-        function() require("gitsigns").toggle_current_line_blame() end,
-        desc = "Toggle Current Line Blame",
-      },
-    },
-    event = "BufEnter",
-    config = function()
-      require("gitsigns").setup({
-        signs = {
-          add = { text = "│" },
-          change = { text = "│" },
-        },
-        current_line_blame = true,
-        current_line_blame_opts = {
-          virt_text = false,
-          -- virt_text_pos = "eol", -- or "overlay" "right_align"
-          delay = 200,
-        },
-        -- current_line_blame_formatter = " <author>, <author_time:%R> - <summary>",
-        worktrees = {
-          {
-            toplevel = vim.env.HOME,
-            gitdir = vim.env.HOME .. "/.dotfiles",
-          },
-          {
-            toplevel = vim.env.HOME,
-            gitdir = vim.env.HOME .. "/personal/.dotfiles",
-          },
-        },
-      })
-    end,
-  },
-
-  -- Standalone UI for nvim-lsp progress
-  {
-    "j-hui/fidget.nvim",
-    enabled = false,
-    event = "LspAttach",
-    config = function()
-      require("fidget").setup({
-        -- text = {
-        --   spinner = "meter",
-        -- },
-        -- window = {
-        --   blend = 0, -- set 0 if using transparent background, otherwise set 100
-        -- },
-        progress = {
-          poll_rate = 200,
-          ignore_done_already = true,
-          display = {
-            done_ttl = 0.5,
-            -- done_icon = " ",
-            -- Icon shown when LSP progress tasks are in progress
-            progress_icon = { pattern = "meter", period = 1 },
-            -- Highlight group for in-progress LSP tasks
-            progress_style = "WarningMsg",
-            group_style = "WarningMsg", -- Highlight group for group name (LSP server name)
-            icon_style = "WarningMsg", -- Highlight group for group icons
-            done_style = "Conditional", -- Highlight group for completed LSP tasks
-          },
-        },
-        notification = {
-          -- override_vim_notify = true,
-          window = {
-            winblend = 0,
-          },
-        },
-      })
-    end,
-  },
-
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-    },
-    cmd = "Neotree",
-    keys = {
-      { "<C-b>", "<cmd>Neotree toggle<cr>", mode = "n", desc = "Toggle Neotree" },
-    },
-    config = function()
-      require("neo-tree").setup({
-        close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
-        filesystem = {
-          follow_current_file = {
-            enabled = true,
-          },
-          filtered_items = {
-            hide_dotfiles = false,
-            hide_gitignored = false,
-            hide_hidden = false,
-            hide_by_name = {
-              ".git",
-            },
-          },
-        },
-      })
-    end,
-  },
-
   {
     "lukas-reineke/indent-blankline.nvim",
     version = "2",
-    config = function()
+    opts = {
+      char = "",
+      context_char = "│",
+      show_current_context = true,
+    },
+    config = function(_, opts)
       vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "*",
@@ -170,18 +40,14 @@ return {
         group = vim.api.nvim_create_augroup("RelinkIndentBlanklineHightLightGroup", { clear = true }),
         desc = "Relink IndentBlankline Highlight Group",
       })
-      require("indent_blankline").setup({
-        char = "",
-        context_char = "│",
-        show_current_context = true,
-      })
+      require("indent_blankline").setup(opts)
     end,
   },
-
   {
     "luukvbaal/statuscol.nvim",
-    config = function()
+    opts = function()
       local builtin = require("statuscol.builtin")
+      local util = require("util")
 
       local function get_num_wraps()
         -- Calculate the actual buffer width, accounting for splits, number columns, and other padding
@@ -208,7 +74,7 @@ return {
         return wrapped_lines
       end
 
-      require("statuscol").setup({
+      return {
         relculright = true, -- whether to right-align the cursor line number with 'relativenumber' set
         ft_ignore = { "alpha", "neo-tree", "oil" },
         segments = {
@@ -247,10 +113,100 @@ return {
           },
           { sign = { namespace = { "gitsign" }, auto = false } },
         },
-      })
+      }
     end,
   },
-
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
+    opts = function()
+      return {
+        provider_selector = function() return { "treesitter", "indent" } end,
+        -- Adding number suffix of folded lines instead of the default ellipsis
+        fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
+          local newVirtText = {}
+          local suffix = ("  %d "):format(endLnum - lnum)
+          local sufWidth = vim.fn.strdisplaywidth(suffix)
+          local targetWidth = width - sufWidth
+          local curWidth = 0
+          for _, chunk in ipairs(virtText) do
+            local chunkText = chunk[1]
+            local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            if targetWidth > curWidth + chunkWidth then
+              table.insert(newVirtText, chunk)
+              print(vim.inspect(chunk))
+            else
+              chunkText = truncate(chunkText, targetWidth - curWidth)
+              local hlGroup = chunk[2]
+              table.insert(newVirtText, { chunkText, hlGroup })
+              chunkWidth = vim.fn.strdisplaywidth(chunkText)
+              -- str width returned from truncate() may less than 2nd argument, need padding
+              if curWidth + chunkWidth < targetWidth then
+                suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+              end
+              break
+            end
+            curWidth = curWidth + chunkWidth
+          end
+          table.insert(newVirtText, { suffix, "MoreMsg" })
+          return newVirtText
+        end,
+        open_fold_hl_timeout = 200,
+      }
+    end,
+    config = function(_, opts)
+      vim.o.foldcolumn = "0" -- '0' is not bad
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+      vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+      vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+      require("ufo").setup(opts)
+    end,
+  },
+  {
+    "folke/which-key.nvim",
+    dependencies = {
+      "echasnovski/mini.icons",
+      "nvim-tree/nvim-web-devicons",
+    },
+    event = "VeryLazy",
+    keys = {
+      {
+        "<leader>?",
+        function() require("which-key").show() end,
+        desc = "Show keymaps",
+      },
+    },
+    opts = {
+      preset = "helix",
+      plugins = { presets = { g = false } },
+      win = { border = "rounded" },
+      triggers = { "<auto>", mode = "nso" }, -- disable trigger on visual mode (mode="x")
+    },
+  },
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      words = { enabled = true, modes = { "n" } }, -- highlight references on cursor hold
+      -- TODO: figure it out
+      toggle = { enabled = false },
+      input = { enabled = true }, -- Better vim.ui.input
+      styles = {
+        input = {
+          relative = "cursor",
+          row = -3,
+          col = 0,
+          width = 40,
+          keys = {
+            i_ctrl_bs = { "<c-bs>", "<c-s-w>", mode = { "i" }, expr = true },
+            i_ctrl_h = { "<c-h>", "<c-s-w>", mode = { "i" }, expr = true },
+          },
+        },
+      },
+    },
+  },
   {
     "echasnovski/mini.animate",
     version = false,
@@ -266,7 +222,7 @@ return {
             cursor = { enable = false },
             scroll = {
               enable = true,
-              timing = animate.gen_timing.cubic({ duration = 50, unit = "total" }),
+              timing = animate.gen_timing.quartic({ duration = 50, unit = "total" }),
             },
             resize = { enable = false },
             open = { enable = false },
@@ -308,13 +264,13 @@ return {
       coworking_setup()
     end,
   },
-
-  -- a lua powered greeter like vim-startify / dashboard-nvim
   {
     "goolord/alpha-nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local dashboard = require("alpha.themes.dashboard")
+      local util = require("util")
+      local icons = require("util.icons")
 
       local version = "v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
       dashboard.section.header.val = "NVIM " .. version
@@ -332,9 +288,9 @@ return {
       }
 
       dashboard.section.buttons.val = {
-        util.button("n", " " .. " New file", "<cmd> enew <cr>"),
-        util.button("ctrl + p", " " .. " Find file", "<cmd> Telescope find_files <cr>"),
-        util.button("q", " " .. " Quit", "<cmd> qa <cr>"),
+        util.button("n", icons.dashboard.new .. " New file", "<cmd> enew <cr>"),
+        util.button("ctrl + p", icons.dashboard.search .. " Find file", "<cmd> Telescope find_files <cr>"),
+        util.button("q", icons.dashboard.quit .. " Quit", "<cmd> qa <cr>"),
       }
 
       dashboard.config.layout = {
@@ -366,7 +322,8 @@ return {
         callback = function()
           local stats = require("lazy").stats()
           local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
-          dashboard.section.footer.val = { "Neovim loaded  " .. stats.count .. " plugins in " .. ms .. "ms" }
+          dashboard.section.footer.val =
+            { "Neovim loaded " .. icons.dashboard.plugins .. stats.count .. " plugins in " .. ms .. "ms" }
           pcall(vim.cmd.AlphaRedraw)
         end,
       })
@@ -383,12 +340,39 @@ return {
     end,
   },
   {
+    "folke/zen-mode.nvim",
+    keys = {
+      { "<C-w>m", function() require("zen-mode").toggle() end, mode = "n" },
+    },
+    cmd = "ZenMode",
+    opts = {
+      window = {
+        backdrop = 1,
+        width = 0.95,
+      },
+    },
+  },
+  {
+    "NvChad/nvim-colorizer.lua",
+    event = "BufEnter",
+    opts = {
+      filetypes = { "*" },
+      user_default_options = {
+        names = false,
+        tailwind = "both",
+        mode = "background",
+      },
+    },
+  },
+  {
     "nvzone/showkeys",
     cmd = "ShowkeysToggle",
-    config = function()
-      require("showkeys").setup({
-        position = "bottom-left",
-      })
-    end,
+    opts = {
+      winopts = {
+        border = "rounded",
+      },
+      maxkeys = 5,
+      position = "bottom-right",
+    },
   },
 }
