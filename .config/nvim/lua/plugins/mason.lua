@@ -16,7 +16,6 @@ return {
             table.insert(formatters, formatter.command)
           end
           local adapters = require("plugins.dap.adapters")
-          local linters = require("plugins.linting.linters")
           local tool_names = {}
           for _, server in pairs(langueage_servers) do
             table.insert(tool_names, server.name)
@@ -27,9 +26,6 @@ return {
           for _, adapter in pairs(adapters) do
             table.insert(tool_names, adapter.name)
           end
-          for _, linter in pairs(linters) do
-            table.insert(tool_names, linter.name)
-          end
           require("mason-tool-installer").setup({
             ensure_installed = tool_names,
           })
@@ -37,6 +33,7 @@ return {
       },
     },
     config = function()
+      local icons = require("util.icons")
       require("mason").setup({
         providers = {
           "mason.providers.registry-api", -- default
@@ -45,6 +42,11 @@ return {
         ui = {
           height = 0.85,
           border = "rounded",
+          icons = {
+            package_installed = icons.status.check,
+            package_pending = icons.status.uncheck,
+            package_uninstalled = icons.status.uncheck,
+          },
         },
       })
 
