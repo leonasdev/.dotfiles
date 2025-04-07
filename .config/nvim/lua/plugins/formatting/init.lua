@@ -39,7 +39,7 @@ return {
         end
 
         local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-        if vim.tbl_contains(require("plugins.formatting.autoformat").disable_autoformat, ft) then
+        if vim.tbl_contains(require("plugins.formatting.autoformat").disable_autoformat_ft, ft) then
           return
         end
 
