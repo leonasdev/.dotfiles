@@ -115,3 +115,15 @@ vim.api.nvim_create_user_command("Q", "q", {})
 vim.api.nvim_create_user_command("Wq", "wq", {})
 vim.api.nvim_create_user_command("WQ", "wq", {})
 vim.api.nvim_create_user_command("Qa", "qa", {})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "help",
+  callback = function(event)
+    vim.keymap.set(
+      "n",
+      "gd",
+      "<c-]>",
+      { buffer = event.buf, desc = "Jump to the definition of the keyword under the cursor" }
+    )
+  end,
+})

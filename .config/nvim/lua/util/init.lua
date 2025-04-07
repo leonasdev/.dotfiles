@@ -1,3 +1,4 @@
+-- TODO: move this to plugins?
 local M = {}
 
 ---A helper function to find configurations

@@ -1,4 +1,5 @@
 return {
+  -- TODO: better management
   {
     "leonasdev/my-colorscheme",
     lazy = false,
