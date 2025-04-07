@@ -71,7 +71,7 @@ return {
             },
           },
           sources = {
-            git_files = { layout = picker_files_layout, submodule = true },
+            git_files = { layout = picker_files_layout, submodules = true },
             files = { layout = picker_files_layout, hidden = true, ignored = true },
             grep = { layout = "ivy_split", hidden = true, ignored = true },
             help = { layout = "bottom" },
