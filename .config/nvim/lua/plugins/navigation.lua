@@ -30,7 +30,9 @@ return {
       { "<C-b>", function() Snacks.explorer.open() end, mode = "n", desc = "Toggle file tree" },
     },
     opts = function()
+      ---@type snacks.picker.layout.Config
       local picker_files_layout = {
+        ---@diagnostic disable: assign-type-mismatch
         preview = false,
         layout = {
           backdrop = false,
@@ -47,7 +49,8 @@ return {
         },
       }
 
-      return {
+      ---@type snacks.Config
+      local ret = {
         picker = {
           enabled = true,
           ---@diagnostic disable: missing-fields
@@ -71,11 +74,12 @@ return {
             },
           },
           sources = {
-            git_files = { layout = picker_files_layout, submodules = true },
-            files = { layout = picker_files_layout, hidden = true, ignored = true },
-            grep = { layout = "ivy_split", hidden = true, ignored = true },
-            help = { layout = "bottom" },
+            git_files = { title = "󰱼 Search Files (Git)", layout = picker_files_layout, submodules = true },
+            files = { title = "󰱼 Search Files", layout = picker_files_layout, hidden = true, ignored = true },
+            grep = { title = "󰺮 Grep", layout = "ivy_split", hidden = true, ignored = true },
+            help = { title = "󱤇 Help", layout = "bottom" },
             colorschemes = {
+              title = " Colorschemes",
               layout = "select",
               matcher = {
                 sort_empty = true,
@@ -97,9 +101,7 @@ return {
             },
             lsp_definitions = { layout = "dropdown" },
             lsp_references = { layout = "dropdown" },
-            lsp_declarations = {
-              layout = "dropdown",
-            },
+            lsp_declarations = { layout = "dropdown" },
             explorer = {
               win = {
                 input = {
@@ -119,6 +121,8 @@ return {
         },
         explorer = { enabled = true },
       }
+
+      return ret
     end,
   },
   {
