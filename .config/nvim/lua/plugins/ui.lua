@@ -134,7 +134,6 @@ return {
             local chunkWidth = vim.fn.strdisplaywidth(chunkText)
             if targetWidth > curWidth + chunkWidth then
               table.insert(newVirtText, chunk)
-              print(vim.inspect(chunk))
             else
               chunkText = truncate(chunkText, targetWidth - curWidth)
               local hlGroup = chunk[2]
