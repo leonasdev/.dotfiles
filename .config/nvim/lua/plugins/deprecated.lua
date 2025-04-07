@@ -297,7 +297,8 @@ return {
       })
     end,
   },
-  { -- suppressed by snacks.picker "nvim-telescope/telescope.nvim",
+  { -- suppressed by snacks.picker
+    "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
     enabled = false,
     dependencies = {

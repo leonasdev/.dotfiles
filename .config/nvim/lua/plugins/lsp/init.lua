@@ -35,6 +35,9 @@ local function setup_lsp()
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       local opts = { buffer = bufnr }
+      if not client then
+        return
+      end
 
       vim.keymap.set("n", "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
       vim.keymap.set("n", "<leader>dp", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
@@ -43,6 +46,9 @@ local function setup_lsp()
       vim.keymap.set({ "i", "n" }, "<C-s>", function() vim.lsp.buf.signature_help({ border = "rounded" }) end, opts)
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+      vim.keymap.set("n", "gd", function() Snacks.picker.lsp_definitions() end, opts)
+      vim.keymap.set("n", "gr", function() Snacks.picker.lsp_references() end, opts)
+      vim.keymap.set("n", "gi", function() Snacks.picker.lsp_implementations() end, opts)
 
       -- auto show diagnostic when cursor hold
       vim.api.nvim_create_autocmd("CursorHold", {
@@ -67,34 +73,18 @@ local function setup_lsp()
           vim.b.diagnostics_pos = cursor_pos
         end,
       })
-
-      -- *THIS IS SUPRESSED BY Snacks.words*
-      -- The following two autocommands are used to highlight references of the
-      -- word under your cursor when your cursor rests there for a little while.
-      --    See `:help CursorHold` for information about when this is executed
-      --
-      -- When you move your cursor, the highlights will be cleared (the second autocommand).
-      -- if client and client.server_capabilities.documentHighlightProvider then
-      --   vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "InsertLeave" }, {
-      --     group = vim.api.nvim_create_augroup("CursorHighlightDocument", { clear = true }),
-      --     buffer = bufnr,
-      --     callback = vim.lsp.buf.document_highlight,
-      --   })
-      --
-      --   vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
-      --     group = vim.api.nvim_create_augroup("ClearReferences", { clear = true }),
-      --     buffer = bufnr,
-      --     callback = vim.lsp.buf.clear_references,
-      --   })
-      -- end
     end,
   })
 
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-  if ok then
-    capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
-  end
+  local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  local has_blink, blink = pcall(require, "blink.cmp")
+  local capabilities = vim.tbl_deep_extend(
+    "force",
+    {},
+    vim.lsp.protocol.make_client_capabilities(),
+    has_cmp and cmp_nvim_lsp.default_capabilities() or {},
+    has_blink and blink.get_lsp_capabilities() or {}
+  )
 
   local setup_server = function(server, config)
     if not config then
@@ -155,6 +145,7 @@ return {
 
       -- bridges mason with the lspconfig
       { "williamboman/mason-lspconfig.nvim" },
+      { "folke/snacks.nvim" },
     },
     config = function()
       setup_diagnostic()
