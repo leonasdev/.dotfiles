@@ -1,88 +1,90 @@
+local M = {}
+
 local default_config_dir = vim.fn.stdpath("config") .. "/lua/plugins/formatting/configs/"
 
--- we need to wrap to_register to a function, since null-ls will loaded after
--- See https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
--- for a list of available built-in sources
-return {
-  prettier = {
-    name = "prettier",
-    disabled = false,
-    to_register_wrap = function()
-      return require("null-ls").builtins.formatting.prettier.with({
-        filetypes = { "html", "css", "scss" },
-        extra_args = { "--print-width", "120" },
-      })
-    end,
-  },
-  -- dprint = {
-  --   name = "dprint",
-  --   disabled = false,
-  --   to_register_wrap = function()
-  --     return require("null-ls").builtins.formatting.dprint.with({
-  --       filetypes = {
-  --         "javascriptreact",
-  --         "typescript",
-  --         "typescriptreact",
-  --         "json",
-  --         "javascript",
-  --       },
-  --       -- check if project have dprint configuration
-  --       extra_args = {
-  --         "--config",
-  --         require("util").config_finder({ "dprint.json", ".dprint.json" }, default_config_dir),
-  --       },
-  --     })
-  --   end,
-  -- },
+M.formatters = {
   stylua = {
-    name = "stylua",
-    disabled = false,
-    to_register_wrap = function()
-      return require("null-ls").builtins.formatting.stylua.with({
-        filetypes = { "lua" },
-        extra_args = {
-          "--config-path",
-          require("util").config_finder({ "stylua.toml", ".stylua.toml" }, default_config_dir),
-        },
-      })
+    enabled = true,
+    ensure_installed = "stylua",
+    fts = { "lua" },
+    prepend_args = function()
+      return {
+        "--config-path",
+        require("util").config_finder({ "stylua.toml", ".stylua.toml" }, default_config_dir),
+      }
     end,
   },
-  yapf = {
-    name = { "yapf", version = "0.22.0" },
-    disabled = true,
-    to_register_wrap = function()
-      return require("null-ls").builtins.formatting.yapf.with({
-        filetypes = { "python" },
-        args = {},
-      })
+  ruff_format = {
+    enabled = true,
+    ensure_installed = "ruff",
+    fts = { "python" },
+    prepend_args = function()
+      return {
+        "--config",
+        require("util").config_finder({ "ruff.toml", "pyproject.toml" }, default_config_dir),
+      }
     end,
   },
-  isort = {
-    name = { "isort" },
-    disabled = true,
-    to_register_wrap = function()
-      return require("null-ls").builtins.formatting.isort.with({
-        filetypes = { "python" },
-        extra_args = {
-          "--dont-order-by-type",
-          "--force-single-line-imports",
-          "--force-sort-within-sections",
-          "--line-length=80",
-        },
-      })
-    end,
+  gofumpt = {
+    enabled = true,
+    ensure_installed = "gofumpt",
+    fts = { "go" },
   },
-  gofunpt = {
-    name = "gofumpt",
-    disabled = false,
-    to_register_wrap = function()
-      return require("null-ls").builtins.formatting.gofumpt.with({
-        filetypes = { "go" },
-      })
-    end,
+  fixjson = {
+    enabled = true,
+    ensure_installed = "fixjson",
+    fts = { "json" },
   },
-  black = {
-    name = "black",
-    disabled = true,
+  prettier = {
+    enabled = true,
+    ensure_installed = "prettier",
+    fts = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+    prepend_args = { "--print-width", "120" },
   },
 }
+
+function M.get_enabled()
+  local ret = {}
+  for formatter, formatter_opts in pairs(M.formatters) do
+    if not formatter_opts.enabled then
+      goto continue
+    end
+
+    ret[formatter] = formatter_opts
+
+    ::continue::
+  end
+  return ret
+end
+
+function M.formatters_by_ft()
+  local formatters = M.get_enabled()
+  local formatters_by_ft = {}
+  for formatter, formatter_opts in pairs(formatters) do
+    for _, ft in ipairs(formatter_opts.fts) do
+      formatters_by_ft[ft] = formatters_by_ft[ft] or {}
+      table.insert(formatters_by_ft[ft], formatter)
+    end
+  end
+  return formatters_by_ft
+end
+
+function M.list_fts()
+  local formatters = M.get_enabled()
+  local fts = {}
+  for _, formatter_opts in pairs(formatters) do
+    vim.list_extend(fts, formatter_opts.fts)
+  end
+  return fts
+end
+
+function M.list_ensure_installed()
+  local formatters = M.get_enabled()
+  local ensure_installed = {}
+  for _, formatter_opts in pairs(formatters) do
+    table.insert(ensure_installed, formatter_opts.ensure_installed)
+  end
+  return ensure_installed
+end
+
+return M

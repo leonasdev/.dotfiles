@@ -1,38 +1,16 @@
-local default_config_dir = vim.fn.stdpath("config") .. "/lua/plugins/formatting/configs/"
 return {
   {
     "stevearc/conform.nvim",
+    dependencies = {
+    "williamboman/mason.nvim",
     opts = {
-      formatters_by_ft = {
-        lua = { "stylua" },
-        python = { "ruff_format" },
-        go = { "gofumpt" },
-        json = { "fixjson" },
-        html = { "prettier" },
-        css = { "prettier" },
-        scss = { "prettier" },
-      },
-      formatters = {
-        stylua = {
-          prepend_args = function()
-            return {
-              "--config-path",
-              require("util").config_finder({ "stylua.toml", ".stylua.toml" }, default_config_dir),
-            }
-          end,
-        },
-        ruff_format = {
-          prepend_args = function()
-            return {
-              "--config",
-              require("util").config_finder({ "ruff.toml", "pyproject.toml" }, default_config_dir),
-            }
-          end,
-        },
-        prettier = {
-          prepend_args = { "--print-width", "120" },
-        },
-      },
+      ensure_installed = require("plugins.formatting.formatters").list_ensure_installed(),
+    }
+  },
+    ft = require("plugins.formatting.formatters").list_fts(),
+    opts = {
+      formatters_by_ft = require("plugins.formatting.formatters").formatters_by_ft(),
+      formatters = require("plugins.formatting.formatters").get_enabled(),
       format_after_save = function(bufnr)
         if not require("plugins.formatting.autoformat").autoformat then
           return
