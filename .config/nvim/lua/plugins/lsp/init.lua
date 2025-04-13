@@ -82,7 +82,7 @@ return {
         end
         local server_opts = vim.tbl_deep_extend("force", {
           capabilities = vim.deepcopy(capabilities),
-        }, servers[server] or {})
+        }, servers[server].config or {})
         require("lspconfig")[server].setup(server_opts)
       end
 
