@@ -8,7 +8,7 @@ return {
       options = {
         globalstatus = true,
         disabled_filetypes = {
-          statusline = { "alpha" },
+          statusline = { "alpha", "snacks_dashboard" },
         },
         component_separators = { left = "", right = "" },
         section_separators = { left = "", right = "" },
@@ -24,8 +24,9 @@ return {
       vim.opt.showmode = false
     end,
   },
-  {
+  { -- TODO: do not use v2 anymore
     "lukas-reineke/indent-blankline.nvim",
+    event = "LazyFile",
     version = "2",
     opts = {
       char = "",
@@ -40,11 +41,15 @@ return {
         group = vim.api.nvim_create_augroup("RelinkIndentBlanklineHightLightGroup", { clear = true }),
         desc = "Relink IndentBlankline Highlight Group",
       })
+      local ft_excludes = vim.g.indent_blankline_filetype_exclude
+      table.insert(ft_excludes, "snacks_picker_preview")
+      vim.g.indent_blankline_filetype_exclude = ft_excludes
       require("indent_blankline").setup(opts)
     end,
   },
-  {
+  { -- TODO: try snacks.statuscolumn
     "luukvbaal/statuscol.nvim",
+    event = "VeryLazy",
     opts = function()
       local builtin = require("statuscol.builtin")
       local util = require("util")
@@ -76,7 +81,7 @@ return {
 
       return {
         relculright = true, -- whether to right-align the cursor line number with 'relativenumber' set
-        ft_ignore = { "alpha", "neo-tree", "oil" },
+        ft_ignore = { "alpha", "neo-tree", "oil", "snacks_dashboard" },
         segments = {
           { sign = { namespace = { "diagnostic" } } },
           { sign = { name = { "Dap.*" } }, click = "v:lua.ScLa" },
@@ -87,6 +92,7 @@ return {
               -- highlight the line number of selection in virtual mode
               function(args)
                 local v_hl = ""
+                ---@diagnostic disable: undefined-field
                 local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
                 if mode == "v" then
                   local v_range = util.get_visual_range()
@@ -116,9 +122,24 @@ return {
       }
     end,
   },
-  {
+  { -- TODO: deprecate this
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
+    keys = {
+      { "zo" },
+      { "zO" },
+      { "zc" },
+      { "zC" },
+      { "za" },
+      { "zA" },
+      { "zx" },
+      { "zX" },
+      { "zm" },
+      { "zM" },
+      { "zr" },
+      { "zR" },
+    },
+    -- event = "LazyFile",
     opts = function()
       return {
         provider_selector = function() return { "treesitter", "indent" } end,
@@ -186,25 +207,108 @@ return {
   },
   {
     "folke/snacks.nvim",
-    ---@type snacks.Config
-    opts = {
-      words = { enabled = true, modes = { "n" } }, -- highlight references on cursor hold
-      -- TODO: figure it out
-      toggle = { enabled = false },
-      input = { enabled = true }, -- Better vim.ui.input
-      styles = {
-        input = {
-          relative = "cursor",
-          row = -3,
-          col = 0,
-          width = 40,
-          keys = {
-            i_ctrl_bs = { "<c-bs>", "<c-s-w>", mode = { "i" }, expr = true },
-            i_ctrl_h = { "<c-h>", "<c-s-w>", mode = { "i" }, expr = true },
+    keys = {
+      { "<leader>m", function() Snacks.notifier.show_history() end, mode = "n", desc = "Show Notification History" },
+    },
+    opts = function(_, opts)
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "SnacksDashboardOpened",
+        desc = "Prevent from first ctrl-o not work when enter nvim",
+        once = true,
+        callback = function()
+          local jump_back_key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
+          vim.api.nvim_feedkeys(jump_back_key, "n", false)
+        end,
+      })
+
+      ---@type snacks.Config
+      local ret = {
+        dashboard = {
+          enabled = true,
+          width = 30,
+          preset = {
+            keys = {
+              { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+              { icon = "󰱼 ", key = "<ctrl-p>", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+              { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+            },
+          },
+          sections = {
+            { -- nvim version
+              text = {
+                {
+                  string.format("NVIM v%s.%s.%s", vim.version().major, vim.version().minor, vim.version().patch),
+                  hl = "SnacksDashboardHeader",
+                },
+              },
+              align = "center",
+              padding = 1,
+            },
+            { -- greeting
+              text = {
+                {
+                  require("util").get_greeting("Leon"),
+                  hl = "String",
+                },
+              },
+              align = "center",
+              padding = 2,
+            },
+            { section = "keys", gap = 1, padding = 2 },
+            {
+              function()
+                local startup = Snacks.dashboard.sections.startup({ icon = "" })
+                if startup then
+                  table.insert(startup.text, 2, { " ", hl = "special" })
+                end
+                return startup
+              end,
+            },
           },
         },
-      },
-    },
+        words = { enabled = true, modes = { "n" } }, -- highlight references on cursor hold
+        -- TODO: figure it out
+        toggle = { enabled = true },
+        notifier = { -- Better vim.notify
+          enabled = true,
+          width = { min = 0.2, max = 0.2 },
+        },
+        input = { enabled = true }, -- Better vim.ui.input
+        styles = {
+          ---@diagnostic disable: missing-fields
+          dashboard = {
+            wo = {
+              fillchars = "eob: ",
+            },
+          },
+          ---@diagnostic disable: missing-fields
+          notification = {
+            ft = "markdown",
+            wo = {
+              wrap = true,
+              -- linebreak = false,
+              showbreak = "",
+            },
+          },
+          ---@diagnostic disable: missing-fields
+          notification_history = {
+            minimal = true,
+            keys = { ["<esc>"] = "close" },
+          },
+          input = {
+            relative = "cursor",
+            row = -3,
+            col = 0,
+            width = 40,
+            keys = {
+              i_ctrl_bs = { "<c-bs>", "<c-s-w>", mode = { "i" }, expr = true },
+              i_ctrl_h = { "<c-h>", "<c-s-w>", mode = { "i" }, expr = true },
+            },
+          },
+        },
+      }
+      return vim.tbl_deep_extend("force", opts or {}, ret)
+    end,
   },
   {
     "echasnovski/mini.animate",
@@ -264,81 +368,6 @@ return {
     end,
   },
   {
-    "goolord/alpha-nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      local dashboard = require("alpha.themes.dashboard")
-      local util = require("util")
-      local icons = require("util.icons")
-
-      local version = "v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
-      dashboard.section.header.val = "NVIM " .. version
-
-      local userName = "Leon"
-      local greeting = util.get_greeting(userName)
-
-      local greetHeading = {
-        type = "text",
-        val = greeting,
-        opts = {
-          position = "center",
-          hl = "String",
-        },
-      }
-
-      dashboard.section.buttons.val = {
-        util.button("n", icons.dashboard.new .. " New file", "<cmd> enew <cr>"),
-        util.button("ctrl + p", icons.dashboard.search .. " Find file", "<cmd> Telescope find_files <cr>"),
-        util.button("q", icons.dashboard.quit .. " Quit", "<cmd> qa <cr>"),
-      }
-
-      dashboard.config.layout = {
-        { type = "padding", val = vim.fn.max({ 2, vim.fn.floor(vim.fn.winheight(0) * 0.35) }) },
-        dashboard.section.header,
-        { type = "padding", val = 1 },
-        greetHeading,
-        { type = "padding", val = 2 },
-        dashboard.section.buttons,
-        { type = "padding", val = 1 },
-        dashboard.section.footer,
-        { type = "padding", val = 100 },
-      }
-
-      for _, button in ipairs(dashboard.section.buttons.val) do
-        button.opts.hl = "AlphaButtons"
-        button.opts.hl_shortcut = "AlphaShortcut"
-      end
-      dashboard.section.header.opts.hl = "AlphaHeader"
-      dashboard.section.buttons.opts.hl = "AlphaButtons"
-      dashboard.section.footer.opts.hl = "AlphaFooter"
-
-      require("alpha").setup(dashboard.config)
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "LazyVimStarted",
-        desc = "Add load plugins greeting to Alpha dashboad",
-        once = true,
-        callback = function()
-          local stats = require("lazy").stats()
-          local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
-          dashboard.section.footer.val =
-            { "Neovim loaded " .. icons.dashboard.plugins .. stats.count .. " plugins in " .. ms .. "ms" }
-          pcall(vim.cmd.AlphaRedraw)
-        end,
-      })
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "AlphaReady",
-        desc = "Prevent from first ctrl-o not work when enter nvim",
-        once = true,
-        callback = function()
-          local jump_back_key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
-          vim.api.nvim_feedkeys(jump_back_key, "n", false)
-        end,
-      })
-    end,
-  },
-  {
     "folke/zen-mode.nvim",
     keys = {
       { "<C-w>m", function() require("zen-mode").toggle() end, mode = "n" },
@@ -353,7 +382,7 @@ return {
   },
   {
     "NvChad/nvim-colorizer.lua",
-    event = "BufEnter",
+    event = "BufReadPre",
     opts = {
       filetypes = { "*" },
       user_default_options = {

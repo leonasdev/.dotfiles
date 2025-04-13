@@ -2,6 +2,7 @@ return {
   {
     "folke/snacks.nvim",
     priority = 1000,
+    lazy = false,
     keys = {
       {
         "<C-p>",
@@ -74,8 +75,8 @@ return {
             },
           },
           sources = {
-            git_files = { title = "󰱼 Search Files (Git)", layout = picker_files_layout, submodules = true },
-            files = { title = "󰱼 Search Files", layout = picker_files_layout, hidden = true, ignored = true },
+            git_files = { title = "󰱼 Find File (Git)", layout = picker_files_layout, submodules = true },
+            files = { title = "󰱼 Find File", layout = picker_files_layout, hidden = true, ignored = true },
             grep = { title = "󰺮 Grep", layout = "ivy_split", hidden = true, ignored = true },
             help = { title = "󱤇 Help", layout = "bottom" },
             colorschemes = {
@@ -155,6 +156,16 @@ return {
           ["<c-n>"] = discard_and_close,
         },
       }
+    end,
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = function()
+      vim.list_extend(require("plugins.lsp.keymaps").keys, {
+        { "n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to Definitions" } },
+        { "n", "gr", function() Snacks.picker.lsp_references() end, { desc = "Go to References" } },
+        { "n", "gi", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementations" } },
+      })
     end,
   },
 }

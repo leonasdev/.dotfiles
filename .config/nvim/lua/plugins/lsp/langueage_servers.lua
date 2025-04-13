@@ -1,7 +1,9 @@
-return {
-  lua_ls = {},
+local M = {}
+
+M.servers = {
+  lua_ls = { enabled = true },
   pyright = {
-    disabled = false,
+    enabled = true,
     config = {
       root_dir = function(fname) return require("lspconfig.util").root_pattern(".git")(fname) end,
       settings = {
@@ -14,17 +16,15 @@ return {
       },
     },
   },
-  html = {
-    disabled = false,
-  },
   clangd = {
+    enabled = true,
     config = {
       cmd = { "clangd", "--offset-encoding=utf-16" },
     },
   },
-  gopls = {},
-  dockerls = {},
+  gopls = { enabled = false },
   rust_analyzer = {
+    enabled = false,
     config = {
       settings = {
         ["rust-analyzer"] = {
@@ -38,17 +38,26 @@ return {
       },
     },
   },
-  ts_ls = {},
-  cssls = {},
-  jsonls = {},
-  volar = {},
-  tailwindcss = {},
-  astro = {},
-  solidity = {
-    config = {
-      cmd = { "nomicfoundation-solidity-language-server", "--stdio" },
-      filetypes = { "solidity" },
-      single_file_support = true,
-    },
-  },
+  dockerls = { enabled = true },
+  jsonls = { enabled = true },
+  html = { enabled = false },
+  ts_ls = { enabled = false },
+  cssls = { enabled = false },
+  tailwindcss = { enabled = false },
 }
+
+function M.get_enabled()
+  local ret = {}
+  for server, server_opts in pairs(M.servers) do
+    if not server_opts.enabled then
+      goto continue
+    end
+
+    ret[server] = server_opts
+
+    ::continue::
+  end
+  return ret
+end
+
+return M

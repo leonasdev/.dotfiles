@@ -113,18 +113,18 @@ return {
   },
   {
     "numToStr/Comment.nvim",
-    events = { "BufEnter" },
+    event = "LazyFile",
     opts = {},
   },
 
   {
     "nmac427/guess-indent.nvim",
-    events = { "BufEnter" },
+    event = "LazyFile",
     opts = {},
   },
   {
     "kylechui/nvim-surround",
-    event = "BufEnter",
+    event = "LazyFile",
     opts = {
       keymaps = {
         normal = "s",

@@ -1,6 +1,7 @@
 return {
-  {
+  { -- TODO: refactor
     "mfussenegger/nvim-lint",
+    event = "LazyFile",
     opts = {
       linters_by_ft = {
         python = { "pylint" },
