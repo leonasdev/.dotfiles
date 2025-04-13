@@ -579,4 +579,80 @@ return {
       })
     end,
   },
+  { -- suppressed by snacks.dashboard
+    "goolord/alpha-nvim",
+    enabled = false,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      local dashboard = require("alpha.themes.dashboard")
+      local util = require("util")
+      local icons = require("util.icons")
+
+      local version = "v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
+      dashboard.section.header.val = "NVIM " .. version
+
+      local userName = "Leon"
+      local greeting = util.get_greeting(userName)
+
+      local greetHeading = {
+        type = "text",
+        val = greeting,
+        opts = {
+          position = "center",
+          hl = "String",
+        },
+      }
+
+      dashboard.section.buttons.val = {
+        util.button("n", icons.dashboard.new .. " New file", "<cmd> enew <cr>"),
+        util.button("ctrl + p", icons.dashboard.search .. " Find file", "<cmd> Telescope find_files <cr>"),
+        util.button("q", icons.dashboard.quit .. " Quit", "<cmd> qa <cr>"),
+      }
+
+      dashboard.config.layout = {
+        { type = "padding", val = vim.fn.max({ 2, vim.fn.floor(vim.fn.winheight(0) * 0.35) }) },
+        dashboard.section.header,
+        { type = "padding", val = 1 },
+        greetHeading,
+        { type = "padding", val = 2 },
+        dashboard.section.buttons,
+        { type = "padding", val = 1 },
+        dashboard.section.footer,
+        { type = "padding", val = 100 },
+      }
+
+      for _, button in ipairs(dashboard.section.buttons.val) do
+        button.opts.hl = "AlphaButtons"
+        button.opts.hl_shortcut = "AlphaShortcut"
+      end
+      dashboard.section.header.opts.hl = "AlphaHeader"
+      dashboard.section.buttons.opts.hl = "AlphaButtons"
+      dashboard.section.footer.opts.hl = "AlphaFooter"
+
+      require("alpha").setup(dashboard.config)
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyVimStarted",
+        desc = "Add load plugins greeting to Alpha dashboad",
+        once = true,
+        callback = function()
+          local stats = require("lazy").stats()
+          local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
+          dashboard.section.footer.val =
+            { "Neovim loaded " .. icons.dashboard.plugins .. stats.count .. " plugins in " .. ms .. "ms" }
+          pcall(vim.cmd.AlphaRedraw)
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "AlphaReady",
+        desc = "Prevent from first ctrl-o not work when enter nvim",
+        once = true,
+        callback = function()
+          local jump_back_key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
+          vim.api.nvim_feedkeys(jump_back_key, "n", false)
+        end,
+      })
+    end,
+  },
 }

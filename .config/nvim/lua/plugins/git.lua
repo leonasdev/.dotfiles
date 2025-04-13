@@ -8,7 +8,7 @@ return {
         desc = "Toggle current line blame",
       },
     },
-    event = "BufEnter",
+    event = "LazyFile",
     opts = {
       signs = {
         add = { text = "│" },

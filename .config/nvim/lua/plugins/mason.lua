@@ -1,42 +1,12 @@
 return {
-  -- managing tool
   {
     "williamboman/mason.nvim",
-    lazy = true,
-    dependencies = {
-      -- bridges mason with the lspconfig
-      { "williamboman/mason-lspconfig.nvim" },
-
-      -- Install and upgrade third party tools automatically
-      {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        config = function()
-          local langueage_servers = require("plugins.lsp.langueage_servers")
-          local formatters = {}
-          for _, formatter in pairs(require("conform").list_all_formatters()) do
-            table.insert(formatters, formatter.command)
-          end
-          local adapters = require("plugins.dap.adapters")
-          local tool_names = {}
-          for server, _ in pairs(langueage_servers) do
-            local tool_name = require("mason-lspconfig.mappings.server").lspconfig_to_package[server]
-            table.insert(tool_names, tool_name)
-          end
-          for _, formatter in pairs(formatters) do
-            table.insert(tool_names, formatter)
-          end
-          for _, adapter in pairs(adapters) do
-            table.insert(tool_names, adapter.name)
-          end
-          require("mason-tool-installer").setup({
-            ensure_installed = tool_names,
-          })
-        end,
-      },
-    },
-    config = function()
+    cmd = "Mason",
+    build = ":MasonUpdate",
+    opts = function(_, opts)
       local icons = require("util.icons")
-      require("mason").setup({
+      local ret = {
+        ensure_installed = opts.ensure_installed or {},
         providers = {
           "mason.providers.registry-api", -- default
           "mason.providers.client",
@@ -50,9 +20,31 @@ return {
             package_uninstalled = icons.status.uncheck,
           },
         },
-      })
+      }
+      return ret
+    end,
+    config = function(_, opts)
+      require("mason").setup(opts)
+      local mason_registry = require("mason-registry")
+      mason_registry:on("package:install:success", function()
+        vim.defer_fn(function()
+          -- trigger FileType event to possibly load this newly installed LSP server
+          require("lazy.core.handler.event").trigger({
+            event = "FileType",
+            buf = vim.api.nvim_get_current_buf(),
+          })
+        end, 100)
+      end)
 
-      require("mason-lspconfig").setup()
+      mason_registry.refresh(function()
+        for _, tool in ipairs(opts.ensure_installed) do
+          local p = mason_registry.get_package(tool)
+          if not p:is_installed() then
+            require("lazy.util").info("[mason] installing " .. tool)
+            p:install()
+          end
+        end
+      end)
     end,
   },
 }

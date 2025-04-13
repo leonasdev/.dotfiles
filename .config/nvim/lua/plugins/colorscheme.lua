@@ -2,8 +2,8 @@ return {
   -- TODO: better management
   {
     "leonasdev/my-colorscheme",
-    lazy = false,
-    priority = 1000,
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
     dev = true,
     dir = "~/personal/my-colorscheme",
     config = function()
@@ -20,8 +20,8 @@ return {
   -- solarized
   {
     "ishan9299/nvim-solarized-lua",
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
+    lazy = true,
+    priority = 1000,
     -- dir = "~/personal/nvim-solarized-lua",
     config = function()
       vim.api.nvim_create_autocmd("ColorScheme", {
@@ -162,7 +162,7 @@ return {
     lazy = true,
     config = function()
       require("tokyonight").setup({
-        transparent = true,
+        transparent = false,
       })
     end,
   },
@@ -204,7 +204,7 @@ return {
     lazy = true,
     config = function()
       require("catppuccin").setup({
-        transparent_background = true,
+        transparent_background = false,
       })
     end,
   },
@@ -234,6 +234,7 @@ return {
   -- darcula (JetBrains Intellij IDEA default theme)
   {
     "briones-gabriel/darcula-solid.nvim",
+    lazy = true,
     dependencies = {
       {
         "rktjmp/lush.nvim",
@@ -245,7 +246,15 @@ return {
   {
     "AstroNvim/astrotheme",
     lazy = true,
-    config = function() require("astrotheme").setup() end,
+    config = function()
+      require("astrotheme").setup({
+        style = {
+          transparent = true,
+          float = false,
+          inactive = false,
+        },
+      })
+    end,
   },
 
   -- rose-pine

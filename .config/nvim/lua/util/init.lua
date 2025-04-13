@@ -145,4 +145,11 @@ function M.get_visual_range()
   return range
 end
 
+function M.close_diagnostic_float()
+  if vim.g.diagnostic_float_win then
+    pcall(vim.api.nvim_win_close, vim.g.diagnostic_float_win, false)
+    vim.g.diagnostic_float_win = nil
+  end
+end
+
 return M
