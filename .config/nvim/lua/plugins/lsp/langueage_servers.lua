@@ -39,6 +39,7 @@ M.servers = {
     },
   },
   dockerls = { enabled = true },
+  bashls = { enabled = true },
   jsonls = { enabled = true },
   html = { enabled = false },
   ts_ls = { enabled = false },
