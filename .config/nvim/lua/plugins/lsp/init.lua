@@ -8,6 +8,20 @@ return {
       { "williamboman/mason-lspconfig.nvim" },
     },
     opts = function()
+      vim.g.diagnostic_enabled = true
+      local toggle_diag = Snacks.toggle.diagnostics()
+      Snacks.toggle({
+        name = "Diagnostics",
+        get = function() return toggle_diag:get() end,
+        set = function(state)
+          toggle_diag:set(state)
+          if not state then
+            require("util").close_diagnostic_float()
+          end
+          vim.g.diagnostic_enabled = state
+        end,
+      }):map("<leader>td")
+
       local icons = require("util.icons")
       -- options for vim.diagnostic.config()
       ---@type vim.diagnostic.Opts
@@ -52,6 +66,9 @@ return {
           vim.api.nvim_create_autocmd({ "CursorMoved", "WinResized" }, {
             buffer = bufnr,
             callback = function()
+              if not vim.g.diagnostic_enabled then
+                return
+              end
               require("util").close_diagnostic_float()
               local _, win = vim.diagnostic.open_float({
                 nil,
