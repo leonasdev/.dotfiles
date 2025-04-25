@@ -16,6 +16,7 @@ return {
         end,
         mode = "n",
       },
+      { "<leader>ff", function() Snacks.picker.files() end, mode = "n" },
       { "<C-f>", function() Snacks.picker.grep() end, mode = "n" },
       { "<C-t>", function() Snacks.picker.resume() end, mode = "n" },
       {
