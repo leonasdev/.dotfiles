@@ -12,7 +12,9 @@ return {
     ---@type blink.cmp.Config
     opts = {
       completion = {
-        keyword = { range = "full" }, -- keyword match against the text before and after the cursor
+        accept = { auto_brackets = { enabled = false } },
+        -- keyword = { range = "full" }, -- keyword match against the text before and after the cursor
+
         list = { selection = { preselect = true } },
         documentation = {
           auto_show = true,
