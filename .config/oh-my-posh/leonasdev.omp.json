@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
   "transient_prompt": {
-    "template": "[{{ .Segments.Time.Text }}]<#5ca8cc> ❯</> ",
+    "template": "[{{ .Segments.Time.Segment.Text }}]<#5ca8cc> ❯</> ",
     "foreground": "#999982",
     "background": "transparent"
   },
