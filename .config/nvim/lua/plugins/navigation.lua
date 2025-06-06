@@ -78,7 +78,7 @@ return {
           sources = {
             git_files = { title = "󰱼 Find File (Git)", layout = picker_files_layout, submodules = true },
             files = { title = "󰱼 Find File", layout = picker_files_layout, hidden = true, ignored = true },
-            grep = { title = "󰺮 Grep", layout = "ivy_split", hidden = true, ignored = true },
+            grep = { title = "󰺮 Grep", layout = "ivy_split", hidden = false, ignored = true },
             help = { title = "󱤇 Help", layout = "bottom" },
             colorschemes = {
               title = " Colorschemes",
