@@ -10,15 +10,15 @@ set -gx PATH ~/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 set -gx PATH ~/go/bin $PATH
 
-set -Ux nvm_default_version latest
+set -gx nvm_default_version latest
 
 set -x ZELLIJ_AUTO_EXIT true
 
 # fzf colorscheme
-set -Ux FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
-" --color=bg+:-1,bg:-1,spinner:#cb4b16,hl:#b58900"\
-" --color=fg:#93a1a1,header:#268bd2,info:#b58900,pointer:#268bd2"\
-" --color=marker:#268bd2,fg+:#eee8d5,prompt:#b58900,hl+:#cb4b16"
+set -gx FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
+" --color=bg+:-1,bg:-1,spinner:#cc5f29,hl:#caa944"\
+" --color=fg:#808079,header:#5ca8cc,info:#caa944,pointer:#5ca8cc"\
+" --color=marker:#5ca8cc,fg+:#cccca5,prompt:#caa944,hl+:#cc5f29"
 
 set -x GPG_TTY (tty)
 
