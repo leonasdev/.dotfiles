@@ -65,8 +65,8 @@ Installation will overwrite the following's config:
       - [jorgebucaran/nvm.fish](https://github.com/jorgebucaran/nvm.fish) - Node.js version manager lovingly made for Fish.
         ```bash
         fisher install jorgebucaran/nvm.fish
-        nvm install v16
-        set -U nvm_default_version v16
+        nvm install latest
+        set -U nvm_default_version latest
         ```
       - [jethrokuan/z](https://github.com/jethrokuan/z) - Pure-fish z directory jumping (optional)
         ```bash
