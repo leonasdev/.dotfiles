@@ -5,7 +5,6 @@ M.servers = {
   pyright = {
     enabled = true,
     config = {
-      root_dir = function(fname) return require("lspconfig.util").root_pattern(".git")(fname) end,
       settings = {
         python = {
           analysis = {
@@ -24,7 +23,7 @@ M.servers = {
   },
   gopls = { enabled = false },
   rust_analyzer = {
-    enabled = false,
+    enabled = true,
     config = {
       settings = {
         ["rust-analyzer"] = {
