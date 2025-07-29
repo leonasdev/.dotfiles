@@ -82,35 +82,17 @@ return {
 
       vim.diagnostic.config(opts.diagnostics)
 
-      local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-      local has_blink, blink = pcall(require, "blink.cmp")
-      local capabilities = vim.tbl_deep_extend(
-        "force",
-        {},
-        vim.lsp.protocol.make_client_capabilities(),
-        has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-        has_blink and blink.get_lsp_capabilities() or {}
-      )
-
       local servers = require("plugins.lsp.langueage_servers").get_enabled()
-      local function setup_server(server)
-        if not servers[server] or not servers[server].enabled then
-          return
-        end
-        local server_opts = vim.tbl_deep_extend("force", {
-          capabilities = vim.deepcopy(capabilities),
-        }, servers[server].config or {})
-        require("lspconfig")[server].setup(server_opts)
-      end
-
       local ensure_installed = {}
-      for server, _ in pairs(require("plugins.lsp.langueage_servers").get_enabled()) do
+      for server, server_opts in pairs(servers) do
+        vim.lsp.config(server, server_opts.config or {})
+        vim.lsp.enable(server)
         table.insert(ensure_installed, server)
       end
       require("mason-lspconfig").setup({
         ensure_installed = ensure_installed,
-        handlers = { setup_server },
         automatic_installation = false,
+        automatic_enable = false,
       })
     end,
   },
