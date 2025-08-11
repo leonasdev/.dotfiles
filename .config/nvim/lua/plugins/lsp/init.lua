@@ -97,19 +97,37 @@ return {
 
       -- Temporarily work around for this pyright issue:
       -- https://github.com/neovim/neovim/issues/34731
-      local util = require("vim.lsp.util")
-      local original_apply_text_edits = util.apply_text_edits
-      util.apply_text_edits = function(text_edits, bufnr, position_encoding, change_annotations)
-        local pyright = vim.lsp.get_clients({ bufnr = bufnr, name = "pyright" })[1]
+      vim.lsp.config("pyright", {
+        handlers = {
+          -- Override the default rename handler to remove the `annotationId` from edits.
+          --
+          -- Pyright is being non-compliant here by returning `annotationId` in the edits, but not
+          -- populating the `changeAnnotations` field in the `WorkspaceEdit`. This causes Neovim to
+          -- throw an error when applying the workspace edit.
+          --
+          -- See:
+          -- - https://github.com/neovim/neovim/issues/34731
+          -- - https://github.com/microsoft/pyright/issues/10671
+          [vim.lsp.protocol.Methods.textDocument_rename] = function(err, result, ctx)
+            if err then
+              vim.notify("Pyright rename failed: " .. err.message, vim.log.levels.ERROR)
+              return
+            end
 
-        for _, edit in ipairs(text_edits or {}) do
-          if pyright and edit.annotationId then
-            edit.annotationId = nil
-          end
-        end
+            ---@cast result lsp.WorkspaceEdit
+            for _, change in ipairs(result.documentChanges or {}) do
+              for _, edit in ipairs(change.edits or {}) do
+                if edit.annotationId then
+                  edit.annotationId = nil
+                end
+              end
+            end
 
-        return original_apply_text_edits(text_edits, bufnr, position_encoding, change_annotations)
-      end
+            local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+            vim.lsp.util.apply_workspace_edit(result, client.offset_encoding)
+          end,
+        },
+      })
     end,
   },
 
