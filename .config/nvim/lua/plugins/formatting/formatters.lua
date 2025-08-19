@@ -25,6 +25,11 @@ M.formatters = {
       }
     end,
   },
+  ruff_organize_imports = {
+    enabled = false,
+    ensure_installed = "ruff",
+    fts = { "python" },
+  },
   gofumpt = {
     enabled = true,
     ensure_installed = "gofumpt",

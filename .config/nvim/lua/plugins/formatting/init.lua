@@ -2,11 +2,11 @@ return {
   {
     "stevearc/conform.nvim",
     dependencies = {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = require("plugins.formatting.formatters").list_ensure_installed(),
-    }
-  },
+      "williamboman/mason.nvim",
+      opts = {
+        ensure_installed = require("plugins.formatting.formatters").list_ensure_installed(),
+      },
+    },
     ft = require("plugins.formatting.formatters").list_fts(),
     opts = {
       formatters_by_ft = require("plugins.formatting.formatters").formatters_by_ft(),
@@ -39,6 +39,16 @@ return {
       )
 
       require("conform").setup(opts)
+
+      vim.api.nvim_create_user_command(
+        "RuffOrganizeImports",
+        function()
+          require("conform").format({
+            formatters = { "ruff_organize_imports" },
+          })
+        end,
+        { desc = "Ruff Organize Imports (Python)" }
+      )
     end,
   },
 }
