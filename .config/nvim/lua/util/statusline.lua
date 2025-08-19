@@ -230,7 +230,6 @@ local components = {
           unknown = "",
         },
       },
-
     },
     show_loading = false,
     on_click = function() vim.cmd("Copilot toggle") end,
@@ -245,16 +244,16 @@ local components = {
   },
   autoformat = {
     function()
-        local autoformat = require("plugins.formatting.autoformat").autoformat
-        if
-          vim.tbl_contains(
-            require("plugins.formatting.autoformat").disable_autoformat_ft,
-            vim.api.nvim_get_option_value("filetype", {})
-          )
-        then
-          return "󰚔 off"
-        end
-        return autoformat and "󰚔 on" or "󰚔 off"
+      local autoformat = require("plugins.formatting.autoformat").autoformat
+      if
+        vim.tbl_contains(
+          require("plugins.formatting.autoformat").disable_autoformat_ft,
+          vim.api.nvim_get_option_value("filetype", {})
+        )
+      then
+        return "󰚔 off"
+      end
+      return autoformat and "󰚔 on" or "󰚔 off"
     end,
     on_click = function() vim.cmd("FormatToggle") end,
     fmt = function(str)
@@ -272,7 +271,6 @@ local components = {
       local disabled_filetypes = { "snacks_picker_input", "TelescopePrompt", "oil" }
       for _, ft in ipairs(disabled_filetypes) do
         if vim.o.ft == ft then
-
           return false
         end
       end
