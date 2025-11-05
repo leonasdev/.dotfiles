@@ -42,6 +42,15 @@
           "foreground": "#5ca8cc"
         },
         {
+          "type": "python",
+          "style": "plain",
+          "foreground": "#78ba8d",
+          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}({{ .Venv }}{{ end }}){{ end }} ",
+          "properties": {
+            "folder_name_fallback": false
+          }
+        },
+        {
           "foreground": "#cccca5",
           "properties": {
             "style": "full"
