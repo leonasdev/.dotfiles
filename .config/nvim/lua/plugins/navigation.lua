@@ -16,8 +16,9 @@ return {
         end,
         mode = "n",
       },
-      { "<leader>ff", function() Snacks.picker.files() end, mode = "n" },
+      { "<C-M-p>", function() Snacks.picker.files() end, mode = "n" },
       { "<C-f>", function() Snacks.picker.grep() end, mode = "n" },
+      { "<C-M-f>", function() Snacks.picker.git_grep() end, mode = "n" },
       { "<C-t>", function() Snacks.picker.resume() end, mode = "n" },
       {
         "<leader>fn",
@@ -39,12 +40,12 @@ return {
         layout = {
           backdrop = false,
           row = 1,
-          width = 0.4,
+          width = 0.48,
           min_width = 80,
           height = 0.4,
           border = "rounded",
           box = "vertical",
-          title = "{title}",
+          title = "{title} {flags}",
           { win = "input", height = 2, border = "none" },
           { win = "list", border = "hpad" },
           { win = "preview", title = "{preview}", border = "rounded" },
@@ -54,6 +55,16 @@ return {
       ---@type snacks.Config
       local ret = {
         picker = {
+          toggles = {
+            submodules = "[+submodules]",
+            untracked = "[+untracked]",
+            hidden = "[+hidden]",
+            ignored = "[+ignored]",
+            modified = "[+modified]",
+          },
+          -- debug = {
+          --   proc = true,
+          -- },
           enabled = true,
           ---@diagnostic disable: missing-fields
           icons = {
@@ -76,9 +87,31 @@ return {
             },
           },
           sources = {
-            git_files = { title = "󰱼 Find File (Git)", layout = picker_files_layout, submodules = true },
-            files = { title = "󰱼 Find File", layout = picker_files_layout, hidden = true, ignored = true },
-            grep = { title = "󰺮 Grep", layout = "ivy_split", hidden = false, ignored = true },
+            git_files = {
+              title = "󰱼 Find File (Git)",
+              layout = picker_files_layout,
+              submodules = true,
+              untracked = false,
+            },
+            files = {
+              title = "󰱼 Find File",
+              layout = picker_files_layout,
+              hidden = true,
+              ignored = true,
+            },
+            grep = {
+              title = "󰺮 Grep",
+              layout = "ivy_split",
+              hidden = true,
+              ignored = false,
+              args = { "--sort=path" },
+            },
+            git_grep = {
+              title = "󰺮 Grep (Git)",
+              layout = "ivy_split",
+              untracked = true,
+              submodules = false,
+            },
             help = { title = "󱤇 Help", layout = "bottom" },
             colorschemes = {
               title = " Colorschemes",
@@ -148,6 +181,7 @@ return {
           show_hidden = true,
         },
         float = {
+          border = "rounded",
           padding = 2,
           max_width = 78,
           max_height = 14,

@@ -403,4 +403,26 @@ return {
       position = "bottom-right",
     },
   },
+  {
+    "sphamba/smear-cursor.nvim",
+    event = "VeryLazy",
+    opts = {
+      smear_insert_mode = false,
+      --- faster with smear
+      stiffness = 1, -- 0.6      [0, 1]
+      trailing_stiffness = 0.9, -- 0.45     [0, 1]
+      damping = 0.85, -- 0.85     [0, 1]
+      distance_stop_animating = 1, -- 0.1      > 0
+      time_interval = 5, -- 17
+      delay_event_to_smear = 2,
+      matrix_pixel_threshold = 0.5,
+
+      --- smooth cursor without smear
+      -- stiffness = 1,
+      -- trailing_stiffness = 1,
+      -- matrix_pixel_threshold = 0.5,
+      -- time_interval = 5, -- 17
+      -- delay_event_to_smear = 2,
+    },
+  },
 }
