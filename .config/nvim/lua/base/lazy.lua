@@ -33,6 +33,9 @@ require("lazy").setup({
       loaded = icons.status.check,
       not_loaded = icons.status.uncheck,
     },
+    custom_keys = {
+      ["<c-o>"] = {}, -- disable Ctrl-o in Lazy window
+    },
   },
   performance = {
     rtp = {
