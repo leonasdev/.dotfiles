@@ -187,7 +187,6 @@ return {
           max_height = 14,
         },
         keymaps = {
-          ["<esc>"] = discard_and_close,
           ["<c-n>"] = discard_and_close,
         },
       }
