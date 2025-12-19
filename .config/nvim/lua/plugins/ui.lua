@@ -215,10 +215,7 @@ return {
         pattern = "SnacksDashboardOpened",
         desc = "Prevent from first ctrl-o not work when enter nvim",
         once = true,
-        callback = function()
-          local jump_back_key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
-          vim.api.nvim_feedkeys(jump_back_key, "n", false)
-        end,
+        callback = function() vim.keymap.set("n", "<C-o>", "2<C-o>", { buffer = true, silent = true }) end,
       })
 
       ---@type snacks.Config

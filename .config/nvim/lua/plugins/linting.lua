@@ -43,6 +43,16 @@ return {
           print("No linters configured for filetype: " .. filetype)
         end
       end, {})
+
+      -- Customize built-in linters
+      local hadolint = lint.linters.hadolint
+      hadolint.args = {
+        "--ignore",
+        "DL3008",
+        "-f",
+        "json",
+        "-",
+      }
     end,
   },
 }

@@ -3,6 +3,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    branch = "master", -- TODO: migrate to 'main'
     event = { "LazyFile" },
     opts = {
       highlight = { enable = true },
