@@ -90,8 +90,8 @@ return {
             git_files = {
               title = "󰱼 Find File (Git)",
               layout = picker_files_layout,
-              submodules = true,
-              untracked = false,
+              submodules = false,
+              untracked = true,
             },
             files = {
               title = "󰱼 Find File",
@@ -187,7 +187,6 @@ return {
           max_height = 14,
         },
         keymaps = {
-          ["<esc>"] = discard_and_close,
           ["<c-n>"] = discard_and_close,
         },
       }
