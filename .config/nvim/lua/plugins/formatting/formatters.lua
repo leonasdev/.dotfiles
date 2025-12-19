@@ -26,7 +26,7 @@ M.formatters = {
     end,
   },
   ruff_organize_imports = {
-    enabled = false,
+    enabled = true,
     ensure_installed = "ruff",
     fts = { "python" },
   },
@@ -45,6 +45,11 @@ M.formatters = {
     ensure_installed = "prettier",
     fts = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
     prepend_args = { "--print-width", "120" },
+  },
+  rustfmt = {
+    enabled = false,
+    ensure_installed = "rustfmt",
+    fts = { "rust" },
   },
 }
 
