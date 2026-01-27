@@ -62,9 +62,9 @@
         {
           "type": "git",
           "style": "plain",
+          "timeout": 500,
           "properties": {
             "branch_icon": " ",
-            "cache_duration": "none",
             "fetch_status": true,
             "fetch_upstream_icon": true,
             "commit_icon": " "
