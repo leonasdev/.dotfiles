@@ -20,6 +20,9 @@ return {
             package_uninstalled = icons.status.uncheck,
           },
         },
+        pip = {
+          upgrade_pip = true,
+        },
       }
       return ret
     end,
