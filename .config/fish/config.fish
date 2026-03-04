@@ -1,48 +1,53 @@
-set fish_greeting ""
+### --- 1. Path Management ---
+fish_add_path "$HOME/.local/bin" \
+              "$HOME/go/bin" \
+              "$HOME/.cargo/bin" \
+              "/usr/local/go/bin"
 
 
-command -qv nvim && alias vim nvim
+### --- 2. Environment Variables ---
+if type -q nvim
+    set -gx EDITOR nvim
+else if type -q vim
+    set -gx EDITOR vim
+else
+    set -gx EDITOR vi
+end
 
-set -gx EDITOR nvim
+# fzf colorscheme & default settings
+set -gx FZF_DEFAULT_OPTS $FZF_NON_COLOR_OPTS \
+    "--color=bg+:-1,bg:-1,spinner:#cc5f29,hl:#caa944" \
+    "--color=fg:#808079,header:#5ca8cc,info:#caa944,pointer:#5ca8cc" \
+    "--color=marker:#5ca8cc,fg+:#cccca5,prompt:#caa944,hl+:#cc5f29" \
+    "--info=inline-right" \
+    "--no-scrollbar"
 
-set -gx PATH bin $PATH
-set -gx PATH ~/bin $PATH
-set -gx PATH ~/.local/bin $PATH
-set -gx PATH ~/go/bin $PATH
+### --- 3. Fish Internal Variables ---
+set -g fish_greeting ""
+set -g nvm_default_version latest
 
-set -gx nvm_default_version latest
 
-set -x ZELLIJ_AUTO_EXIT true
-
-# fzf colorscheme
-set -gx FZF_DEFAULT_OPTS "$FZF_NON_COLOR_OPTS"\
-" --color=bg+:-1,bg:-1,spinner:#cc5f29,hl:#caa944"\
-" --color=fg:#808079,header:#5ca8cc,info:#caa944,pointer:#5ca8cc"\
-" --color=marker:#5ca8cc,fg+:#cccca5,prompt:#caa944,hl+:#cc5f29"
-
-set -x GPG_TTY (tty)
-
+### --- 4. Interactive only --- 
 if status is-interactive
-# Commands to run in interactive sessions can go here
-    # aliases
-    alias g git
-
-    alias ls "ls -p -G"
-    alias la "ls -a"
-    alias ll "ls -lA"
-    alias lla "ll -A"
-
-    alias cz chezmoi
-
+    # eza / ls
     if type -q eza
-        alias ls "eza --icons"
-        alias lsa "ls -a"
-        alias ll "eza -l -g --icons"
-        alias lla "ll -a"
+        alias l "eza -lg --icons --group-directories-first"
+        alias ll "eza -lga --icons --group-directories-first --git"
+        # auto generate lt, ltt, lttt, ...
+        for i in (seq 10)
+            set -l t_string (string repeat -n $i t)
+            alias l$t_string="eza --tree -L $i --icons --group-directories-first --git-ignore"
+        end
+    else
+        alias ll "ls -AlF"
+        alias l "ls -lF"
     end
-    fish_add_path $HOME/.cargo/bin
-    fish_add_path /usr/local/go/bin
+
     if type -q oh-my-posh # check if oh-my-posh exist
-        oh-my-posh init fish --config ~/.config/oh-my-posh/leonasdev.omp.json | source
+        oh-my-posh init fish --config $HOME/.config/oh-my-posh/leonasdev.omp.json | source
+    end
+
+    if type -q fzf
+        fzf --fish | source
     end
 end
