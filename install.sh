@@ -297,7 +297,8 @@ function install_deps() {
   fi
   if ! command -v fzf &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing fzf...${NC}"
-    sudo apt install -qqy fzf
+    mkdir -p $HOME/.local/bin
+    wget -qO- https://github.com/junegunn/fzf/releases/download/v0.70.0/fzf-0.70.0-linux_amd64.tar.gz | tar xzvf - -C $HOME/.local/bin
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
   if ! command -v oh-my-posh &>/dev/null; then
