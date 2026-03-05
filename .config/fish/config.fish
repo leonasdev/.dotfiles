@@ -48,8 +48,4 @@ if status is-interactive
     if type -q oh-my-posh # check if oh-my-posh exist
         oh-my-posh init fish --config $HOME/.config/oh-my-posh/leonasdev.omp.json | source
     end
-
-    if type -q fzf
-        fzf --fish | source
-    end
 end
