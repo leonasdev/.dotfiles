@@ -20,7 +20,9 @@ set -gx FZF_DEFAULT_OPTS $FZF_NON_COLOR_OPTS \
     "--color=fg:#808079,header:#5ca8cc,info:#caa944,pointer:#5ca8cc" \
     "--color=marker:#5ca8cc,fg+:#cccca5,prompt:#caa944,hl+:#cc5f29" \
     "--info=inline-right" \
-    "--no-scrollbar"
+    "--no-scrollbar" \
+    "--bind=change:top" \
+    "--bind=resize:clear-screen"
 
 ### --- 3. Fish Internal Variables ---
 set -g fish_greeting ""

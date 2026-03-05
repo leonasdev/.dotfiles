@@ -26,7 +26,7 @@ function fzf_change_directory
       return 1
     end
 
-    set -l preview_cmd "eza -T -L 1 --icons --group-directories-first {} | head -20"
+    set -l preview_cmd "eza -T -L 1 --icons --color=always --group-directories-first {} | head -20"
 
     set -l selected ($fd_cmd --type=directory . . $HOME -H -E .git -E .npm -E .cache -d 3 | fzf  \
         --height=60% \
