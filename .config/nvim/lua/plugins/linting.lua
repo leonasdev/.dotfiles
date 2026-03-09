@@ -4,8 +4,8 @@ return {
     event = "LazyFile",
     opts = {
       linters_by_ft = {
-        python = { "pylint" },
-        go = { "staticcheck" },
+        -- python = { "pylint" },
+        -- go = { "staticcheck" },
         dockerfile = { "hadolint" },
       },
       events = { "BufWritePost", "BufReadPost", "InsertLeave", "TextChanged" },
