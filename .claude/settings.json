@@ -1,0 +1,21 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "git-commands@dot-claude": true
+  },
+  "extraKnownMarketplaces": {
+    "dot-claude": {
+      "source": {
+        "source": "github",
+        "repo": "leonasdev/dot-claude"
+      }
+    }
+  }
+}
