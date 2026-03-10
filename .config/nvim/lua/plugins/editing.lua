@@ -127,12 +127,18 @@ return {
   {
     "kylechui/nvim-surround",
     event = "LazyFile",
-    opts = {
-      keymaps = {
-        normal = "s",
-        normal_cur = "ss",
-        visual = "s",
-      },
-    },
+    init = function()
+      vim.g.nvim_surround_no_normal_mappings = true
+      vim.g.nvim_surround_no_visual_mappings = true
+    end,
+    opts = {},
+    config = function(_, opts)
+      require("nvim-surround").setup(opts)
+      vim.keymap.set("n", "s", "<Plug>(nvim-surround-normal)", { desc = "Add surround" })
+      vim.keymap.set("n", "ss", "<Plug>(nvim-surround-normal-cur)", { desc = "Add surround to current line" })
+      vim.keymap.set("x", "s", "<Plug>(nvim-surround-visual)", { desc = "Add surround to selection" })
+      vim.keymap.set("n", "ds", "<Plug>(nvim-surround-delete)", { desc = "Delete surround" })
+      vim.keymap.set("n", "cs", "<Plug>(nvim-surround-change)", { desc = "Change surround" })
+    end,
   },
 }
