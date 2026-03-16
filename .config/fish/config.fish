@@ -26,7 +26,6 @@ set -gx FZF_DEFAULT_OPTS $FZF_NON_COLOR_OPTS \
 
 ### --- 3. Fish Internal Variables ---
 set -g fish_greeting ""
-set -g nvm_default_version latest
 
 
 ### --- 4. Interactive only --- 
