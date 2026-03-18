@@ -2,10 +2,11 @@
 # Claude Code tmux integration
 #
 # Usage: claude.sh <command> [args...]
-#   popup <window_id> <work_dir>  - Toggle Claude popup for a window
-#   cleanup                       - Clean up orphaned claude sessions
-#   bell <session_name>           - Handle bell from claude (notify main window)
-#   clear-bell <window_id>        - Clear bell indicator (called internally by popup)
+#   select <window_id> <current_path> - Show directory picker if multiple unique pane paths, else popup directly
+#   popup <window_id> <work_dir>      - Toggle Claude popup for a window
+#   cleanup                           - Clean up orphaned claude sessions
+#   bell <session_name>               - Handle bell from claude (notify main window)
+#   clear-bell <window_id>            - Clear bell indicator (called internally by popup)
 
 
 SOCKET="claude"
@@ -14,6 +15,49 @@ BELL_COLOR="#d97757"
 BORDER_COLOR="#d97757"
 PREFIX="win"
 SELF="$HOME/.config/tmux/claude.sh"
+
+cmd_select() {
+  local win_id="${1//@/}"
+  local current_path="$2"
+  local session="${PREFIX}${win_id}"
+
+  # Only show menu when creating a new session
+  if tmux -L "$SOCKET" has-session -t "$session" 2>/dev/null; then
+    cmd_popup "$win_id" "$current_path"
+    return
+  fi
+
+  # Get unique paths from all panes in this window
+  local paths
+  paths=$(tmux list-panes -t "@${win_id}" -F "#{pane_current_path}" | sort -u)
+  local count
+  count=$(echo "$paths" | wc -l)
+
+  if [ "$count" -le 1 ]; then
+    cmd_popup "$win_id" "$current_path"
+    return
+  fi
+
+  # Build display-menu arguments
+  local menu_args=()
+  local idx=1
+  while IFS= read -r path; do
+    local label="${path/#$HOME/\~}"
+    if [ "$path" = "$current_path" ]; then
+      label="$label (current)"
+    fi
+    local key=""
+    if [ "$idx" -le 9 ]; then
+      key="$idx"
+    fi
+    menu_args+=("$label" "$key" "run-shell '$SELF popup $win_id \"$path\"'")
+    ((idx++))
+  done <<< "$paths"
+  menu_args+=("" "" "")
+  menu_args+=("Cancel" "Escape" "")
+
+  tmux display-menu -T " Claude: select working directory " -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" "${menu_args[@]}"
+}
 
 cmd_popup() {
   local win_id="${1//@/}"
@@ -86,9 +130,10 @@ cmd_clear_bell() {
 }
 
 case "${1:-}" in
+  select)    cmd_select "$2" "$3" ;;
   popup)     cmd_popup "$2" "$3" ;;
   cleanup)   cmd_cleanup ;;
   bell)      cmd_bell "$2" ;;
   clear-bell) cmd_clear_bell "$2" ;;
-  *)         echo "Usage: $0 {popup|cleanup|bell|clear-bell}" >&2; exit 1 ;;
+  *)         echo "Usage: $0 {select|popup|cleanup|bell|clear-bell}" >&2; exit 1 ;;
 esac
