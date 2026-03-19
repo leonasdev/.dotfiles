@@ -80,7 +80,7 @@ cmd_popup() {
     tmux -L "$SOCKET" send-keys -t "$session" " clear && claude" Enter
   fi
 
-  tmux display-popup -E -w 90% -h 90% -S "fg=${BORDER_COLOR}" -b heavy \
+  tmux display-popup -E -w 96% -h 90% -S "fg=${BORDER_COLOR}" -b heavy -T " Claude Code " \
     "tmux -L $SOCKET attach-session -t $session"
 }
 
