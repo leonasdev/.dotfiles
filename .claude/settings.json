@@ -6,20 +6,38 @@
     "commit": "",
     "pr": ""
   },
+  "permissions": {
+    "deny": [
+      "EnterPlanMode"
+    ]
+  },
+  "model": "opus",
   "statusLine": {
     "type": "command",
-    "command": "command -v ccstatusline > /dev/null 2>&1 && ccstatusline || printf '\\033[33m[WARNING] ccstatusline is not installed. Run: npm install -g ccstatusline@latest\\033[0m'",
-    "padding": 0
+    "command": "command -v ccstatusline > /dev/null 2>&1 && ccstatusline || printf '\\033[33m[WARNING] ccstatusline is not installed. Run: npm install -g ccstatusline@latest\\033[0m'"
   },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
-    "git-commands@dot-claude": true
+    "git-commands@dot-claude": true,
+    "claude-md-management@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "superpowers-extended-cc@superpowers-extended-cc-marketplace": true,
+    "frontend-design@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "dot-claude": {
       "source": {
         "source": "github",
         "repo": "leonasdev/dot-claude"
+      }
+    },
+    "superpowers-extended-cc-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "pcvelz/superpowers"
       }
     }
   }
