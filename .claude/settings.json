@@ -21,11 +21,12 @@
     "git-commands@dot-claude": true,
     "claude-md-management@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
+    "github@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": true,
     "superpowers-extended-cc@superpowers-extended-cc-marketplace": true,
     "frontend-design@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "dot-claude": {
