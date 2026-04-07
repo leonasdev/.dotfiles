@@ -5,7 +5,6 @@
     "foreground": "#999982",
     "background": "transparent"
   },
-  "console_title_template": "{{.Shell}} in {{.PWD}}",
   "blocks": [
     {
       "type": "prompt",
