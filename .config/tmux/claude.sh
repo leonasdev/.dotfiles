@@ -75,6 +75,8 @@ cmd_popup() {
     tmux -L "$SOCKET" new-session -d -s "$session" -c "$work_dir"
     tmux -L "$SOCKET" set-option -g status-left ""
     tmux -L "$SOCKET" set-option -g status-right ""
+    tmux -L "$SOCKET" set-option -g monitor-bell on
+    tmux -L "$SOCKET" set-option -g bell-action any
     tmux -L "$SOCKET" set-hook -g alert-bell \
       "run-shell '$SELF bell #{session_name}'"
     tmux -L "$SOCKET" send-keys -t "$session" " clear && claude" Enter
@@ -100,9 +102,10 @@ cmd_bell() {
   local session="$1"
   local win_id="@${session#${PREFIX}}"
 
-  local tty
-  tty=$(tmux -L "$MAIN_SOCKET" display-message -t "$win_id" -p "#{pane_tty}")
-  printf "\a" > "$tty"
+  # Send bell directly to terminal clients, bypassing tmux's bell-action
+  while IFS= read -r clt; do
+    printf "\a" > "$clt"
+  done < <(tmux -L "$MAIN_SOCKET" list-clients -F "#{client_tty}")
 
   local attached
   attached=$(tmux -L "$SOCKET" display-message -t "$session" -p "#{session_attached}" 2>/dev/null || echo "0")
