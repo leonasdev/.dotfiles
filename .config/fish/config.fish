@@ -14,6 +14,8 @@ else
     set -gx EDITOR vi
 end
 
+set -gx CLAUDE_CODE_NO_FLICKER 1
+
 # fzf colorscheme & default settings
 set -gx FZF_DEFAULT_OPTS $FZF_NON_COLOR_OPTS \
     "--color=bg+:-1,bg:-1,spinner:#cc5f29,hl:#caa944" \
