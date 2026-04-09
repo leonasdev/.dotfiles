@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+LOG="$HOME/.local/state/claude-cron/wake.log"
+mkdir -p "$(dirname "$LOG")"
+
+{
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] === wake start ==="
+
+  "$HOME/.local/bin/claude" \
+    -p "Say: A" \
+    --model claude-haiku-4-5-20251001 \
+    --system-prompt "." \
+    --no-session-persistence \
+    --max-turns 1 \
+    --setting-sources project \
+    --strict-mcp-config \
+    --mcp-config '{"mcpServers":{}}' \
+    --tools ""
+
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] === wake done (exit=$?) ==="
+  echo ""
+} >> "$LOG" 2>&1
+
+# keep only last 2000 row
+tail -n 2000 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
