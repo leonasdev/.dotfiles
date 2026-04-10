@@ -22,7 +22,7 @@
         "id": "a49975a4-1949-4397-b66d-2c53eb63b832",
         "type": "git-branch",
         "color": "hex:CAA944",
-        "rawValue": false,
+        "rawValue": true,
         "metadata": {
           "hideNoGit": "true"
         }
@@ -40,20 +40,28 @@
         "rawValue": true
       },
       {
+        "id": "1d6def25-31bd-412d-821b-095c4dd15e87",
+        "type": "separator"
+      },
+      {
+        "id": "a0062b83-a878-4568-b416-64a02178c103",
+        "type": "thinking-effort",
+        "rawValue": true,
+        "color": "hex:999982"
+      },
+      {
         "id": "2af044ef-de7a-4242-aefa-e97c5e019c7e",
         "type": "separator",
         "color": "hex:999982"
       },
       {
-        "id": "81cf74ed-bd3c-4b5e-9227-416142758493",
-        "type": "context-percentage",
-        "color": "hex:999982",
-        "bold": false,
+        "id": "31a9b42e-b0ac-49b7-9e66-686019c070fa",
+        "type": "context-percentage-usable",
         "rawValue": false,
         "metadata": {
-          "display": "progress-short",
           "inverse": "false"
-        }
+        },
+        "color": "hex:999982"
       },
       {
         "id": "2d03ed40-6b8a-466e-8860-fc8e681bdb63",
@@ -81,6 +89,10 @@
         "metadata": {
           "display": "time"
         }
+      },
+      {
+        "id": "d2879dfe-9760-4c63-a2a3-cfb823eb69fa",
+        "type": "separator"
       }
     ]
   ],
@@ -89,6 +101,7 @@
   "colorLevel": 3,
   "inheritSeparatorColors": false,
   "globalBold": false,
+  "minimalistMode": false,
   "powerline": {
     "enabled": false,
     "separators": [
@@ -99,6 +112,7 @@
     ],
     "startCaps": [],
     "endCaps": [],
-    "autoAlign": false
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
   }
 }
