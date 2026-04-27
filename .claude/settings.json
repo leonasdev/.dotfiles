@@ -7,13 +7,11 @@
     "pr": ""
   },
   "permissions": {
-    "deny": [
-      "EnterPlanMode"
-    ]
+    "defaultMode": "auto"
   },
   "statusLine": {
     "type": "command",
-    "command": "command -v ccstatusline > /dev/null 2>&1 && ccstatusline || printf '\\033[33m[WARNING] ccstatusline is not installed. Run: npm install -g ccstatusline@latest\\033[0m'",
+    "command": "~/personal/claude-statusline/statusline.sh",
     "refreshInterval": 1
   },
   "enabledPlugins": {
@@ -36,5 +34,9 @@
       }
     }
   },
-  "effortLevel": "high"
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "preferredNotifChannel": "terminal_bell",
+  "autoScrollEnabled": false,
+  "skipAutoPermissionPrompt": true
 }
