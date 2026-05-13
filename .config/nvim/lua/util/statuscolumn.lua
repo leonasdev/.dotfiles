@@ -164,7 +164,7 @@ function M.draw()
     diag, dap, git = get_signs(bufnr, vim.v.lnum)
   end
 
-  return render_sign(diag) .. clickable(render_sign(dap) .. get_lnum(winid)) .. render_sign(git)
+  return render_sign(diag) .. clickable(render_sign(dap) .. get_lnum(winid)) .. render_sign(git) .. " "
 end
 
 return M
