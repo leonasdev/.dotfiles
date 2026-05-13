@@ -40,5 +40,6 @@ opt.iskeyword:append("-") -- now 'test-test' is a word
 opt.path:append({ "**" }) -- Finding files - Search down into subfolders
 opt.updatetime = 100 -- ref: https://www.reddit.com/r/vim/comments/jqogan/how_does_a_lower_updatetime_lead_to_better/
 opt.belloff = "all" -- Just turn the dang bell off
-opt.signcolumn = "yes" -- always showing the signcolumn
+opt.signcolumn = "yes:3" -- reserve 3 sign slots (diagnostic, DAP, git) for statuscolumn
+opt.statuscolumn = "%!v:lua.require'util.statuscolumn'.draw()"
 opt.guicursor = "a:block"
