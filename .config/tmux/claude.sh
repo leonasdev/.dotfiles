@@ -183,25 +183,13 @@ cmd_bell() {
   attached=$(tmux -L "$SOCKET" display-message -t "$session" -p "#{session_attached}" 2>/dev/null || echo "0")
 
   if [ "$attached" = "0" ]; then
-    local orig
-    orig=$(tmux -L "$MAIN_SOCKET" display-message -t "$win_id" -p "#{window_name}")
-
     tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" @claude_bell 1
-    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" @claude_orig_name "$orig"
-    tmux -L "$MAIN_SOCKET" rename-window -t "$win_id" "#[fg=${BELL_COLOR}]✦ #[default]$orig"
   fi
 }
 
 cmd_clear_bell() {
   local win_id="$1"
-
-  if [ "$(tmux -L "$MAIN_SOCKET" show-option -w -t "$win_id" -qv @claude_bell)" = "1" ]; then
-    local orig
-    orig=$(tmux -L "$MAIN_SOCKET" show-option -w -t "$win_id" -qv @claude_orig_name)
-    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" -u @claude_bell
-    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" -u @claude_orig_name
-    tmux -L "$MAIN_SOCKET" rename-window -t "$win_id" "$orig"
-  fi
+  tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" -uq @claude_bell
 }
 
 cmd_kill_window() {
