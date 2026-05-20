@@ -1,0 +1,48 @@
+{
+  "skill_name": "reviewing-ai-generated-code",
+  "evals": [
+    {
+      "id": 1,
+      "name": "hallucinated-db-helper-and-theater-test",
+      "prompt": "我同事用 Cursor 完成了一個 task，剛 push 到 feature/list-recent-users 這個 branch，幫我詳細 review 一下。\n\n所有檔案在 /home/os-leon.zhuang/.claude/skills/reviewing-ai-generated-code-workspace/evals/fixtures/01-hallucinated-db-helper/ 下：\n- task-spec.md 是當初給 Cursor 的 spec\n- ai-conversation.md 是跟 Cursor 的對話紀錄\n- repo/ 是程式碼，base branch 是 main、要 review 的 branch 是 feature/list-recent-users\n\n請判斷這份變更是不是真的做到 task、能不能 work、品質如何，然後給我一份完整 review report。",
+      "expected_output": "Review report 標記 critical: (1) 呼叫了不存在的 db.query_users_since 方法 (hallucinated API), 違反 'minimal changes' 約束且 import 進來會立刻爆。(2) test_list_recent_users_returns_results 用 'assert result is not None' 不算 test, 沒覆蓋到 task 要求的『最新優先』排序。可能 concerns: db 層應該堅持用 query(sql, params); 沒處理空結果是不是真的 return []。",
+      "assertions": [
+        {"id": "critical-hallucinated-api", "text": "明確指出 db.query_users_since() 不存在於 app/db.py，會在 import / call 時失敗"},
+        {"id": "critical-theater-test", "text": "明確指出 test_list_recent_users_returns_results 的 assertion (assert result is not None) 是 testing theater，沒實際驗證任何行爲"},
+        {"id": "concern-missing-ordering-test", "text": "指出 test 沒覆蓋 task 要求的『created_at descending』排序"},
+        {"id": "verification-actually-run", "text": "report 中有實際驗證痕跡 — grep / read 確認 query_users_since 不存在，或執行了 import 試試"},
+        {"id": "report-has-structured-sections", "text": "report 結構化（有 Critical / Concerns / 已驗證項目 等明確區段）"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "discount-bug-and-testing-theater",
+      "prompt": "同事用 Copilot Agent 修了 cart discount 的 bug，幫我看一下這個 PR 對不對。\n\n相關檔案在 /home/os-leon.zhuang/.claude/skills/reviewing-ai-generated-code-workspace/evals/fixtures/02-discount-theater/：\n- task-spec.md 是 task spec\n- ai-conversation.md 是與 AI 的對話\n- repo/ 裏 base = main，要 review 的是 feature/discount-validation\n\n幫我做一個詳細的 code review，確保這次的修改真的解決了 task 描述的問題。",
+      "expected_output": "Review report critical: (1) 邏輯錯誤——`if (code.rate > 1)` 不會 reject rate = 1.0 (spec 要求 >= 1.0 都 reject), 也不會 reject rate = -0.2。(2) Test 是 testing theater——用 `console.log` + `console.assert(e !== null)` / `console.assert(r, ...)`, 在錯誤路徑沒驗證實際 throw, 而且 rate=-0.2 那條 test 期待 truthy return 反而會 mask 掉 missing 的負值驗證。沒用 testing framework 也是 flag。",
+      "assertions": [
+        {"id": "critical-wrong-boundary", "text": "指出 `if (code.rate > 1)` 漏掉了 rate = 1.0 的 case（spec 要求 >= 1）"},
+        {"id": "critical-missing-negative-check", "text": "指出沒實作 rate < 0 的 reject 邏輯（spec 明確要求）"},
+        {"id": "critical-test-doesnt-assert-throws", "text": "指出 test 沒使用 expect(...).toThrow() 或等價的斷言, 用 try/catch 加 console.assert(e !== null) 不能驗證 throw 行爲"},
+        {"id": "concern-test-mask-negative-case", "text": "指出 rate=-0.2 那個 test 預期 truthy return，反而把『應該 throw』這件事 mask 掉了"},
+        {"id": "verification-actually-run", "text": "report 中有實際驗證痕跡 — 跑 test、手動 evaluate 邏輯、或顯式 trace 邊界"}
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "webhook-spec-drift-overengineering",
+      "prompt": "同事讓 Gemini 加了一個 Slack webhook endpoint，剛 push 上來請我 review。請幫我做完整 review。\n\n材料在 /home/os-leon.zhuang/.claude/skills/reviewing-ai-generated-code-workspace/evals/fixtures/03-webhook-spec-drift/：\n- task-spec.md 是給 Gemini 的 spec\n- ai-conversation.md 是與 Gemini 的對話（這個對話蠻關鍵的）\n- repo/，base = main，要 review 的 = feature/slack-webhook\n\n判斷實作有沒有真的滿足 spec，能不能上 production。",
+      "expected_output": "Review report critical: (1) 完全沒實作 rate limiting (10 req/min/IP), 但 Gemini 在對話中聲稱『rate limiting is integrated』(對話揭露這是直接 false claim)。(2) Retry 用盡後 silently return False 並回 200 給 caller (delivered=false)，沒丟 DLQ、沒回 503——違反 spec。Concerns: 拉了 plugin architecture (base / registry / dispatcher) 違反 spec『Don't build a plugin system』; test 沒覆蓋 retry-exhausted 進 DLQ、沒覆蓋 rate-limit 429。",
+      "assertions": [
+        {"id": "critical-no-rate-limit", "text": "明確指出 rate limit (10/min/IP) 完全沒實作；可加分項：點出 Gemini 在對話中聲稱已整合 (false claim)"},
+        {"id": "critical-no-dlq-on-failure", "text": "指出 retry 用盡時 silently return False 而非 enqueue 到 dlq；endpoint 回應沒回 503"},
+        {"id": "concern-plugin-overengineering", "text": "指出 plugin architecture (base/registry/dispatcher) 違反 spec 明確說的『Don't build a plugin system』"},
+        {"id": "concern-missing-tests", "text": "指出 test 沒覆蓋 retry-exhausted 進 DLQ / rate-limit 429 (兩個 spec 要求的 test 都缺)"},
+        {"id": "uses-ai-conversation-context", "text": "報告中明顯體現有讀 ai-conversation.md，例如點出 Gemini 對 rate limit 的虛假聲明、或它對 plugin 架構的 push-back"},
+        {"id": "verification-actually-run", "text": "報告中有實際驗證痕跡，例 grep 找 rate limiter、檢查 endpoint 是否回 503 path、跑測試查 retry 行爲"}
+      ],
+      "files": []
+    }
+  ]
+}
