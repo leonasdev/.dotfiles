@@ -1,16 +1,37 @@
 {
   "env": {
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
-    "CLAUDE_CODE_EFFORT_LEVEL": "max",
-    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1"
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
   },
   "attribution": {
     "commit": "",
     "pr": ""
   },
   "permissions": {
+    "ask": [
+      "mcp__mcp-atlassian__jira_create_issue",
+      "mcp__mcp-atlassian__jira_batch_create_issues",
+      "mcp__mcp-atlassian__jira_delete_issue",
+      "mcp__mcp-atlassian__jira_update_issue",
+      "mcp__mcp-atlassian__jira_transition_issue",
+      "mcp__mcp-atlassian__jira_add_comment",
+      "mcp__mcp-atlassian__jira_edit_comment",
+      "mcp__mcp-atlassian__jira_add_worklog",
+      "mcp__mcp-atlassian__jira_create_issue_link",
+      "mcp__mcp-atlassian__jira_remove_issue_link",
+      "mcp__mcp-atlassian__jira_create_remote_issue_link",
+      "mcp__mcp-atlassian__jira_link_to_epic",
+      "mcp__mcp-atlassian__jira_add_watcher",
+      "mcp__mcp-atlassian__jira_remove_watcher",
+      "mcp__mcp-atlassian__jira_create_version",
+      "mcp__mcp-atlassian__jira_batch_create_versions",
+      "mcp__mcp-atlassian__jira_update_proforma_form_answers",
+      "mcp__mcp-atlassian__jira_create_sprint",
+      "mcp__mcp-atlassian__jira_update_sprint",
+      "mcp__mcp-atlassian__jira_add_issues_to_sprint"
+    ],
     "defaultMode": "auto"
   },
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "~/personal/claude-statusline/statusline.sh",
@@ -26,7 +47,7 @@
     "frontend-design@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {
     "dot-claude": {
@@ -39,6 +60,6 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "preferredNotifChannel": "terminal_bell",
-  "autoScrollEnabled": false,
+  "autoScrollEnabled": true,
   "skipAutoPermissionPrompt": true
 }
