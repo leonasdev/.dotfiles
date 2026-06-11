@@ -47,6 +47,9 @@ if status is-interactive
     end
 
     if type -q oh-my-posh # check if oh-my-posh exist
-        oh-my-posh init fish --config $HOME/.config/oh-my-posh/leonasdev.omp.json | source
+        # fallback for prompts whose session cache got GC'd (>7 days idle),
+        # see https://github.com/JanDeDobbeleer/oh-my-posh/issues/7574
+        set -gx POSH_CONFIG $HOME/.config/oh-my-posh/leonasdev.omp.json
+        oh-my-posh init fish --config $POSH_CONFIG | source
     end
 end
