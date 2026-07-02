@@ -31,7 +31,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "~/personal/claude-statusline/statusline.sh",
@@ -61,5 +60,6 @@
   "tui": "fullscreen",
   "preferredNotifChannel": "terminal_bell",
   "autoScrollEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "model": "claude-fable-5[1m]"
 }
