@@ -6,10 +6,13 @@ return {
     priority = 1000, -- make sure to load this before all the other start plugins
     dev = true,
     dir = "~/personal/my-colorscheme",
+    -- Make `:colorscheme my-colorscheme` re-read the source files, from any cwd.
+    -- The repo's .lazy.lua sets this too, but only when nvim starts inside the repo.
+    init = function() vim.g.my_colorscheme_dev = true end,
     config = function()
       require("my-colorscheme").setup({
         transparent = false,
-        lualine = {
+        statusline = {
           transparent = false,
         },
       })
