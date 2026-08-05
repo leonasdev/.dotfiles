@@ -150,7 +150,7 @@ return {
           width = 30,
           preset = {
             keys = {
-              { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+              { icon = " ", key = "n", desc = "New File", action = ":ene" },
               { icon = "󰱼 ", key = "<ctrl-p>", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
               { icon = " ", key = "q", desc = "Quit", action = ":qa" },
             },
