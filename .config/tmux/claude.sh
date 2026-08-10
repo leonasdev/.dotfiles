@@ -37,6 +37,17 @@ format_relative_time() {
   fi
 }
 
+# Display name for an orphan session: "<original window name>: <path>"
+orphan_label() {
+  local spath="$1" orig_name="$2"
+  local short_path="${spath/#$HOME/\~}"
+  if [ -n "$orig_name" ]; then
+    echo "${orig_name}: ${short_path}"
+  else
+    echo "$short_path"
+  fi
+}
+
 cmd_select() {
   local win_id="${1//@/}"
   local current_path="$2"
@@ -82,35 +93,53 @@ cmd_select() {
   local menu_args=()
   local idx=1
 
+  # Group headers only make sense when there are two groups to tell apart.
+  # A leading "-" marks a menu entry disabled, so it renders dim and is skipped
+  # when moving the selection.
+  local grouped=0
+  [ ${#orphans[@]} -gt 0 ] && grouped=1
+
   # Orphan entries first (most recent activity at top)
-  if [ ${#orphans[@]} -gt 0 ]; then
+  if [ "$grouped" -eq 1 ]; then
     local sorted_orphans
     sorted_orphans=$(printf '%s\n' "${orphans[@]}" | sort -t$'\t' -k3,3nr)
+
+    # Pad the name column so the relative times line up
+    local name_width=0 name
     while IFS=$'\t' read -r sname spath sactivity orig_name; do
-      local short_path="${spath/#$HOME/\~}"
+      name=$(orphan_label "$spath" "$orig_name")
+      [ ${#name} -gt "$name_width" ] && name_width=${#name}
+    done <<< "$sorted_orphans"
+
+    menu_args+=("-↻ Resume a previous session" "" "")
+    while IFS=$'\t' read -r sname spath sactivity orig_name; do
       local label
-      if [ -n "$orig_name" ]; then
-        label="· ${orig_name}: ${short_path}"
-      else
-        label="· ${short_path}"
-      fi
-      label="${label} ($(format_relative_time "$sactivity"))"
+      label=$(printf '  %-*s   %s' "$name_width" \
+        "$(orphan_label "$spath" "$orig_name")" \
+        "$(format_relative_time "$sactivity")")
       local key=""
       if [ "$idx" -le 9 ]; then key="$idx"; fi
       menu_args+=("$label" "$key" "run-shell '$SELF adopt $win_id $sname'")
       ((idx++))
     done <<< "$sorted_orphans"
+
     menu_args+=("" "" "")
+    menu_args+=("-+ Start a new session" "" "")
   fi
 
-  # New-session entries
+  # New-session entries. Under a header they are indented; standing alone they
+  # carry the "+" themselves.
   while IFS= read -r path; do
     [ -z "$path" ] && continue
     local label="${path/#$HOME/\~}"
     if [ "$path" = "$current_path" ]; then
-      label="${label} (current)"
+      label="${label}  (this pane)"
     fi
-    label="+ ${label}"
+    if [ "$grouped" -eq 1 ]; then
+      label="  ${label}"
+    else
+      label="+ ${label}"
+    fi
     local key=""
     if [ "$idx" -le 9 ]; then key="$idx"; fi
     menu_args+=("$label" "$key" "run-shell '$SELF popup $win_id \"$path\"'")
@@ -120,12 +149,14 @@ cmd_select() {
   menu_args+=("" "" "")
   menu_args+=("Cancel" "Escape" "")
 
-  local title=" Claude: select session "
-  if [ ${#orphans[@]} -eq 0 ]; then
-    title=" Claude: no session in this window - start one? "
+  local title=" Claude Code "
+  if [ "$grouped" -eq 0 ]; then
+    title=" Claude Code: no session in this window "
   fi
 
-  tmux display-menu -T "$title" -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" "${menu_args[@]}"
+  # "--" is required: the header entries start with "-" and would otherwise be
+  # parsed as flags.
+  tmux display-menu -T "$title" -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" -- "${menu_args[@]}"
 }
 
 cmd_popup() {
