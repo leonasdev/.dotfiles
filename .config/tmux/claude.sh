@@ -74,14 +74,10 @@ cmd_select() {
   # Unique pane paths in current window
   local paths
   paths=$(tmux list-panes -t "@${win_id}" -F "#{pane_current_path}" | sort -u)
-  local path_count
-  path_count=$(echo "$paths" | wc -l)
 
-  # Fast path: no orphans, single pane path → popup directly
-  if [ ${#orphans[@]} -eq 0 ] && [ "$path_count" -le 1 ]; then
-    cmd_popup "$win_id" "$current_path"
-    return
-  fi
+  # No fast path: creating a session always requires an explicit confirmation,
+  # so that a stray prefix+space on a window without a session can't silently
+  # spawn (and make you wait on) a new claude process.
 
   local menu_args=()
   local idx=1
@@ -124,7 +120,12 @@ cmd_select() {
   menu_args+=("" "" "")
   menu_args+=("Cancel" "Escape" "")
 
-  tmux display-menu -T " Claude: select session " -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" "${menu_args[@]}"
+  local title=" Claude: select session "
+  if [ ${#orphans[@]} -eq 0 ]; then
+    title=" Claude: no session in this window - start one? "
+  fi
+
+  tmux display-menu -T "$title" -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" "${menu_args[@]}"
 }
 
 cmd_popup() {
