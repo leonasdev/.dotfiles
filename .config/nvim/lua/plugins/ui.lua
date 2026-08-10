@@ -24,27 +24,52 @@ return {
       vim.opt.showmode = false
     end,
   },
-  { -- TODO: do not use v2 anymore
+  {
     "lukas-reineke/indent-blankline.nvim",
     event = "LazyFile",
-    version = "2",
+    version = "*",
+    main = "ibl",
     opts = {
-      char = "",
-      context_char = "│",
-      show_current_context = true,
+      indent = { char = " " },
+      scope = {
+        enabled = true,
+        char = "│",
+        show_start = false,
+        show_end = false,
+        include = {
+          node_type = {
+            ["*"] = {
+              -- No "block": it starts at the body's own indent, so the cursor
+              -- range (anchored at column 0) only matches it from the second
+              -- line on -- the scope jumps a level deeper mid-block.
+              "argument_list",
+              "arguments",
+              "dictionary",
+              "element",
+              "for_statement",
+              "if_statement",
+              "list_literal",
+              "object",
+              "return_statement",
+              "table_constructor",
+              "try_statement",
+              "tuple",
+              "while_statement",
+              "with_statement",
+            },
+          },
+        },
+      },
+      -- Joined with ibl's own defaults, not replacing them.
+      exclude = { filetypes = { "snacks_picker_preview" } },
     },
     config = function(_, opts)
-      vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" })
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        pattern = "*",
-        callback = function() vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { link = "IndentBlanklineChar" }) end,
-        group = vim.api.nvim_create_augroup("RelinkIndentBlanklineHightLightGroup", { clear = true }),
-        desc = "Relink IndentBlankline Highlight Group",
-      })
-      local ft_excludes = vim.g.indent_blankline_filetype_exclude
-      table.insert(ft_excludes, "snacks_picker_preview")
-      vim.g.indent_blankline_filetype_exclude = ft_excludes
-      require("indent_blankline").setup(opts)
+      local hooks = require("ibl.hooks")
+      hooks.register(
+        hooks.type.HIGHLIGHT_SETUP,
+        function() vim.api.nvim_set_hl(0, "IblScope", { link = "IblIndent" }) end
+      )
+      require("ibl").setup(opts)
     end,
   },
   { -- TODO: deprecate this
