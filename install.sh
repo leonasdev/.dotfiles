@@ -270,6 +270,11 @@ function install_deps() {
     source $HOME/.cargo/env
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
+  if ! command -v cargo-binstall &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing cargo-binstall...${NC}"
+    curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
   if ! command -v go &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing golang...${NC}"
     sudo rm -rf /usr/local/go
@@ -280,11 +285,11 @@ function install_deps() {
     echo "Added /usr/local/go/bin to .bashrc and .profile"
     echo -e "${GREEN}${BOLD}Done${NC}"
   fi
-  # if ! command -v tree-sitter &>/dev/null; then
-  #   echo -e "${BOLD}${BLUE}Installing tree-sitter-cli, it may take a little while...${NC}"
-  #   cargo install -q tree-sitter-cli
-  #   echo -e "${GREEN}${BOLD}Done${NC}"
-  # fi
+  if ! command -v tree-sitter &>/dev/null; then
+    echo -e "${BOLD}${BLUE}Installing tree-sitter-cli, it may take a little while...${NC}"
+    cargo binstall -y -q tree-sitter-cli
+    echo -e "${GREEN}${BOLD}Done${NC}"
+  fi
   if ! command -v eza &>/dev/null; then
     echo -e "${BOLD}${BLUE}Installing eza... (could take a while)${NC}"
     cargo install -q eza
