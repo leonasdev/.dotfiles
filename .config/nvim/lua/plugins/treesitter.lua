@@ -8,6 +8,20 @@ return {
       local ts = require("nvim-treesitter")
       ts.setup({})
 
+      -- Neovim bundles parsers for these, so `language.add()` below succeeds and
+      -- the install path never runs -- but the bundled runtime ships no
+      -- indents.scm, leaving treesitter indentation silently off for them. Pull
+      -- nvim-treesitter's copies once so they behave like every other language.
+      local bundled = { "c", "lua", "markdown", "markdown_inline", "query", "vim", "vimdoc" }
+      local installed = {} ---@type table<string, true>
+      for _, lang in ipairs(ts.get_installed()) do
+        installed[lang] = true
+      end
+      local missing = vim.tbl_filter(function(lang) return not installed[lang] end, bundled)
+      if #missing > 0 then
+        pcall(ts.install, missing)
+      end
+
       local available ---@type table<string, true>?
       local tried = {} ---@type table<string, true>
 
