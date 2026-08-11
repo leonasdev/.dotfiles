@@ -38,28 +38,16 @@
   },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,
-    "git-commands@dot-claude": true,
-    "claude-md-management@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "github@claude-plugins-official": false,
-    "typescript-lsp@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": false
+    "typescript-lsp@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
+    "skill-creator@claude-plugins-official": false,
+    "mattpocock-skills@claude-plugins-official": true
   },
-  "extraKnownMarketplaces": {
-    "dot-claude": {
-      "source": {
-        "source": "github",
-        "repo": "leonasdev/dot-claude"
-      }
-    }
-  },
-  "effortLevel": "xhigh",
+  "extraKnownMarketplaces": {},
   "tui": "fullscreen",
   "preferredNotifChannel": "terminal_bell",
   "autoScrollEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "model": "claude-fable-5[1m]"
+  "remoteControlAtStartup": false,
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": false
 }
