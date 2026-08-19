@@ -156,7 +156,12 @@ cmd_select() {
 
   # "--" is required: the header entries start with "-" and would otherwise be
   # parsed as flags.
-  tmux display-menu -T "$title" -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" -- "${menu_args[@]}"
+  #
+  # "|| true": display-menu blocks until the menu is dismissed, so a client that
+  # dies while it is open (ssh drop) takes the menu with it and the exit status
+  # comes back as 128+signal. Without this, run-shell reports "returned 129" and
+  # parks the pane in view-mode, waiting for a "q" you only see on reattach.
+  tmux display-menu -T "$title" -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" -- "${menu_args[@]}" || true
 }
 
 cmd_popup() {
@@ -186,8 +191,11 @@ cmd_popup() {
     tmux -L "$SOCKET" send-keys -t "$session" " clear && claude" Enter
   fi
 
+  # "|| true": same reason as display-menu above -- the popup is torn down with
+  # its client, and the signal-derived exit status would otherwise surface as a
+  # bogus run-shell failure in the pane.
   tmux display-popup -E -w 96% -h 90% -S "fg=${BORDER_COLOR}" -b heavy -T " Claude Code " \
-    "tmux -L $SOCKET attach-session -t $session"
+    "tmux -L $SOCKET attach-session -t $session" || true
 }
 
 cmd_cleanup() {
