@@ -9,6 +9,9 @@
 #   bell <session_name>               - Handle bell from claude (notify main window)
 #   clear-bell <window_id>            - Clear bell indicator (called internally by popup)
 #   kill-window <window_id>           - Confirm kill-window (session persists as orphan)
+#   restart-all                       - Menu: restart stale claude processes to apply an update
+#   restart-run                       - Do the restart (called from the restart-all menu)
+#   restart-one <pid>                 - Restart a single session by pid (run by hand)
 
 
 SOCKET="claude"
@@ -268,6 +271,311 @@ cmd_adopt() {
   cmd_popup "$win_id" ""
 }
 
+# ==============================================================================
+#  Restart-to-update
+# ==============================================================================
+#
+# Claude Code writes ~/.claude/sessions/<pid>.json for every live process:
+#
+#   {"pid":…,"sessionId":…,"cwd":…,"version":"2.1.247","status":"idle|busy",
+#    "tmux":"<session>:@<window>.%<pane>","procStart":"<stat field 22>",…}
+#
+# which is everything needed to restart a session in place. Two consequences
+# drive the design below:
+#
+#   * The file is removed on clean shutdown, so it must be read before the
+#     process is signalled, not after.
+#   * The running version lives in the file (and in /proc/<pid>/exe), so
+#     "which sessions are stale" is an exact comparison, not a guess.
+
+SESSIONS_DIR="$HOME/.claude/sessions"
+RESTART_LOG="${XDG_RUNTIME_DIR:-/tmp}/claude-tmux-restart.log"
+
+restart_log() {
+  printf '%s %s\n' "$(date +%H:%M:%S)" "$*"
+}
+
+installed_version() {
+  basename "$(readlink -f "$HOME/.local/bin/claude" 2>/dev/null)"
+}
+
+# /proc/<pid>/stat field 22 is the process start time; the session file
+# records it so a recycled pid can be told apart from the original. comm is
+# parenthesised and may contain spaces, which shifts awk's field numbering --
+# strip through ") " first, after which field 22 lands on field 20.
+proc_start() {
+  sed -n 's/.*) //p' "/proc/$1/stat" 2>/dev/null | awk '{print $20}'
+}
+
+# The session files are single-line JSON and every field read here is a
+# string, so a sed extraction avoids a jq/python dependency.
+json_str() {
+  sed -n 's/.*"'"$2"'":"\([^"]*\)".*/\1/p' "$1"
+}
+
+# Never restart the session we are running inside: a claude that shells out to
+# this script would otherwise SIGTERM its own process tree mid-command.
+ancestor_pids() {
+  local p="$$"
+  while [ -n "$p" ] && [ "$p" != "0" ] && [ "$p" != "1" ]; do
+    echo "$p"
+    p=$(ps -o ppid= -p "$p" 2>/dev/null | tr -d ' ')
+  done
+}
+
+# The session file records "<session>:@<window>.%<pane>" but not which tmux
+# server owns it. Pane ids are per-server and can collide, so probe both
+# sockets and confirm against the process's own tty.
+pane_socket() {
+  local pane="$1" pid="$2" pty sock
+  pty=$(ps -o tty= -p "$pid" 2>/dev/null | tr -d ' ')
+  [ -z "$pty" ] && return 1
+  for sock in "$SOCKET" "$MAIN_SOCKET"; do
+    if [ "$(tmux -L "$sock" display-message -t "$pane" -p '#{pane_tty}' 2>/dev/null)" = "/dev/$pty" ]; then
+      echo "$sock"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# A worktree session has to come back through --worktree, which is also what
+# claude itself prints on exit ("Resume this session with: claude --worktree
+# <name> --resume <id>"). cwd alone would land in the right directory but lose
+# original_cwd/original_branch, and with them the merge-back affordance.
+# --worktree reuses an existing worktree rather than erroring on it.
+#
+# The CLI always places worktrees at <repo>/.claude/worktrees/<name> -- the
+# configurable location in settings.json is Desktop-SSH-only and documented as
+# not read by the CLI. Match the *last* occurrence so a worktree entered from
+# inside another worktree resolves against its immediate parent.
+resume_command() {
+  local cwd="$1" sid="$2" repo name
+  if [[ "$cwd" == */.claude/worktrees/* ]]; then
+    repo="${cwd%/.claude/worktrees/*}"
+    name="${cwd##*/.claude/worktrees/}"
+    name="${name%%/*}"
+    printf 'cd %q && claude --worktree %q --resume %q' "$repo" "$name" "$sid"
+  else
+    printf 'cd %q && claude --resume %q' "$cwd" "$sid"
+  fi
+}
+
+# Emits one TSV row per live session:
+#   <state>\t<pid>\t<version>\t<name>\t<tmux ref>\t<sessionId>\t<cwd>
+# state is stale|current, suffixed with -busy when claude reports itself busy.
+restart_targets() {
+  local installed self_pids f pid pstart ver status name tmuxref sid cwd state
+  installed=$(installed_version)
+  self_pids=" $(ancestor_pids | tr '\n' ' ')"
+
+  for f in "$SESSIONS_DIR"/*.json; do
+    [ -e "$f" ] || continue
+    pid=$(basename "$f" .json)
+    case "$pid" in *[!0-9]*) continue ;; esac
+    [ -d "/proc/$pid" ] || continue
+
+    pstart=$(json_str "$f" procStart)
+    [ "$pstart" = "$(proc_start "$pid")" ] || continue
+    case "$self_pids" in *" $pid "*) continue ;; esac
+
+    ver=$(json_str "$f" version)
+    status=$(json_str "$f" status)
+    name=$(json_str "$f" name)
+    tmuxref=$(json_str "$f" tmux)
+    sid=$(json_str "$f" sessionId)
+    cwd=$(json_str "$f" cwd)
+
+    # Only interactive CLI sessions are ours to restart. Background agents
+    # (kind "bg", from --bg / /background / claude agents) register in this
+    # same directory, and tmux detection is independent of kind -- a detached
+    # agent inherits $TMUX_PANE from whatever pane spawned it, so it can carry
+    # a pane reference belonging to something else entirely. jobId/spare mark
+    # job-backed and pre-warmed background sessions.
+    [ "$(json_str "$f" kind)" = "interactive" ] || continue
+    [ "$(json_str "$f" entrypoint)" = "cli" ] || continue
+    grep -q '"jobId"' "$f" && continue
+    grep -q '"spare":true' "$f" && continue
+
+    # No pane to relaunch in, or nothing to resume.
+    [ -z "$tmuxref" ] && continue
+    [ -z "$sid" ] && continue
+
+    if [ "$ver" = "$installed" ]; then state="current"; else state="stale"; fi
+    [ "$status" = "idle" ] || state="${state}-busy"
+
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+      "$state" "$pid" "$ver" "$name" "$tmuxref" "$sid" "$cwd"
+  done
+}
+
+cmd_restart_all() {
+  local installed targets stale busy menu_args=() line pid ver name
+  installed=$(installed_version)
+  targets=$(restart_targets)
+
+  stale=$(echo "$targets" | grep -c '^stale	' || true)
+  busy=$(echo "$targets" | grep -c '^stale-busy	' || true)
+
+  if [ "$stale" -eq 0 ]; then
+    if [ "$busy" -gt 0 ]; then
+      tmux display-message "Claude ${installed}: all up to date except ${busy} busy session(s)"
+    else
+      tmux display-message "Claude ${installed}: all sessions up to date"
+    fi
+    return 0
+  fi
+
+  local name_width=0
+  while IFS=$'\t' read -r _ pid ver name _; do
+    [ -z "$name" ] && continue
+    [ ${#name} -gt "$name_width" ] && name_width=${#name}
+  done < <(echo "$targets" | grep -E '^stale(-busy)?	')
+
+  menu_args+=("-↻ Restart (SIGTERM, then resume in place)" "" "")
+  while IFS=$'\t' read -r _ pid ver name tmuxref _; do
+    [ -z "$pid" ] && continue
+    menu_args+=("$(printf '  %-*s  %s  %s' "$name_width" "$name" "$ver" "${tmuxref%%.*}")" "" "")
+  done < <(echo "$targets" | grep '^stale	')
+
+  if [ "$busy" -gt 0 ]; then
+    menu_args+=("" "" "")
+    menu_args+=("-⏸ Busy, will be left alone" "" "")
+    while IFS=$'\t' read -r _ pid ver name tmuxref _; do
+      [ -z "$pid" ] && continue
+      menu_args+=("$(printf '  %-*s  %s  %s' "$name_width" "$name" "$ver" "${tmuxref%%.*}")" "" "")
+    done < <(echo "$targets" | grep '^stale-busy	')
+  fi
+
+  menu_args+=("" "" "")
+  menu_args+=("Restart ${stale} session(s)" "y" "run-shell -b '$SELF restart-run'")
+  menu_args+=("Cancel" "Escape" "")
+
+  # "--" and "|| true" for the same reasons as cmd_select above.
+  tmux display-menu -T " Claude Code: update to ${installed} " -b heavy \
+    -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" -- "${menu_args[@]}" || true
+}
+
+# Restart one session in place.
+#   Args: <pid> <version> <name> <tmux ref> <sessionId> <cwd>
+#   0 = restarted, 1 = skipped with the pane left exactly as it was.
+# Progress goes to stdout; callers decide where that lands.
+restart_session() {
+  local pid="$1" ver="$2" name="$3" tmuxref="$4" sid="$5" cwd="$6"
+  local pane sock cmd waited
+
+  pane="${tmuxref##*.}"
+  if ! sock=$(pane_socket "$pane" "$pid"); then
+    restart_log "skip ${name} (${pid}): no pane matching ${tmuxref} on either socket"
+    return 1
+  fi
+
+  # Built before signalling: the session file is gone once claude exits.
+  cmd=$(resume_command "$cwd" "$sid")
+  restart_log "${name} (${pid}, ${ver}) in ${sock}:${pane}"
+  restart_log "  resume: ${cmd}"
+
+  # SIGTERM rather than driving the TUI with /exit. claude's signal handler
+  # runs the same graceful shutdown (SessionEnd hooks, transcript flush,
+  # session file removed, git worktree unlocked) but never renders the
+  # worktree exit dialog -- whose shape varies (Keep/Remove, or a four-option
+  # variant when a tmux session is detected) and whose second option discards
+  # uncommitted work. Not typing into that menu is the whole point.
+  if ! kill -TERM "$pid" 2>/dev/null; then
+    restart_log "  skip: SIGTERM failed"
+    return 1
+  fi
+
+  # Wait for the process to actually go, rather than firing keystrokes at a
+  # TUI we cannot see. Anything unexpected -- a prompt, a hung shutdown --
+  # times out here and the pane is left untouched for you to look at.
+  waited=0
+  while [ -d "/proc/$pid" ] && [ "$waited" -lt 150 ]; do
+    sleep 0.2
+    waited=$((waited + 1))
+  done
+  if [ -d "/proc/$pid" ]; then
+    restart_log "  skip: still alive after 30s, pane left untouched"
+    return 1
+  fi
+  restart_log "  exited after $((waited / 5))s"
+
+  # Let the shell draw its prompt before typing into it.
+  waited=0
+  while [ "$waited" -lt 25 ]; do
+    case "$(tmux -L "$sock" display-message -t "$pane" -p '#{pane_current_command}' 2>/dev/null)" in
+      claude | "") sleep 0.2; waited=$((waited + 1)) ;;
+      *) break ;;
+    esac
+  done
+
+  tmux -L "$sock" send-keys -t "$pane" "$cmd" Enter
+  restart_log "  sent to ${pane} after $((waited / 5))s"
+  return 0
+}
+
+cmd_restart_run() {
+  local targets restarted=0 skipped=0 state pid ver name tmuxref sid cwd
+  targets=$(restart_targets | grep '^stale	' || true)
+  [ -z "$targets" ] && { tmux display-message "Claude: nothing to restart"; return 0; }
+
+  # Braces, not a pipe: the counters have to survive the redirect. tmux
+  # run-shell parks the pane in view-mode over any stray output, so the whole
+  # loop goes to the log instead.
+  {
+    restart_log "=== restart-all -> $(installed_version)"
+    while IFS=$'\t' read -r state pid ver name tmuxref sid cwd; do
+      [ -z "$pid" ] && continue
+      if restart_session "$pid" "$ver" "$name" "$tmuxref" "$sid" "$cwd"; then
+        restarted=$((restarted + 1))
+      else
+        skipped=$((skipped + 1))
+      fi
+    done <<< "$targets"
+  } >>"$RESTART_LOG" 2>&1
+
+  if [ "$skipped" -gt 0 ]; then
+    tmux display-message "Claude: restarted ${restarted}, skipped ${skipped} (${RESTART_LOG})"
+  else
+    tmux display-message "Claude: restarted ${restarted} session(s)"
+  fi
+}
+
+# Restart a single session by pid, for trying this out on one target before
+# turning it loose on everything. Progress goes to the terminal as well as
+# the log, since this one is meant to be run by hand.
+cmd_restart_one() {
+  local want="$1" found=0 state pid ver name tmuxref sid cwd rc
+
+  if [ -z "$want" ]; then
+    echo "Usage: $(basename "$0") restart-one <pid>" >&2
+    restart_targets | awk -F'\t' '{printf "  %-9s %-8s %-9s %s\n", $2, $3, $1, $4}' >&2
+    return 1
+  fi
+
+  while IFS=$'\t' read -r state pid ver name tmuxref sid cwd; do
+    [ "$pid" = "$want" ] || continue
+    found=1
+    case "$state" in
+      *-busy)
+        echo "refusing: ${name} (${pid}) reports status busy -- wait for it to go idle" >&2
+        return 1
+        ;;
+      current)
+        echo "note: ${name} (${pid}) is already on $(installed_version); restarting anyway" >&2
+        ;;
+    esac
+    restart_session "$pid" "$ver" "$name" "$tmuxref" "$sid" "$cwd" | tee -a "$RESTART_LOG"
+    rc=${PIPESTATUS[0]}
+    return "$rc"
+  done < <(restart_targets)
+
+  if [ "$found" -eq 0 ]; then
+    echo "no live interactive CLI session with pid ${want}" >&2
+    return 1
+  fi
+}
+
 case "${1:-}" in
   select)      cmd_select "$2" "$3" ;;
   popup)       cmd_popup "$2" "$3" ;;
@@ -276,5 +584,8 @@ case "${1:-}" in
   bell)        cmd_bell "$2" ;;
   clear-bell)  cmd_clear_bell "$2" ;;
   kill-window) cmd_kill_window "$2" ;;
-  *)           echo "Usage: $0 {select|popup|adopt|cleanup|bell|clear-bell|kill-window}" >&2; exit 1 ;;
+  restart-all) cmd_restart_all ;;
+  restart-run) cmd_restart_run ;;
+  restart-one) cmd_restart_one "$2" ;;
+  *)           echo "Usage: $0 {select|popup|adopt|cleanup|bell|clear-bell|kill-window|restart-all|restart-run|restart-one}" >&2; exit 1 ;;
 esac
