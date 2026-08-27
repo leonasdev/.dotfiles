@@ -445,6 +445,15 @@ restart_targets() {
 }
 
 cmd_restart_all() {
+  # Inert inside the popup. The claude socket inherits this same tmux.conf, so
+  # the binding exists there too -- but the sessions it would restart are the
+  # popup's own, including the one you are looking at, and the menu would
+  # render over the Claude Code UI to ask about it. Restarting is a thing you
+  # do from the main tmux, looking at the whole set. Same guard as cmd_select.
+  if [[ "$TMUX" == */${SOCKET},* ]]; then
+    return
+  fi
+
   local installed targets stale held menu_args=() state pid ver name tmuxref
   installed=$(installed_version)
   targets=$(restart_targets)
