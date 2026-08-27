@@ -336,6 +336,20 @@ ancestor_pids() {
   done
 }
 
+# A monitor or a backgrounded Bash task shows up as a live child shell of the
+# claude process, spawned through the Bash tool and carrying its snapshot
+# signature. SIGTERM takes those with it, and the exit dialog we deliberately
+# bypass ("Background work is running / The following will stop when you
+# exit") is the only thing that would have offered to keep them running. A
+# monitor holds its child shell for its whole lifetime rather than polling in
+# bursts, so this is a steady signal, not a race.
+#
+# An in-flight foreground Bash call looks identical, but such a session
+# reports itself busy and is held for that reason anyway.
+has_shell_work() {
+  pgrep -P "$1" -a 2>/dev/null | grep -q 'shell-snapshots/snapshot-'
+}
+
 # The session file records "<session>:@<window>.%<pane>" but not which tmux
 # server owns it. Pane ids are per-server and can collide, so probe both
 # sockets and confirm against the process's own tty.
@@ -415,7 +429,15 @@ restart_targets() {
     [ -z "$sid" ] && continue
 
     if [ "$ver" = "$installed" ]; then state="current"; else state="stale"; fi
-    [ "$status" = "idle" ] || state="${state}-busy"
+    # Only "idle" is safe to restart. The other values are claude's own words
+    # -- "busy" while it works, "shell" while a backgrounded command is
+    # outstanding, and whatever else it grows -- so carry the status through
+    # as the hold reason rather than mapping it onto a guessed enum.
+    if [ "$status" != "idle" ]; then
+      state="${state}-$(printf '%s' "${status:-unknown}" | tr -cd 'a-z_-')"
+    elif has_shell_work "$pid"; then
+      state="${state}-work"
+    fi
 
     printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
       "$state" "$pid" "$ver" "$name" "$tmuxref" "$sid" "$cwd"
@@ -423,16 +445,16 @@ restart_targets() {
 }
 
 cmd_restart_all() {
-  local installed targets stale busy menu_args=() line pid ver name
+  local installed targets stale held menu_args=() state pid ver name tmuxref
   installed=$(installed_version)
   targets=$(restart_targets)
 
   stale=$(echo "$targets" | grep -c '^stale	' || true)
-  busy=$(echo "$targets" | grep -c '^stale-busy	' || true)
+  held=$(echo "$targets" | grep -c '^stale-' || true)
 
   if [ "$stale" -eq 0 ]; then
-    if [ "$busy" -gt 0 ]; then
-      tmux display-message "Claude ${installed}: all up to date except ${busy} busy session(s)"
+    if [ "$held" -gt 0 ]; then
+      tmux display-message "Claude ${installed}: all up to date except ${held} held session(s)"
     else
       tmux display-message "Claude ${installed}: all sessions up to date"
     fi
@@ -443,7 +465,7 @@ cmd_restart_all() {
   while IFS=$'\t' read -r _ pid ver name _; do
     [ -z "$name" ] && continue
     [ ${#name} -gt "$name_width" ] && name_width=${#name}
-  done < <(echo "$targets" | grep -E '^stale(-busy)?	')
+  done < <(echo "$targets" | grep -E '^stale(-[a-z_-]+)?	')
 
   menu_args+=("-↻ Restart (SIGTERM, then resume in place)" "" "")
   while IFS=$'\t' read -r _ pid ver name tmuxref _; do
@@ -451,13 +473,13 @@ cmd_restart_all() {
     menu_args+=("$(printf '  %-*s  %s  %s' "$name_width" "$name" "$ver" "${tmuxref%%.*}")" "" "")
   done < <(echo "$targets" | grep '^stale	')
 
-  if [ "$busy" -gt 0 ]; then
+  if [ "$held" -gt 0 ]; then
     menu_args+=("" "" "")
-    menu_args+=("-⏸ Busy, will be left alone" "" "")
-    while IFS=$'\t' read -r _ pid ver name tmuxref _; do
+    menu_args+=("-⏸ Left alone" "" "")
+    while IFS=$'\t' read -r state pid ver name tmuxref _; do
       [ -z "$pid" ] && continue
-      menu_args+=("$(printf '  %-*s  %s  %s' "$name_width" "$name" "$ver" "${tmuxref%%.*}")" "" "")
-    done < <(echo "$targets" | grep '^stale-busy	')
+      menu_args+=("$(printf '  %-*s  %s  %s  (%s)' "$name_width" "$name" "$ver" "${tmuxref%%.*}" "${state#*-}")" "" "")
+    done < <(echo "$targets" | grep '^stale-')
   fi
 
   menu_args+=("" "" "")
@@ -570,8 +592,14 @@ cmd_restart_one() {
     [ "$pid" = "$want" ] || continue
     found=1
     case "$state" in
-      *-busy)
-        echo "refusing: ${name} (${pid}) reports status busy -- wait for it to go idle" >&2
+      *-work)
+        echo "refusing: ${name} (${pid}) has a monitor or background task running:" >&2
+        pgrep -P "$pid" -a 2>/dev/null | grep 'shell-snapshots/snapshot-' | sed 's/^/  /' >&2
+        echo "SIGTERM would stop it and resume will not bring it back." >&2
+        return 1
+        ;;
+      *-*)
+        echo "refusing: ${name} (${pid}) reports status ${state#*-} -- wait for it to go idle" >&2
         return 1
         ;;
       current)
