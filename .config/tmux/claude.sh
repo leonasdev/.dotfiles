@@ -167,6 +167,20 @@ cmd_select() {
   tmux display-menu -T "$title" -b heavy -S "fg=${BORDER_COLOR}" -H "bg=${BORDER_COLOR},fg=default" -- "${menu_args[@]}" || true
 }
 
+# Server-wide options for the claude socket. Re-applied on every popup rather
+# than once at session creation: that server reads this same tmux.conf, so a
+# prefix+r sourced from inside the popup puts the main status-left/right back
+# and flips monitor-bell off again -- which silently kills the bell indicator,
+# since the alert-bell hook survives but never fires. Setting them here means
+# the next popup heals it.
+claude_server_options() {
+  tmux -L "$SOCKET" set-option -g status-left ""
+  tmux -L "$SOCKET" set-option -g status-right ""
+  tmux -L "$SOCKET" set-option -g monitor-bell on
+  tmux -L "$SOCKET" set-option -g bell-action any
+  tmux -L "$SOCKET" set-hook -g alert-bell "run-shell '$SELF bell #{session_name}'"
+}
+
 cmd_popup() {
   local win_id="${1//@/}"
   local session="${PREFIX}${win_id}"
@@ -179,17 +193,16 @@ cmd_popup() {
 
   cmd_clear_bell "@${win_id}"
 
+  local created=0 orig_name
   if ! tmux -L "$SOCKET" has-session -t "$session" 2>/dev/null; then
-    local orig_name
     orig_name=$(tmux -L "$MAIN_SOCKET" display-message -t "@${win_id}" -p "#{window_name}" 2>/dev/null || echo "")
-
     tmux -L "$SOCKET" new-session -d -s "$session" -c "$work_dir"
-    tmux -L "$SOCKET" set-option -g status-left ""
-    tmux -L "$SOCKET" set-option -g status-right ""
-    tmux -L "$SOCKET" set-option -g monitor-bell on
-    tmux -L "$SOCKET" set-option -g bell-action any
-    tmux -L "$SOCKET" set-hook -g alert-bell \
-      "run-shell '$SELF bell #{session_name}'"
+    created=1
+  fi
+
+  claude_server_options
+
+  if [ "$created" -eq 1 ]; then
     tmux -L "$SOCKET" set-option -t "$session" @orig_window_name "$orig_name"
     tmux -L "$SOCKET" send-keys -t "$session" " clear && claude" Enter
   fi
