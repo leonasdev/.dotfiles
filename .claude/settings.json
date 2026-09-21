@@ -1,8 +1,5 @@
 {
   "cleanupPeriodDays": 3650,
-  "env": {
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
-  },
   "attribution": {
     "commit": "",
     "pr": ""
