@@ -7,17 +7,25 @@
 #   adopt <window_id> <session_name>  - Re-key an orphan session to the current window
 #   cleanup                           - Kill orphan claude sessions (manual; no longer auto-triggered)
 #   bell <session_name>               - Handle bell from claude (notify main window)
-#   clear-bell <window_id>            - Clear bell indicator (called internally by popup)
+#   sync <session_name>               - Recompute bell indicator from unread bell flags (tmux hooks)
 #   kill-window <window_id>           - Confirm kill-window (session persists as orphan)
 #   restart-all                       - Menu: restart stale claude processes to apply an update
 #   restart-run                       - Do the restart (called from the restart-all menu)
 #   restart-one <pid>                 - Restart a single session by pid (run by hand)
+#   sidebar-add <window_id>           - Add the agent sidebar pane to a popup window (hook)
+#   sidebar-check <window_id>         - Close the window if only sidebar panes remain (hook)
+#   sidebar-add-all                   - Add it to every popup window that lacks one
+#   sidebar-remove-all                - Remove every sidebar pane
 
 
 SOCKET="claude"
 MAIN_SOCKET="default"
-BELL_COLOR="#d97757"
-BORDER_COLOR="#d97757"
+SIDEBAR="$HOME/.config/tmux/agent-sidebar.sh"
+# Popup / menu border colour comes from the theme (@t_brand_claude, see
+# tmux.conf Theme section); the literal is only a fallback if the token is
+# missing on the main server.
+BORDER_COLOR=$(tmux -L "default" show -gv @t_brand_claude 2>/dev/null)
+BORDER_COLOR="${BORDER_COLOR:-#d97757}"
 PREFIX="win"
 SELF="$HOME/.config/tmux/claude.sh"
 
@@ -174,11 +182,62 @@ cmd_select() {
 # since the alert-bell hook survives but never fires. Setting them here means
 # the next popup heals it.
 claude_server_options() {
-  tmux -L "$SOCKET" set-option -g status-left ""
-  tmux -L "$SOCKET" set-option -g status-right ""
+  # status-left/right for the popup live in tmux.conf's claude-socket block.
   tmux -L "$SOCKET" set-option -g monitor-bell on
   tmux -L "$SOCKET" set-option -g bell-action any
   tmux -L "$SOCKET" set-hook -g alert-bell "run-shell '$SELF bell #{session_name}'"
+  # Viewing a window clears its bell flag (tmux does this in session_set_current
+  # and on attach, before it fires these hooks), so the indicator is recomputed
+  # whenever the visible window changes.
+  tmux -L "$SOCKET" set-hook -g session-window-changed "run-shell '$SELF sync #{session_name}'"
+  tmux -L "$SOCKET" set-hook -g client-session-changed "run-shell '$SELF sync #{session_name}'"
+  # Every window in the popup gets the agent sidebar on its left, and a window
+  # whose agent pane has exited (claude quit, /exit, crash) is closed rather
+  # than left as a bare sidebar. window-pane-changed is the hook that fires
+  # after the dead pane is gone (the focus falls onto the sidebar); it also
+  # fires on ordinary focus changes, where the check is a no-op.
+  tmux -L "$SOCKET" set-hook -g after-new-window "run-shell '$SELF sidebar-add #{window_id}'"
+  tmux -L "$SOCKET" set-hook -g after-new-session "run-shell '$SELF sidebar-add #{window_id}'"
+  tmux -L "$SOCKET" set-hook -g window-pane-changed "run-shell '$SELF sidebar-check #{window_id}'"
+}
+
+# ==============================================================================
+#  Agent sidebar (agent-sidebar.sh) - one 28-column pane per popup window
+# ==============================================================================
+SIDEBAR_WIDTH=28
+
+cmd_sidebar_add() {
+  local win_id="$1"
+  # already has one?
+  [ -n "$(tmux -L "$SOCKET" list-panes -t "$win_id" -F '#{pane_id}' -f '#{==:#{@sidebar},1}' 2>/dev/null)" ] && return 0
+  # split off the left of the window's first pane; -d keeps the agent pane focused
+  local first
+  first=$(tmux -L "$SOCKET" list-panes -t "$win_id" -F '#{pane_id}' | head -1)
+  [ -n "$first" ] || return 0
+  tmux -L "$SOCKET" split-window -d -hb -l "$SIDEBAR_WIDTH" -t "$first" "$SIDEBAR"
+}
+
+# Close a window that has nothing but sidebar panes left in it.
+cmd_sidebar_check() {
+  local win_id="$1" others
+  others=$(tmux -L "$SOCKET" list-panes -t "$win_id" -F '#{pane_id}' -f '#{!=:#{@sidebar},1}' 2>/dev/null) || return 0
+  [ -z "$others" ] && [ -n "$(tmux -L "$SOCKET" list-panes -t "$win_id" -F '#{pane_id}' 2>/dev/null)" ] && \
+    tmux -L "$SOCKET" kill-window -t "$win_id"
+  return 0
+}
+
+cmd_sidebar_add_all() {
+  local w
+  for w in $(tmux -L "$SOCKET" list-windows -a -F '#{window_id}' 2>/dev/null); do
+    cmd_sidebar_add "$w"
+  done
+}
+
+cmd_sidebar_remove_all() {
+  local p
+  for p in $(tmux -L "$SOCKET" list-panes -a -F '#{pane_id}' -f '#{==:#{@sidebar},1}' 2>/dev/null); do
+    tmux -L "$SOCKET" kill-pane -t "$p"
+  done
 }
 
 cmd_popup() {
@@ -191,26 +250,29 @@ cmd_popup() {
     return
   fi
 
-  cmd_clear_bell "@${win_id}"
-
   local created=0 orig_name
+  orig_name=$(tmux -L "$MAIN_SOCKET" display-message -t "@${win_id}" -p "#{window_name}" 2>/dev/null || echo "")
   if ! tmux -L "$SOCKET" has-session -t "$session" 2>/dev/null; then
-    orig_name=$(tmux -L "$MAIN_SOCKET" display-message -t "@${win_id}" -p "#{window_name}" 2>/dev/null || echo "")
     tmux -L "$SOCKET" new-session -d -s "$session" -c "$work_dir"
     created=1
   fi
 
   claude_server_options
+  # Refreshed on every open, not just creation: the popup's status-left shows
+  # it, and the main window may have been renamed since.
+  tmux -L "$SOCKET" set-option -t "$session" @orig_window_name "$orig_name"
 
   if [ "$created" -eq 1 ]; then
-    tmux -L "$SOCKET" set-option -t "$session" @orig_window_name "$orig_name"
     tmux -L "$SOCKET" send-keys -t "$session" " clear && claude" Enter
+    cmd_sidebar_add "$(tmux -L "$SOCKET" display -t "$session" -p '#{window_id}')"
   fi
 
   # "|| true": same reason as display-menu above -- the popup is torn down with
   # its client, and the signal-derived exit status would otherwise surface as a
   # bogus run-shell failure in the pane.
-  tmux display-popup -E -w 96% -h 90% -S "fg=${BORDER_COLOR}" -b heavy -T " Claude Code " \
+  # Attaching clears the current window's bell flag and fires
+  # client-session-changed, which recomputes the indicator (see cmd_sync).
+  tmux display-popup -E -w 100% -h 99% -S "fg=${BORDER_COLOR}" -b heavy -T " Claude Code " \
     "tmux -L $SOCKET attach-session -t $session" || true
 }
 
@@ -235,17 +297,41 @@ cmd_bell() {
     printf "\a" > "$clt"
   done < <(tmux -L "$MAIN_SOCKET" list-clients -F "#{client_tty}")
 
+  # Detached: nothing is visible, so the bell is unread regardless of flags
+  # (tmux sets window_bell_flag only on non-current windows, so a bell in the
+  # session's current window would otherwise leave no trace).
+  # Attached: the user sees the current window; the indicator is needed only
+  # if the bell landed elsewhere, which is exactly what the flags say.
   local attached
   attached=$(tmux -L "$SOCKET" display-message -t "$session" -p "#{session_attached}" 2>/dev/null || echo "0")
 
   if [ "$attached" = "0" ]; then
-    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" @claude_bell 1
+    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" @claude_bell 1 2>/dev/null
+    "$HOME/.config/tmux/agent-state.sh" tick
+  else
+    cmd_sync "$session"
   fi
 }
 
-cmd_clear_bell() {
-  local win_id="$1"
-  tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" -uq @claude_bell
+# Indicator = "some window in this claude session still has an unread bell".
+# Run from the session-window-changed / client-session-changed hooks, so it
+# clears the moment the ringing window is viewed and stays while another
+# window is still unread.
+cmd_sync() {
+  local session="$1"
+  local win_id="@${session#${PREFIX}}"
+  local flags
+  flags=$(tmux -L "$SOCKET" list-windows -t "$session" -F "#{window_bell_flag}" 2>/dev/null) || return 0
+  # sidebars first: the new window is already on screen with its sidebar's
+  # cursor on the old window, so this is the latency the user can see
+  "$SIDEBAR" refresh "$session"
+  if grep -qx 1 <<< "$flags"; then
+    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" @claude_bell 1 2>/dev/null
+  else
+    tmux -L "$MAIN_SOCKET" set-option -w -t "$win_id" -uq @claude_bell 2>/dev/null
+  fi
+  # refresh the main-socket dots right away instead of waiting for the next tick
+  "$HOME/.config/tmux/agent-state.sh" tick
 }
 
 cmd_kill_window() {
@@ -445,6 +531,15 @@ restart_targets() {
 }
 
 cmd_restart_all() {
+  # Inert inside the popup. The claude socket inherits this same tmux.conf, so
+  # the binding exists there too -- but the sessions it would restart are the
+  # popup's own, including the one you are looking at, and the menu would
+  # render over the Claude Code UI to ask about it. Restarting is a thing you
+  # do from the main tmux, looking at the whole set. Same guard as cmd_select.
+  if [[ "$TMUX" == */${SOCKET},* ]]; then
+    return
+  fi
+
   local installed targets stale held menu_args=() state pid ver name tmuxref
   installed=$(installed_version)
   targets=$(restart_targets)
@@ -623,10 +718,14 @@ case "${1:-}" in
   adopt)       cmd_adopt "$2" "$3" ;;
   cleanup)     cmd_cleanup ;;
   bell)        cmd_bell "$2" ;;
-  clear-bell)  cmd_clear_bell "$2" ;;
+  sync)        cmd_sync "$2" ;;
   kill-window) cmd_kill_window "$2" ;;
   restart-all) cmd_restart_all ;;
   restart-run) cmd_restart_run ;;
   restart-one) cmd_restart_one "$2" ;;
-  *)           echo "Usage: $0 {select|popup|adopt|cleanup|bell|clear-bell|kill-window|restart-all|restart-run|restart-one}" >&2; exit 1 ;;
+  sidebar-add)        cmd_sidebar_add "$2" ;;
+  sidebar-check)      cmd_sidebar_check "$2" ;;
+  sidebar-add-all)    cmd_sidebar_add_all ;;
+  sidebar-remove-all) cmd_sidebar_remove_all ;;
+  *)           echo "Usage: $0 {select|popup|adopt|cleanup|bell|sync|kill-window|restart-all|restart-run|restart-one|sidebar-add|sidebar-add-all|sidebar-remove-all}" >&2; exit 1 ;;
 esac
