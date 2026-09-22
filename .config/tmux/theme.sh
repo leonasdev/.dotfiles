@@ -6,13 +6,14 @@
 #                   tokens into the colour options that cannot take formats
 #                   (run from tmux.conf; needs $TMUX)
 #   set <name>    - Make themes/<name>.conf current and apply it to every
-#                   running server (default + claude)
+#                   running server (default + the tmux-agents popup server,
+#                   whose @agents-color-* the theme file also carries)
 #   menu          - display-menu listing available themes
 #   list          - Print theme names, current one marked with *
 
 DIR="$HOME/.config/tmux/themes"
 SELF="$HOME/.config/tmux/theme.sh"
-SOCKETS=(default claude)
+SOCKETS=(default claude)   # claude = @agents-popup-socket in tmux.conf
 
 current_name() {
   local target
