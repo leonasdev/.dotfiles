@@ -1,0 +1,57 @@
+patch:
+  engine/processors:
+    # - ascii_composer # disable shift switch
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  simplifier:
+    opencc_config: t2tw.json
+    option_name: zh_tw
+  switches:
+    - name: zh_tw
+      reset: 1
+    - name: full_shape
+      states: [ 半, 全 ]
+    - name: ascii_punct
+      states: [ 。，, ．， ]
+  # 整個覆寫 punctuator（不 import_preset: symbols）以停用 /fh 這類符號快捷輸入
+  punctuator:
+    full_shape:
+      __include: symbols:/punctuator/full_shape
+    half_shape:
+      ',' : '，'
+      '.' : '。'
+      '<' : '<'
+      '>' : '>'
+      '/' : '/'
+      '?' : '?'
+      ';' : '；'
+      ':' : ':'
+      '''' : ''''
+      '"' : '"'
+      '\' : '、'
+      '|' : '|'
+      '`' : '`'
+      '~' : '～'
+      '!' : '！'
+      '@' : '@'
+      '#' : '#'
+      '%' : '%'
+      '$' : '$'
+      '^' : '^'
+      '&' : '&'
+      '*' : '*'
+      '(' : '('
+      ')' : ')'
+      '-' : '-'
+      '_' : '_'
+      '+' : '+'
+      '=' : '='
+      '[' : '['
+      ']' : ']'
+      '{' : '{'
+      '}' : '}'

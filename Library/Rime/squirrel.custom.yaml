@@ -1,0 +1,17 @@
+patch:
+  app_options: # disable shift switch
+  style/color_scheme: leonasdev
+  style/translucency: true
+  style/label_font_point: 10
+  style/candidate_format: '[label]  [candidate] [comment]'
+  preset_color_schemes/leonasdev:
+    name: leonasdev
+    author: leonasdev
+    color_space: display_p3
+    back_color: '0x00FFFFFF'
+    hilited_candidate_back_color: '0xF7823B'
+    text_color: '0xFFFFFF'
+    hilited_text_color: '0x80FFFFFF'
+    candidate_text_color: '0xFFFFFF'
+    hilited_candidate_text_color: '0xFFFFFF'
+    comment_text_color: '0x80FFFFFF'
