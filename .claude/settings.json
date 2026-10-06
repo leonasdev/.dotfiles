@@ -54,7 +54,8 @@
     "typescript-lsp@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {},
   "modelSettings": {
@@ -71,5 +72,8 @@
   "autoScrollEnabled": true,
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": false,
-  "agentPushNotifEnabled": false
+  "agentPushNotifEnabled": false,
+  "skillOverrides": {
+    "reviewing-ai-generated-code": "off"
+  }
 }
