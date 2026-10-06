@@ -29,21 +29,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus",
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "^(startup|resume|clear|compact|fork)$",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/home/os-leon.zhuang/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "~/personal/claude-statusline/statusline.sh",
@@ -53,22 +38,13 @@
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
-    "skill-creator@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": false,
     "mattpocock-skills@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": false
   },
   "extraKnownMarketplaces": {},
-  "modelSettings": {
-    "claude-opus-5": {
-      "effortLevel": "high"
-    },
-    "claude-opus-5-5": {
-      "effortLevel": "high"
-    }
-  },
   "tui": "fullscreen",
   "preferredNotifChannel": "terminal_bell",
-  "switchModelsOnFlag": true,
   "autoScrollEnabled": true,
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": false,
