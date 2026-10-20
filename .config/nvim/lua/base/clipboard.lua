@@ -40,13 +40,33 @@ local function copy(reg)
 end
 
 -- Paste reads the native clipboard. Reading back over OSC 52 needs a reply
--- most terminals refuse to send, which stalls every `p`; to paste something
--- copied on the remote side use the terminal's own paste (Cmd/Ctrl-V), which
--- arrives as keystrokes and never touches this provider.
+-- most terminals refuse to send, which stalls every `p`. Inside tmux, read its
+-- newest paste buffer instead: with `set-clipboard on` tmux keeps every OSC 52
+-- a program emits (Claude Code, copy mode, nvim's own yanks) as a buffer.
+-- Text copied on the client machine still needs the terminal's own paste
+-- (Cmd/Ctrl-V), which arrives as keystrokes and never touches this provider.
 local function paste_from_register()
   return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
 end
-local paste = native and native.paste or paste_from_register
+
+local function paste_from_tmux()
+  local text = vim.fn.system({ "tmux", "save-buffer", "-" })
+  if vim.v.shell_error ~= 0 then
+    return paste_from_register()
+  end
+  -- OSC 52 carries no register type, so a linewise yank comes back as bare
+  -- text; while the buffer is still our own last yank, keep its regtype.
+  local reg = vim.fn.getreg("")
+  if text == reg or text .. "\n" == reg then
+    return paste_from_register()
+  end
+  if text:sub(-1) == "\n" then
+    return { vim.split(text:sub(1, -2), "\n", { plain = true }), "V" }
+  end
+  return { vim.split(text, "\n", { plain = true }), "v" }
+end
+
+local paste = native and native.paste or (vim.env.TMUX and paste_from_tmux or paste_from_register)
 
 vim.g.clipboard = {
   name = native and (native.copy[1]:match("[^/]+$") .. "+osc52") or "OSC 52",
