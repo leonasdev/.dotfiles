@@ -40,9 +40,25 @@
     "frontend-design@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": false,
     "mattpocock-skills@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": false
+    "rust-analyzer-lsp@claude-plugins-official": false,
+    "copy-buttons@copy-buttons": true
   },
-  "extraKnownMarketplaces": {},
+  "extraKnownMarketplaces": {
+    "copy-buttons": {
+      "source": {
+        "source": "directory",
+        "path": "/home/os-leon.zhuang/.claude/mods/copy-buttons"
+      }
+    }
+  },
+  "pluginConfigs": {
+    "copy-buttons@copy-buttons": {
+      "options": {
+        "icon": "nerd-font",
+        "copiedNotice": "above-button"
+      }
+    }
+  },
   "tui": "fullscreen",
   "preferredNotifChannel": "terminal_bell",
   "autoScrollEnabled": true,
